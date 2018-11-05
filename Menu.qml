@@ -39,7 +39,8 @@ Item {
             anchors{
                 verticalCenter: parent.verticalCenter
                 right: connectionSlider.left
-                rightMargin: parent.width*0.01
+                rightMargin: parent.width*0.02
+                verticalCenterOffset: -parent.height*0.025
             }
         }
         SliderSwitch {
@@ -47,7 +48,7 @@ Item {
             size: parent.height*0.4
             anchors {
                 right: parent.right
-                rightMargin: parent.width*0.005
+                rightMargin: parent.width*0.05
                 verticalCenter: parent.verticalCenter
             }
         }
