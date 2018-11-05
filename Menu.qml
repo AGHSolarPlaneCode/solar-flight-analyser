@@ -1,6 +1,7 @@
 import QtQuick 2.0
 
 Item {
+    antialiasing: true
     Rectangle {
         id: mainPage
         color: "#292B38"
@@ -26,6 +27,31 @@ Item {
         top: parent.top
         right:parent.right
         }
+        Text{
+            text: qsTr("Connect:")
+            color: "#F1F1F1"
+            font {
+                pointSize: parent.height*0.2
+                bold: true
+            }
+
+
+            anchors{
+                verticalCenter: parent.verticalCenter
+                right: connectionSlider.left
+                rightMargin: parent.width*0.01
+            }
+        }
+        SliderSwitch {
+            id: connectionSlider
+            size: parent.height*0.4
+            anchors {
+                right: parent.right
+                rightMargin: parent.width*0.005
+                verticalCenter: parent.verticalCenter
+            }
+        }
+
         Image {
             source: "qrc:/assetsMenu/AGHSOLARLOGO.png"
             height: 0.78*parent.height
@@ -52,6 +78,7 @@ Item {
                 width: parent.width*0.944
                 height: parent.height*0.12
                 color: "#F2B81E"
+                radius: 5
                     border {
                         width: parent.height*0.0034
                         color: "#2F3243"
@@ -60,6 +87,7 @@ Item {
                     anchors {
                         horizontalCenter: parent.horizontalCenter
                         top: parent.top
+                        topMargin: parent.height*0.0034
                     }
                 Image {
                     source: "qrc:/assetsMenu/planeLogo.png"
@@ -75,6 +103,7 @@ Item {
                 width: parent.width*0.944
                 height: parent.height*0.12
                 color: "#F2B81E"
+                radius: 5
                      border {
                         width: parent.height*0.0034
                         color: "#2F3243"
@@ -98,6 +127,7 @@ Item {
                 width: parent.width*0.944
                 height: parent.height*0.12
                 color: "#F2B81E"
+                radius: 5
                      border {
                         width: parent.height*0.0034
                         color: "#2F3243"
@@ -121,6 +151,7 @@ Item {
                 width: parent.width*0.944
                 height: parent.height*0.12
                 color: "#F2B81E"
+                radius: 5
                      border {
                         width: parent.height*0.0034
                         color: "#2F3243"
@@ -144,6 +175,7 @@ Item {
                 width: parent.width*0.944
                 height: parent.height*0.12
                 color: "#F2B81E"
+                radius: 5
                      border {
                         width: parent.height*0.0034
                         color: "#2F3243"
