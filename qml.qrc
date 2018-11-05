@@ -8,5 +8,6 @@
         <file>assetsMenu/parametersIcon.png</file>
         <file>assetsMenu/planeLogo.png</file>
         <file>assetsMenu/settingsIcon.png</file>
+        <file>SliderSwitch.qml</file>
     </qresource>
 </RCC>
