@@ -26,7 +26,7 @@ height: size*1.1
         radius: size*0.5
         border {
             color: "black"
-            width: size*0.01
+            width: size*0.005
         }
 
         anchors {
@@ -62,6 +62,7 @@ height: size*1.1
             PropertyChanges {
                 target: slider
                 color: "#80CBC4"
+                opacity: 0.5
 
             }
         }
