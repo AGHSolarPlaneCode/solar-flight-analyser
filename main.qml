@@ -5,7 +5,10 @@ Window {
     visible: true
     width: 1600
     height: 900
-    title: qsTr("Hello World")
+    title: qsTr("GPS Location Software")
+    Menu {
+        anchors.fill: parent
+    }
 
 
 }
