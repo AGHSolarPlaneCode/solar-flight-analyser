@@ -8,6 +8,9 @@ Window {
     title: qsTr("GPS Location Software")
     Menu {
         anchors.fill: parent
+        standardcolor: "#F2B81E"
+        mousecontainscolor: "#F8C238"
+        switchedcolor: "#F8C238"
     }
 
 
