@@ -1,6 +1,10 @@
 import QtQuick 2.0
 
 Item {
+    property string standardcolor
+    property string switchedcolor
+    property string mousecontainscolor
+    property var choosen
     antialiasing: true
     Rectangle {
         id: mainPage
@@ -80,7 +84,7 @@ Item {
                 id: planeGroupRect
                 width: parent.width*0.944
                 height: parent.height*0.12
-                color: "#F2B81E"
+                color: standardcolor
                 radius: 5
                     border {
                         width: parent.height*0.0034
@@ -100,12 +104,23 @@ Item {
                         centerIn: parent
                     }
                 }
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onEntered: {
+                        parent.color = mousecontainscolor
+                    }
+                    onExited: {
+                        parent.color = standardcolor
+                    }
+
+                }
             }
             Rectangle {
                 id: homeGroupRect
                 width: parent.width*0.944
                 height: parent.height*0.12
-                color: "#F2B81E"
+                color: standardcolor
                 radius: 5
                      border {
                         width: parent.height*0.0034
@@ -124,12 +139,23 @@ Item {
                             centerIn: parent
                         }
             }
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onEntered: {
+                            parent.color = mousecontainscolor
+                        }
+                        onExited: {
+                            parent.color = standardcolor
+                        }
+
+                    }
             }
             Rectangle {
                 id: parametersGroupRect
                 width: parent.width*0.944
                 height: parent.height*0.12
-                color: "#F2B81E"
+                color: standardcolor
                 radius: 5
                      border {
                         width: parent.height*0.0034
@@ -148,12 +174,23 @@ Item {
                             centerIn: parent
                         }
             }
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onEntered: {
+                            parent.color = mousecontainscolor
+                        }
+                        onExited: {
+                            parent.color = standardcolor
+                        }
+
+                    }
             }
             Rectangle {
                 id: historicalDataRect
                 width: parent.width*0.944
                 height: parent.height*0.12
-                color: "#F2B81E"
+                color: standardcolor
                 radius: 5
                      border {
                         width: parent.height*0.0034
@@ -172,13 +209,25 @@ Item {
                             centerIn: parent
                         }
             }
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onEntered: {
+                            parent.color = mousecontainscolor
+                        }
+                        onExited: {
+                            parent.color = standardcolor
+                        }
+
+                    }
             }
             Rectangle {
                 id: settingsRect
                 width: parent.width*0.944
                 height: parent.height*0.12
-                color: "#F2B81E"
+                color: standardcolor
                 radius: 5
+
                      border {
                         width: parent.height*0.0034
                         color: "#2F3243"
@@ -196,6 +245,17 @@ Item {
                             centerIn: parent
                         }
             }
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onEntered: {
+                            parent.color = mousecontainscolor
+                        }
+                        onExited: {
+                            parent.color = standardcolor
+                        }
+
+                    }
             }
 
     }
