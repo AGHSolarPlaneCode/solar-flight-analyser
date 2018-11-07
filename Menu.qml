@@ -46,6 +46,8 @@ Item {
         SliderSwitch {
             id: connectionSlider
             size: parent.height*0.4
+            offstatecolor: "#424D5C"
+            onstatecolor: "#41D037"
             anchors {
                 right: parent.right
                 rightMargin: parent.width*0.05
