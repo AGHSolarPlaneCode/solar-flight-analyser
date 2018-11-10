@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>Menu.qml</file>
+        <file>AppMenu.qml</file>
         <file>assetsMenu/AGHSOLARLOGO.png</file>
         <file>assetsMenu/historyIcon.png</file>
         <file>assetsMenu/homePageIcon.png</file>

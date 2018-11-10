@@ -4,23 +4,9 @@ Item {
     property string standardcolor
     property string switchedcolor
     property string mousecontainscolor
-    property var choosen
     antialiasing: true
-    Rectangle {
-        id: mainPage
-        color: "#292B38"
-        width: parent.width*0.92
-        height: parent.height*0.861
-        anchors {
-            bottom: parent.bottom
-            right: parent.right
-        }
 
-        border {
-            width: 1
-            color: "#333644"
-        }
-    }
+    signal buttonClicked(var buttonState);
 
     Rectangle {
         id: topBar
@@ -113,6 +99,9 @@ Item {
                     onExited: {
                         parent.color = standardcolor
                     }
+                    onClicked: {
+                        buttonClicked("home");
+                    }
 
                 }
             }
@@ -147,6 +136,9 @@ Item {
                         }
                         onExited: {
                             parent.color = standardcolor
+                        }
+                        onClicked: {
+                            buttonClicked("home");
                         }
 
                     }
@@ -183,6 +175,9 @@ Item {
                         onExited: {
                             parent.color = standardcolor
                         }
+                        onClicked: {
+                            buttonClicked("parameters");
+                        }
 
                     }
             }
@@ -217,6 +212,9 @@ Item {
                         }
                         onExited: {
                             parent.color = standardcolor
+                        }
+                        onClicked: {
+                            buttonClicked("historical");
                         }
 
                     }
@@ -253,6 +251,9 @@ Item {
                         }
                         onExited: {
                             parent.color = standardcolor
+                        }
+                        onClicked: {
+                            buttonClicked("settings");
                         }
 
                     }
