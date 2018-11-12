@@ -9,5 +9,6 @@
         <file>assetsMenu/planeLogo.png</file>
         <file>assetsMenu/settingsIcon.png</file>
         <file>SliderSwitch.qml</file>
+        <file>HomePage.qml</file>
     </qresource>
 </RCC>

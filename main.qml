@@ -1,6 +1,8 @@
 import QtQuick 2.11
 import QtQuick.Window 2.11
 import QtQuick.Controls 2.4
+import QtPositioning 5.8
+import QtLocation 5.9
 
 Window {
     id: root
@@ -16,24 +18,27 @@ Window {
         standardcolor: "#F2B81E"
         mousecontainscolor: "#F8C238"
         switchedcolor: "#F8C238"
+        state: "home"
 
         Rectangle {
             id: mainPage
             color: "#292B38"
             width: parent.width*0.92
             height: parent.height*0.861
-            state: "home"
             anchors {
                 right: parent.right
                 bottom: parent.bottom
             }
-            border {
+            border {//
                 width: 1
                 color: "#333644"
             }
             Loader {
                 id: pageLoader
                 anchors.fill:parent
+                onLoaded: {
+                    console.log("Loaded")
+                }
             }
         }
 
@@ -47,8 +52,11 @@ Window {
                     width: 1
                     color: "#333644"
                 }
-                //add homepage here
-//                            }
+                HomePage {
+                id: homePageItem
+                anchors.fill: parent
+                }
+
 
                         }
             }
@@ -112,9 +120,11 @@ Window {
             {
                 console.log("state changed")
                 if(mainMenu.state === "home") {
-                  //add compoment to load
-                console.log("done")}
+                  pageLoader.sourceComponent = undefined
+                  pageLoader.sourceComponent = homePage
+                }
                 else if(mainMenu.state === "parameters") {
+                    pageLoader.sourceComponent = undefined
                 //add component to load
                 }
                 else if(mainMenu.state === "historical") {
