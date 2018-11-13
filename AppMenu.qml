@@ -37,7 +37,7 @@ Item {
             id: connectionSlider
             size: parent.height*0.4
             offstatecolor: "#424D5C"
-            onstatecolor: "#41D037"
+            onstatecolor: "#009688"
             anchors {
                 right: parent.right
                 rightMargin: parent.width*0.05
