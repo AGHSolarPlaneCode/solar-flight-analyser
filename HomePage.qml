@@ -4,8 +4,9 @@ import QtPositioning 5.8
 
 Item {
     id: root
-
+    property real distanceToNextPoint: 2.52545
     Item {
+
         id: mapWidget
         height: parent.height*0.5
         width: parent.width*0.5
@@ -49,19 +50,77 @@ Item {
 
                 }
                 Rectangle { //redspacer
-                    color: "red"
+                    id: redspacer
+                    color: "#F21E41"
                     height: parent.height*0.6
                     width: parent.width*0.002
                     anchors {
                         verticalCenter: parent.verticalCenter
                         left: parent.left
-                        leftMargin: parent.width*0.05
+                        leftMargin: parent.width*0.03
                     }
+                    Text {
+                        id: numberOfPointsTXT
+                        text: "0"
+                        color: "#F5F0F0"
+                        font.pointSize: parent.height*0.6
+                        anchors {
+                            left: parent.right
+                            leftMargin: parent.width*2
+                            verticalCenter: parent.verticalCenter
+                            verticalCenterOffset: -parent.height*0.2
+                        }
+
+                        }
+                    Text {
+                        id: numberOfPointsTXTstatic
+                        text: "Number of Points"
+                        font.pointSize: numberOfPointsTXT.font.pointSize*0.4
+                        color: "#707070"
+                        anchors {
+                            left: parent.left
+                            leftMargin: parent.width*3
+                            bottom: parent.bottom
+                        }
+                    }
+                }
+                Rectangle { //2-nd spacer
+                    color: "#1E90F2"
+                    height: parent.height*0.6
+                    width: parent.width*0.002
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                        left: parent.left
+                        leftMargin: numberOfPointsTXTstatic.width*1.5
+                    }
+                    Text {
+                        id: distanceToNextPointTXT
+                        text: distanceToNextPoint.toFixed(3).toString()+" km"
+                        color: "#F5F0F0"
+                        font.pointSize: parent.height*0.6
+                        anchors {
+                            left: parent.right
+                            leftMargin: parent.width*2
+                            verticalCenter: parent.verticalCenter
+                            verticalCenterOffset: -parent.height*0.2
+                        }
+
+                        }
+                    Text {
+                        text: "Distance To Next Point"
+                        font.pointSize: numberOfPointsTXT.font.pointSize*0.4
+                        color: "#707070"
+                        anchors {
+                            left: parent.left
+                            leftMargin: parent.width*3
+                            bottom: parent.bottom
                 }
             }
 
         }
 
+    }
+    }
     }
     Item {
         id: weatherWidget
