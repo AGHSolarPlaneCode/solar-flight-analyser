@@ -7,6 +7,7 @@ Item {
     antialiasing: true
 
     signal buttonClicked(var buttonState);
+    signal connectionChanged(var connectionState)
 
     Rectangle {
         id: topBar
@@ -42,6 +43,10 @@ Item {
                 right: parent.right
                 rightMargin: parent.width*0.05
                 verticalCenter: parent.verticalCenter
+            }
+            onStateChanged: {
+                if(connectionSlider.state == "on"){connectionChanged(true)}
+                else {connectionChanged(false)}
             }
         }
 

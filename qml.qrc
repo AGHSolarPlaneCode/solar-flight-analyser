@@ -10,5 +10,7 @@
         <file>assetsMenu/settingsIcon.png</file>
         <file>SliderSwitch.qml</file>
         <file>HomePage.qml</file>
+        <file>assetsMenu/PORT STATUS.png</file>
+        <file>assetsMenu/TRANSMITTER DISTANCE.png</file>
     </qresource>
 </RCC>
