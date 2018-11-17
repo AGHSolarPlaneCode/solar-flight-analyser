@@ -10,8 +10,17 @@ Window {
     width: 1600
     height: 900
     title: qsTr("GPS Location Software")
+    property bool connected: false
 
-
+    Connections {
+        target: mainMenu
+        onConnectionChanged: {
+        connected = connectionState
+            var st = mainMenu.state;
+            mainMenu.state = "null"
+            mainMenu.state = st
+        }
+    }
     AppMenu {
         id: mainMenu
         anchors.fill: parent
@@ -19,6 +28,7 @@ Window {
         mousecontainscolor: "#F8C238"
         switchedcolor: "#F8C238"
         state: "home"
+
 
         Rectangle {
             id: mainPage
@@ -36,6 +46,7 @@ Window {
             Loader {
                 id: pageLoader
                 anchors.fill:parent
+                focus: true
                 onLoaded: {
                     console.log("Loaded")
                 }
@@ -44,6 +55,7 @@ Window {
 
             Component {
                 id: homePage
+
 
             Rectangle {
                 anchors.fill: parent
@@ -55,6 +67,8 @@ Window {
                 HomePage {
                 id: homePageItem
                 anchors.fill: parent
+                connected: root.connected
+
                 }
 
 
@@ -113,6 +127,8 @@ Window {
                     mainMenu.state = buttonState  //menuButton signal
                 }
        }
+
+
 
 
 
