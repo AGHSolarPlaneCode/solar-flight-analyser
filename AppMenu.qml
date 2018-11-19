@@ -6,8 +6,8 @@ Item {
     property string mousecontainscolor
     antialiasing: true
 
-    signal buttonClicked(var buttonState);
-    signal connectionChanged(var connectionState)
+    signal buttonClicked(var buttonState)
+    signal connectionChanged(var connectionState)  //send this to backend
 
     Rectangle {
         id: topBar
@@ -22,7 +22,7 @@ Item {
             text: qsTr("Connect:")
             color: "#F1F1F1"
             font {
-                pointSize: parent.height*0.2
+                pointSize: (parent.height*0.2).toFixed(0)
                 bold: true
             }
 

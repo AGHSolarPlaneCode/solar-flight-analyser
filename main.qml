@@ -10,16 +10,13 @@ Window {
     width: 1600
     height: 900
     title: qsTr("GPS Location Software")
-    property bool connected: false
 
     Connections {
         target: mainMenu
         onConnectionChanged: {
-        connected = connectionState
-            var st = mainMenu.state;
-            mainMenu.state = "null"
-            mainMenu.state = st
+        pageLoader.item.connected = connectionState
         }
+
     }
     AppMenu {
         id: mainMenu
@@ -39,7 +36,7 @@ Window {
                 right: parent.right
                 bottom: parent.bottom
             }
-            border {//
+            border {
                 width: 1
                 color: "#333644"
             }
@@ -53,94 +50,62 @@ Window {
             }
         }
 
-            Component {
-                id: homePage
+//            Component {
+//                id: parametersPage
+//                Rectangle {
+//                    anchors.fill: parent
+//                    color: "#292B38"
+//                    border {
+//                        width: 1
+//                        color: "#333644"
+//              }
+////                    //add parameters page here
 
+////                            }
 
-            Rectangle {
-                anchors.fill: parent
-                color: "#292B38"
-                border {
-                    width: 1
-                    color: "#333644"
-                }
-                HomePage {
-                id: homePageItem
-                anchors.fill: parent
-                connected: root.connected
+//                        }
+//            }
+//            Component {
+//                id: historicalPage
+//                Rectangle {
+//                    anchors.fill: parent
+//                    color: "#292B38"
+//                    border {
+//                        width: 1
+//                        color: "#333644"
+//              }
+////                    //add historical page here
 
-                }
+////                            }
 
+//                        }
+//            }
+//            Component {
+//                id: settingsPage
+//                Rectangle {
+//                    anchors.fill: parent
+//                    color: "#292B38"
+//                    border {
+//                        width: 1
+//                        color: "#333644"
+//              }
+////                    //add settings page here
 
-                        }
-            }
-            Component {
-                id: parametersPage
-                Rectangle {
-                    anchors.fill: parent
-                    color: "#292B38"
-                    border {
-                        width: 1
-                        color: "#333644"
-              }
-//                    //add parameters page here
+////                            }
 
-//                            }
-
-                        }
-            }
-            Component {
-                id: historicalPage
-                Rectangle {
-                    anchors.fill: parent
-                    color: "#292B38"
-                    border {
-                        width: 1
-                        color: "#333644"
-              }
-//                    //add historical page here
-
-//                            }
-
-                        }
-            }
-            Component {
-                id: settingsPage
-                Rectangle {
-                    anchors.fill: parent
-                    color: "#292B38"
-                    border {
-                        width: 1
-                        color: "#333644"
-              }
-//                    //add settings page here
-
-//                            }
-
-                        }
-            }
-
-
-            Connections {
-                target: mainMenu
-                onButtonClicked : {
-                    mainMenu.state = buttonState  //menuButton signal
-                }
-       }
-
-
-
+//                        }
+//            }
 
 
             onStateChanged:
             {
                 console.log("state changed")
                 if(mainMenu.state === "home") {
-                  pageLoader.sourceComponent = undefined
-                  pageLoader.sourceComponent = homePage
+                  //pageLoader.sourceComponent = undefined
+                  pageLoader.source = "HomePage.qml"
                 }
                 else if(mainMenu.state === "parameters") {
-                    pageLoader.sourceComponent = undefined
+                    //pageLoader.sourceComponent = undefined
                 //add component to load
                 }
                 else if(mainMenu.state === "historical") {
@@ -166,7 +131,10 @@ Window {
                 State {
                         name: "settings"
 
-                    }
+                    },
+                State {
+                    name: "null"
+                }
 
             ]
 
