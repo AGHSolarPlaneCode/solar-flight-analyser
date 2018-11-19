@@ -50,51 +50,6 @@ Window {
             }
         }
 
-//            Component {
-//                id: parametersPage
-//                Rectangle {
-//                    anchors.fill: parent
-//                    color: "#292B38"
-//                    border {
-//                        width: 1
-//                        color: "#333644"
-//              }
-////                    //add parameters page here
-
-////                            }
-
-//                        }
-//            }
-//            Component {
-//                id: historicalPage
-//                Rectangle {
-//                    anchors.fill: parent
-//                    color: "#292B38"
-//                    border {
-//                        width: 1
-//                        color: "#333644"
-//              }
-////                    //add historical page here
-
-////                            }
-
-//                        }
-//            }
-//            Component {
-//                id: settingsPage
-//                Rectangle {
-//                    anchors.fill: parent
-//                    color: "#292B38"
-//                    border {
-//                        width: 1
-//                        color: "#333644"
-//              }
-////                    //add settings page here
-
-////                            }
-
-//                        }
-//            }
 
 
             onStateChanged:

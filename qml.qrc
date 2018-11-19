@@ -12,5 +12,8 @@
         <file>HomePage.qml</file>
         <file>assetsMenu/PORT STATUS.png</file>
         <file>assetsMenu/TRANSMITTER DISTANCE.png</file>
+        <file>ParametersPage.qml</file>
+        <file>HistoricalPage.qml</file>
+        <file>SettingsPage.qml</file>
     </qresource>
 </RCC>
