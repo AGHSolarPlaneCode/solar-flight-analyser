@@ -2,6 +2,7 @@ import QtQuick 2.0
 
 Item {
     Rectangle {
+        id: root
          anchors.fill: parent
          color: "#292B38"
          border {
