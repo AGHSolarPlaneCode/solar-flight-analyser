@@ -4,16 +4,48 @@ import QtPositioning 5.8
 
 Item {
     id: root
-    property int numberOfPoint : 5
-    property real distanceToNextPoint: 2.52545
-    property real longitude : 59.91325434
-    property real latitude: 10.7534543
-    property string porttxt : "COM8"
-    property bool connected: false
-    property real transmitterDistance : 2.2515
+    property int numberOfPoint : 5  //get from JS function
+    property real distanceToNextPoint: 2.52545 //get from JS function
+    property real longitude : 59.91325434 //get from backend
+    property real latitude: 10.7534543  //get from backend
+    property string porttxt : "COM8" //get from settings (database)
+    property bool connected: false //get from backend
+    property real transmitterDistance : 2.2515 //get from backend
+    anchors.fill: parent
+
     onConnectedChanged: {
+
+        if(connected == true )
+        {
+                transmitterTXT.color = "#38865B" //green
+                portTXT.color = "#38865B"
+                portTXT.text = "Correctly Connected"
+                port.color = "#38865B"
+                port.text = porttxt.toUpperCase()
+                transmitterTXT.text = transmitterDistance.toFixed(1).toString() + "m"
+        }
+            else
+            {
+                 transmitterTXT.color = "#DB3D40"
+                 portTXT.color = "#DB3D40"//red
+                 portTXT.text = "Not Connected"
+                 port.color = "#DB3D40"
+                 port.text =  "---"
+                 transmitterTXT.text = "---"
+            }
+
     console.log(connected)
     }
+    Rectangle {
+        anchors.fill: parent
+        color: "#292B38"
+        border {
+            width: 1
+            color: "#333644"
+        }
+
+
+                }//for tests
 
     Item {
         id: weatherWidget
@@ -51,13 +83,9 @@ Item {
                 source: "qrc:/assetsMenu/TRANSMITTER DISTANCE.png"
             }
             Text {
-                color: {if(connected ==true )
-                        color = "#38865B" //green
-                    else {
-                        color = "#DB3D40" //red
-                    }
-                }
-                font.pointSize: parent.width*0.12
+                id: transmitterTXT
+                color: "#DB3D40"
+                font.pointSize: (parent.width*0.12).toFixed(0)
                 anchors {
                     verticalCenter: parent.verticalCenter
                     horizontalCenter: parent.horizontalCenter
@@ -65,13 +93,7 @@ Item {
                     verticalCenterOffset: parent.height*0.1
                 }
 
-                text: {if(connected ==true )
-                        text = transmitterDistance.toFixed(1).toString() + "m"
-                    else {
-                        text = "---"
-                    }
-                }
-
+                text: "---"
 
             }
 
@@ -131,36 +153,22 @@ Item {
                 source: "qrc:/assetsMenu/PORT STATUS.png"
             }
             Text {
-                color: {if(connected ==true )
-                        color = "#38865B" //green
-                    else {
-                        color = "#DB3D40" //red
-                    }
-                }
-                font.pointSize: parent.height*0.05
+                id: portTXT
+                color: "#DB3D40" //red
+                font.pointSize: (parent.height*0.05).toFixed(0)
                 anchors {
                     bottom: parent.bottom
                     bottomMargin: 0.01*parent.height
                     horizontalCenter: parent.horizontalCenter
                 }
+                text:"Not Connected"
 
-                text: {if(connected ==true )
-                        text = "Correctly Connected"
-                    else {
-                        text = "Not Connected"
-                    }
-                }
 
             }
             Text {
                 id: port
-                color: {if(connected ==true )
-                        color = "#38865B" //green
-                    else {
-                        color = "#DB3D40" //red
-                    }
-                }
-                font.pointSize: parent.height*0.15
+                color: "#DB3D40" //red
+                font.pointSize: (parent.height*0.15).toFixed(0)
                 anchors {
                     verticalCenter: parent.verticalCenter
                     horizontalCenter: parent.horizontalCenter
@@ -168,12 +176,7 @@ Item {
                     verticalCenterOffset: parent.height*0.1
                 }
 
-                text: {if(connected == true )
-                        text = porttxt.toUpperCase()
-                    else {
-                        text = "---"
-                    }
-                }
+                text: "---"
 
             }
 
@@ -242,7 +245,7 @@ Item {
                         id: numberOfPointsTXT
                         text: numberOfPoint.toString()
                         color: "#F5F0F0"
-                        font.pointSize: parent.parent.width*0.04
+                        font.pointSize: (parent.parent.width*0.04).toFixed(0)
                         anchors {
                             left: parent.right
                             leftMargin: parent.width*2
@@ -254,7 +257,7 @@ Item {
                     Text {
                         id: numberOfPointsTXTstatic
                         text: "Number of Points"
-                        font.pointSize: numberOfPointsTXT.font.pointSize*0.4
+                        font.pointSize: (numberOfPointsTXT.font.pointSize*0.4).toFixed(0)
                         color: "#707070"
                         anchors {
                             left: parent.left
@@ -276,7 +279,7 @@ Item {
                         id: distanceToNextPointTXT
                         text: distanceToNextPoint.toFixed(2).toString()+" km"
                         color: "#F5F0F0"
-                        font.pointSize: parent.parent.width*0.04
+                        font.pointSize: (parent.parent.width*0.04).toFixed(0)
                         anchors {
                             left: parent.right
                             leftMargin: parent.width*2
@@ -287,7 +290,7 @@ Item {
                         }
                     Text {
                         text: "Distance To Next Point"
-                        font.pointSize: numberOfPointsTXT.font.pointSize*0.4
+                        font.pointSize: (numberOfPointsTXT.font.pointSize*0.4).toFixed(0)
                         color: "#707070"
                         anchors {
                             left: parent.left
@@ -310,7 +313,7 @@ Item {
                         id: longitudeTXT
                         text: longitude.toFixed(5).toString()
                         color: "#F5F0F0"
-                        font.pointSize: parent.parent.width*0.04
+                        font.pointSize: (parent.parent.width*0.04).toFixed(0)
                         anchors {
                             left: parent.right
                             leftMargin: parent.width*2
@@ -321,7 +324,7 @@ Item {
                         }
                     Text {
                         text: "Longitude"
-                        font.pointSize: longitudeTXT.font.pointSize*0.4
+                        font.pointSize: (longitudeTXT.font.pointSize*0.4).toFixed(0)
                         color: "#707070"
                         anchors {
                             left: parent.left
@@ -344,7 +347,7 @@ Item {
                         id: latitudeTXT
                         text: latitude.toFixed(5).toString()
                         color: "#F5F0F0"
-                        font.pointSize: parent.parent.width*0.04
+                        font.pointSize: (parent.parent.width*0.04).toFixed(0)
                         anchors {
                             left: parent.right
                             leftMargin: parent.width*2
@@ -355,7 +358,7 @@ Item {
                         }
                     Text {
                         text: "Longitude"
-                        font.pointSize: longitudeTXT.font.pointSize*0.4
+                        font.pointSize: (longitudeTXT.font.pointSize*0.4).toFixed(0)
                         color: "#707070"
                         anchors {
                             left: parent.left
