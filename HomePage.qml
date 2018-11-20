@@ -48,6 +48,22 @@ Item {
             width: 1
             color: "#333644"
         }
+        onHeightChanged: {
+            if(mapWidget.state == "windowed") {
+                mapWidget.height = parent.height*0.5
+            }
+            else if(mapWidget.state == "fullPage") {
+                mapWidget.height = parent.height
+            }
+        }
+        onWidthChanged: {
+            if(mapWidget.state == "windowed") {
+                mapWidget.width = parent.width*0.5
+            }
+            else if(mapWidget.state == "fullPage") {
+                mapWidget.width = parent.width
+            }
+        }
 
 
                 }//for tests
@@ -62,6 +78,7 @@ Item {
             right: parent.right
             rightMargin: parent.width*0.05
         }
+
         Rectangle {
             id: weatherBackground
             anchors.fill:parent
@@ -136,6 +153,10 @@ Item {
             id: graphBackground
             anchors.fill:parent
             color: "#2F3243"
+            Image { //static chart just for now
+                anchors.fill:parent
+                source: "qrc:/assetsMenu/CHARTS.png"
+            }
 
         }
     }
@@ -209,6 +230,7 @@ Item {
         id: mapWidget
         height: parent.height*0.5
         width: parent.width*0.5
+        state: "started"
         anchors {
             top: parent.top
             topMargin: parent.height*0.05
@@ -216,19 +238,116 @@ Item {
             leftMargin: parent.width*0.05
 
         }
+        Behavior on width { SmoothedAnimation {id:anim1
+                velocity: Number.POSITIVE_INFINITY
+            } }
+        Behavior on height { SmoothedAnimation {id:anim2
+                velocity: Number.POSITIVE_INFINITY
+            } }
+        Behavior on anchors.topMargin  { SmoothedAnimation {id:anim3
+                velocity: Number.POSITIVE_INFINITY } }
+        Behavior on anchors.leftMargin { SmoothedAnimation {id:anim4
+                velocity: Number.POSITIVE_INFINITY } }
+        states: [
+        State {
+                name: "windowed"
+
+            },
+        State {
+                name: "fullPage"
+            }
+
+        ]
+
+
+    onStateChanged: {
+        console.log("Map State Changed")
+        if(mapWidget.state === "fullPage") {
+            anim1.velocity = 1450
+            anim2.velocity = 750
+            anim3.velocity = 70
+            anim4.velocity = 120
+            mapWidget.anchors.topMargin = 0
+            mapWidget.anchors.leftMargin = 0
+            mapWidget.width = parent.width
+            mapWidget.height = parent.height
+        }
+        else if(mapWidget.state === "windowed") {
+            mapWidget.anchors.topMargin = 0.05*parent.height
+            mapWidget.anchors.leftMargin = 0.05*parent.width
+            mapWidget.width = parent.width*0.5
+            mapWidget.height = parent.height*0.5
+
+        }
+    }
 
         Rectangle {
             anchors.fill: parent
             color : "#2F3243"
-            radius: parent.height*0.02
+            //radius: parent.height*0.02
+            Map { //map
+               id: map
+               anchors.fill: parent
+                anchors {
+                    bottom: parent.bottom
+                    left: parent.left
+                }
+                plugin: Plugin{
+                    name: "mapbox"
+                    PluginParameter{
+                        name: "mapbox.access_token"
+                        value: "pk.eyJ1IjoiYndpZWN6b3JlayIsImEiOiJjam9lYnNoazkydWd5M3Fyczd6azZrcHdqIn0.bPpz-hUEBwFCFnj0vv_gwg"  //add your own acces token
+                    }
+                }
 
+            }
 
+            Rectangle { //bottomBar
+                color: parent.color
+                width: parent.width
+                height: parent.parent.parent.height*0.1*0.5
+                opacity: 0.85
+                anchors {
+                    bottom: parent.bottom
+                    left: parent.left
+
+                }
+                Rectangle {
+                width: parent.height*0.95
+                height: parent.height*0.95
+                color: "transparent"
+                opacity: 1
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                Image {
+                    id : fullPageIcon
+                    width: parent.width*0.6
+                    height: parent.height*0.6
+                    anchors.centerIn: parent
+                    source: "qrc:/assetsMenu/mapFullScreen.png"
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        console.log("Mouse area here")
+                        console.log(mapWidget.state)
+                         if(mapWidget.state == "windowed"||mapWidget.state =="started") {mapWidget.state = "fullPage"}
+                         else {mapWidget.state = "windowed"}
+                         console.log(mapWidget.state)
+                    }
+                }
+
+                }
+
+            }
 
             Rectangle { //topBar
                 color: parent.color
                 width: parent.width
-                height: parent.height*0.2
-                radius: parent.height*0.02
+                height: parent.parent.parent.height*0.2*0.5
+                //radius: parent.height*0.02
+                opacity: 0.85
                 anchors {
                     top: parent.top
 
@@ -247,7 +366,7 @@ Item {
                         id: numberOfPointsTXT
                         text: numberOfPoint.toString()
                         color: "#F5F0F0"
-                        font.pointSize: (parent.parent.width*0.04).toFixed(0)
+                        font.pointSize: (parent.parent.parent.parent.parent.width*0.02).toFixed(0)
                         anchors {
                             left: parent.right
                             leftMargin: parent.width*2
@@ -281,7 +400,7 @@ Item {
                         id: distanceToNextPointTXT
                         text: distanceToNextPoint.toFixed(2).toString()+" km"
                         color: "#F5F0F0"
-                        font.pointSize: (parent.parent.width*0.04).toFixed(0)
+                        font.pointSize: (parent.parent.parent.parent.parent.width*0.02).toFixed(0)
                         anchors {
                             left: parent.right
                             leftMargin: parent.width*2
@@ -315,7 +434,7 @@ Item {
                         id: longitudeTXT
                         text: longitude.toFixed(5).toString()
                         color: "#F5F0F0"
-                        font.pointSize: (parent.parent.width*0.04).toFixed(0)
+                        font.pointSize: (parent.parent.parent.parent.parent.width*0.02).toFixed(0)
                         anchors {
                             left: parent.right
                             leftMargin: parent.width*2
@@ -349,7 +468,7 @@ Item {
                         id: latitudeTXT
                         text: latitude.toFixed(5).toString()
                         color: "#F5F0F0"
-                        font.pointSize: (parent.parent.width*0.04).toFixed(0)
+                        font.pointSize: (parent.parent.parent.parent.parent.width*0.02).toFixed(0)
                         anchors {
                             left: parent.right
                             leftMargin: parent.width*2
@@ -373,84 +492,6 @@ Item {
 
     }
     }
-        Map { //map
-           id: map
-           height: parent.height*0.8
-           width: parent.width
-           state: "started"
-           Rectangle {
-           width: root.width*0.03
-           height: root.height*0.06
-           color: "#2F3243"
-           anchors {
-              bottom: parent.bottom
-              right: parent.right
-           }
-           Image {
-               id : fullPageIcon
-               anchors.fill: parent
-               source: "qrc:/assetsMenu/whiteFullScreenIcon.png"
-           }
-
-           MouseArea {
-               anchors.fill: parent
-               onClicked: {
-                   console.log("Mouse area here")
-                   console.log(map.state)
-                    if(map.state == "windowed"||map.state =="started") {map.state = "fullPage"}
-                    else {map.state = "windowed"}
-                    console.log(map.state)
-               }
-           }
-
-           }
-            anchors {
-                bottom: parent.bottom
-                left: parent.left
-            }
-            plugin: Plugin{
-                name: "mapbox"
-                PluginParameter{
-                    name: "mapbox.access_token"
-                    value: ""  //add your own acces token
-                }
-            }
-            states: [
-            State {
-                    name: "windowed"
-
-                },
-            State {
-                    name: "fullPage"
-                }
-
-            ]
-
-
-        onStateChanged: {
-            console.log("Map State Changed")
-            if(map.state === "fullPage") {
-                fullPageIcon.source = "qrc:/assetsMenu/Full-Screen-Collapse.png"
-                map.anchors.bottom = undefined
-                map.anchors.left = undefined
-                map.anchors.verticalCenter = mapWidget.bottom
-                map.anchors.horizontalCenter = mapWidget.right
-                map.anchors.horizontalCenterOffset = -0.1*mapWidget.width
-                map.anchors.verticalCenterOffset = -0.1*mapWidget.height
-                map.width = mainPage.width
-                map.height = mainPage.height
-            }
-            else if(map.state === "windowed") {
-                fullPageIcon.source = "qrc:/assetsMenu/whiteFullScreenIcon.png"
-                map.anchors.verticalCenter = undefined
-                map.anchors.horizontalCenter = undefined
-                map.anchors.bottom = mapWidget.bottom
-                map.anchors.left = mapWidget.left
-                map.width = mapWidget.width
-                map.height = mapWidget.height*0.8
-            }
-        }
-        }
 
     }
 }
