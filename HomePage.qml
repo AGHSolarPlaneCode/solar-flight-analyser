@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtLocation 5.9
 import QtPositioning 5.8
 
+//before use map add your acces token for MapBoxGL  on line 415
 Item {
     id: root
     property int numberOfPoint : 5  //get from JS function
@@ -11,6 +12,9 @@ Item {
     property string porttxt : "COM8" //get from settings (database)
     property bool connected: false //get from backend
     property real transmitterDistance : 2.2515 //get from backend
+
+
+
     anchors.fill: parent
 
     onConnectedChanged: {
@@ -34,9 +38,10 @@ Item {
                  transmitterTXT.text = "---"
             }
 
-    console.log(connected)
+    //console.log(connected)
     }
     Rectangle {
+        id: mainPage
         anchors.fill: parent
         color: "#292B38"
         border {
@@ -216,10 +221,7 @@ Item {
             anchors.fill: parent
             color : "#2F3243"
             radius: parent.height*0.02
-            Plugin {
-                id: mapPlugin
-                name: "osm"  //change to mapboxgl
-            }
+
 
 
             Rectangle { //topBar
@@ -372,17 +374,83 @@ Item {
     }
     }
         Map { //map
+           id: map
            height: parent.height*0.8
            width: parent.width
-            plugin: mapPlugin
-            center: QtPositioning.coordinate(59.91, 10.75)// Oslo example
-            zoomLevel: 12
+           state: "started"
+           Rectangle {
+           width: root.width*0.03
+           height: root.height*0.06
+           color: "#2F3243"
+           anchors {
+              bottom: parent.bottom
+              right: parent.right
+           }
+           Image {
+               id : fullPageIcon
+               anchors.fill: parent
+               source: "qrc:/assetsMenu/whiteFullScreenIcon.png"
+           }
+
+           MouseArea {
+               anchors.fill: parent
+               onClicked: {
+                   console.log("Mouse area here")
+                   console.log(map.state)
+                    if(map.state == "windowed"||map.state =="started") {map.state = "fullPage"}
+                    else {map.state = "windowed"}
+                    console.log(map.state)
+               }
+           }
+
+           }
             anchors {
                 bottom: parent.bottom
                 left: parent.left
-                right: parent.right
             }
+            plugin: Plugin{
+                name: "mapbox"
+                PluginParameter{
+                    name: "mapbox.access_token"
+                    value: ""  //add your own acces token
+                }
+            }
+            states: [
+            State {
+                    name: "windowed"
 
+                },
+            State {
+                    name: "fullPage"
+                }
+
+            ]
+
+
+        onStateChanged: {
+            console.log("Map State Changed")
+            if(map.state === "fullPage") {
+                fullPageIcon.source = "qrc:/assetsMenu/Full-Screen-Collapse.png"
+                map.anchors.bottom = undefined
+                map.anchors.left = undefined
+                map.anchors.verticalCenter = mapWidget.bottom
+                map.anchors.horizontalCenter = mapWidget.right
+                map.anchors.horizontalCenterOffset = -0.1*mapWidget.width
+                map.anchors.verticalCenterOffset = -0.1*mapWidget.height
+                map.width = mainPage.width
+                map.height = mainPage.height
+            }
+            else if(map.state === "windowed") {
+                fullPageIcon.source = "qrc:/assetsMenu/whiteFullScreenIcon.png"
+                map.anchors.verticalCenter = undefined
+                map.anchors.horizontalCenter = undefined
+                map.anchors.bottom = mapWidget.bottom
+                map.anchors.left = mapWidget.left
+                map.width = mapWidget.width
+                map.height = mapWidget.height*0.8
+            }
         }
+        }
+
     }
 }

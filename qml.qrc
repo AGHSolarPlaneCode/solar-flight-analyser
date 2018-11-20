@@ -15,5 +15,7 @@
         <file>ParametersPage.qml</file>
         <file>HistoricalPage.qml</file>
         <file>SettingsPage.qml</file>
+        <file>assetsMenu/Full-Screen-Collapse.png</file>
+        <file>assetsMenu/whiteFullScreenIcon.png</file>
     </qresource>
 </RCC>
