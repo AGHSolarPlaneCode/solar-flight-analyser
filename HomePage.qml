@@ -296,7 +296,7 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
-                        value: "pk.eyJ1IjoiYndpZWN6b3JlayIsImEiOiJjam9lYnNoazkydWd5M3Fyczd6azZrcHdqIn0.bPpz-hUEBwFCFnj0vv_gwg"  //add your own acces token
+                        value: ""  //add your own acces token
                     }
                 }
 
