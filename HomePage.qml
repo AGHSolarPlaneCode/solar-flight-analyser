@@ -298,6 +298,10 @@ Item {
                         name: "mapbox.access_token"
                         value: ""  //add your own acces token
                     }
+                    PluginParameter{
+                        name: "mapbox.mapping.map_id"
+                        value: "mapbox.dark"
+                    }
                 }
 
             }
