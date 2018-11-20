@@ -30,6 +30,7 @@ height: size*1.1
             color: "black"
             width: size*0.005
         }
+        Behavior on anchors.horizontalCenterOffset   {SmoothedAnimation {velocity: 250}}
 
         anchors {
             verticalCenter: parent.verticalCenter
