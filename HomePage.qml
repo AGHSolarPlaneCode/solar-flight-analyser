@@ -2,7 +2,6 @@ import QtQuick 2.0
 import QtLocation 5.9
 import QtPositioning 5.8
 
-//before use map add your acces token for MapBoxGL  on line 415
 Item {
     id: root
     property int numberOfPoint : 5  //get from JS function
@@ -12,8 +11,9 @@ Item {
     property string porttxt : "COM8" //get from settings (database)
     property bool connected: false //get from backend
     property real transmitterDistance : 2.2515 //get from backend
-
-
+    property real groundSpeed : 25.46656 //get from backend
+    property real altitude : 254.5465 //get from backend
+    property real connectionPower : 98.65 //get from backend
 
     anchors.fill: parent
 
@@ -218,10 +218,115 @@ Item {
             left: parent.left
             leftMargin: parent.width*0.37
         }
-        Rectangle {
+        Rectangle
+        {
             id: parametersBackground
             anchors.fill:parent
             color: "#2F3243"
+              Rectangle { //Ground speed
+                  width: parent.width*0.5
+                  height: parent.height*0.5
+                  anchors.top: parent.top
+                  anchors.left:parent.left
+                  anchors.leftMargin: 0.08*width
+                  color: "transparent"
+                  Image {
+                      width: parent.width*0.98
+                      height: parent.height*0.98
+                      anchors.centerIn: parent
+                      source: "qrc:/assetsMenu/SpeedParametr.png"
+
+                  }
+                  Text {
+                      color: "#F5F0F0"
+                      anchors {
+                       verticalCenter: parent.verticalCenter
+                       verticalCenterOffset: -parent.height*0.06
+                       horizontalCenter: parent.horizontalCenter
+                       horizontalCenterOffset: -parent.width*0.052
+                      }
+                      font.pointSize: (parent.height*0.11).toFixed(0)
+                      text: groundSpeed.toFixed(0).toString() + "km/h"
+                  }
+              }
+              Rectangle { //Heigth
+                  width: parent.width*0.5
+                  height: parent.height*0.5
+                  anchors.top: parent.top
+                  anchors.right: parent.right
+                  anchors.rightMargin: -0.1*width
+                  color: "transparent"
+                  Image {
+                      width: parent.width
+                      height: parent.height
+                      anchors.centerIn: parent
+                      source: "qrc:/assetsMenu/Height.png"
+
+                  }
+                  Text {
+                      color: "#F5F0F0"
+                      anchors {
+                       verticalCenter: parent.verticalCenter
+                       verticalCenterOffset: -parent.height*0.06
+                       horizontalCenter: parent.horizontalCenter
+                       horizontalCenterOffset: -parent.width*0.052
+                      }
+                      font.pointSize: (parent.height*0.12).toFixed(0)
+                      text: altitude.toFixed(0).toString() + "m"
+                  }
+              }
+              Rectangle { //connectionPower
+                  width: parent.width*0.5
+                  height: parent.height*0.5
+                  anchors.bottom: parent.bottom
+                  anchors.left:parent.left
+                  anchors.leftMargin: 0.08*width
+                  color: "transparent"
+                  Image {
+                      width: parent.width*0.98
+                      height: parent.height*0.98
+                      anchors.centerIn: parent
+                      source: "qrc:/assetsMenu/connectionPower.png"
+
+                  }
+                  Text {
+                      color: "#F5F0F0"
+                      anchors {
+                       verticalCenter: parent.verticalCenter
+                       verticalCenterOffset: -parent.height*0.06
+                       horizontalCenter: parent.horizontalCenter
+                       horizontalCenterOffset: -parent.width*0.052
+                      }
+                      font.pointSize: (parent.height*0.11).toFixed(0)
+                      text: connectionPower.toFixed(0).toString() + "%"
+                  }
+              }
+              Rectangle { //Distance
+                  width: parent.width*0.5
+                  height: parent.height*0.5
+                  anchors.bottom: parent.bottom
+                  anchors.right: parent.right
+                  anchors.rightMargin: -0.1*width
+                  color: "transparent"
+                  Image {
+                      width: parent.width
+                      height: parent.height
+                      anchors.centerIn: parent
+                      source: "qrc:/assetsMenu/Distance.png"
+
+                  }
+                  Text {
+                      color: "#F5F0F0"
+                      anchors {
+                       verticalCenter: parent.verticalCenter
+                       verticalCenterOffset: -parent.height*0.06
+                       horizontalCenter: parent.horizontalCenter
+                       horizontalCenterOffset: -parent.width*0.052
+                      }
+                      font.pointSize: (parent.height*0.12).toFixed(0)
+                      text: distanceToNextPoint.toFixed(2).toString() + "km"
+                  }
+              }
 
         }
     }
@@ -296,7 +401,7 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
-                        value: ""  //add your own acces token
+                        value: "***"  //add your own acces token
                     }
                     PluginParameter{
                         name: "mapbox.mapping.map_id"

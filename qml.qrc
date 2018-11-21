@@ -17,5 +17,9 @@
         <file>SettingsPage.qml</file>
         <file>assetsMenu/mapFullScreen.png</file>
         <file>assetsMenu/CHARTS.png</file>
+        <file>assetsMenu/SpeedParametr.png</file>
+        <file>assetsMenu/Height.png</file>
+        <file>assetsMenu/connectionPower.png</file>
+        <file>assetsMenu/Distance.png</file>
     </qresource>
 </RCC>
