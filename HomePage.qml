@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtLocation 5.9
 import QtPositioning 5.8
 
-//before use map add your acces token for MapBoxGL  on line 415
+//before use map add your acces token for MapBoxGL  on line 299
 Item {
     id: root
     property int numberOfPoint : 5  //get from JS function
@@ -296,7 +296,7 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
-                        value: ""  //add your own acces token
+                        value: "*****"  //add your own acces token
                     }
                     PluginParameter{
                         name: "mapbox.mapping.map_id"
@@ -364,13 +364,13 @@ Item {
                     anchors {
                         verticalCenter: parent.verticalCenter
                         left: parent.left
-                        leftMargin: parent.width*0.03
+                        leftMargin: root.width*0.015
                     }
                     Text {
                         id: numberOfPointsTXT
                         text: numberOfPoint.toString()
                         color: "#F5F0F0"
-                        font.pointSize: (parent.parent.parent.parent.parent.width*0.02).toFixed(0)
+                        font.pointSize: (root.width*0.016).toFixed(0)
                         anchors {
                             left: parent.right
                             leftMargin: parent.width*2
@@ -404,7 +404,7 @@ Item {
                         id: distanceToNextPointTXT
                         text: distanceToNextPoint.toFixed(2).toString()+" km"
                         color: "#F5F0F0"
-                        font.pointSize: (parent.parent.parent.parent.parent.width*0.02).toFixed(0)
+                        font.pointSize: (root.width*0.016).toFixed(0)
                         anchors {
                             left: parent.right
                             leftMargin: parent.width*2
@@ -438,7 +438,7 @@ Item {
                         id: longitudeTXT
                         text: longitude.toFixed(5).toString()
                         color: "#F5F0F0"
-                        font.pointSize: (parent.parent.parent.parent.parent.width*0.02).toFixed(0)
+                        font.pointSize: (root.width*0.016).toFixed(0)
                         anchors {
                             left: parent.right
                             leftMargin: parent.width*2
@@ -472,7 +472,7 @@ Item {
                         id: latitudeTXT
                         text: latitude.toFixed(5).toString()
                         color: "#F5F0F0"
-                        font.pointSize: (parent.parent.parent.parent.parent.width*0.02).toFixed(0)
+                        font.pointSize: (root.width*0.016).toFixed(0)
                         anchors {
                             left: parent.right
                             leftMargin: parent.width*2
