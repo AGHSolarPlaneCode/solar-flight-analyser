@@ -19,6 +19,7 @@ Item {
         right:parent.right
         }
         Text{
+            id: timeObj
             color: "#F1F1F1"
             text: new Date().toLocaleString(Qt.locale(),"hh:mm")
             font {
@@ -33,6 +34,24 @@ Item {
                 rightMargin: parent.width*0.02
             }
         }
+        Text{
+            id: dateObj
+            color: "#F1F1F1"
+            text: new Date().toLocaleString(Qt.locale(),"dd.MM.yyyy")
+            font {
+                pointSize: (parent.height*0.1).toFixed(0)
+                bold: true
+            }
+
+            anchors {
+                verticalCenter: parent.verticalCenter
+                verticalCenterOffset: -parent.height*0.025
+                top: timeObj.bottom
+                rightMargin: parent.width*0.02
+                left: timeObj.left
+            }
+        }
+
         Text{
             id:connectionText
             text: qsTr("Connect:")
