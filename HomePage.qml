@@ -11,6 +11,10 @@ Item {
     property string porttxt : "COM8" //get from settings (database)
     property bool connected: false //get from backend
     property real transmitterDistance : 2.2515 //get from backend
+    property real groundSpeed : 25.46656 //get from backend
+    property real altitude : 254.5465 //get from backend
+    property real connectionPower : 98.65 //get from backend
+
     anchors.fill: parent
 
     onConnectedChanged: {
@@ -34,14 +38,31 @@ Item {
                  transmitterTXT.text = "---"
             }
 
-    console.log(connected)
+    //console.log(connected)
     }
     Rectangle {
+        id: mainPage
         anchors.fill: parent
         color: "#292B38"
         border {
             width: 1
             color: "#333644"
+        }
+        onHeightChanged: {
+            if(mapWidget.state == "windowed") {
+                mapWidget.height = parent.height*0.5
+            }
+            else if(mapWidget.state == "fullPage") {
+                mapWidget.height = parent.height
+            }
+        }
+        onWidthChanged: {
+            if(mapWidget.state == "windowed") {
+                mapWidget.width = parent.width*0.5
+            }
+            else if(mapWidget.state == "fullPage") {
+                mapWidget.width = parent.width
+            }
         }
 
 
@@ -57,6 +78,7 @@ Item {
             right: parent.right
             rightMargin: parent.width*0.05
         }
+
         Rectangle {
             id: weatherBackground
             anchors.fill:parent
@@ -131,6 +153,10 @@ Item {
             id: graphBackground
             anchors.fill:parent
             color: "#2F3243"
+            Image { //static chart just for now
+                anchors.fill:parent
+                source: "qrc:/assetsMenu/CHARTS.png"
+            }
 
         }
     }
@@ -192,10 +218,115 @@ Item {
             left: parent.left
             leftMargin: parent.width*0.37
         }
-        Rectangle {
+        Rectangle
+        {
             id: parametersBackground
             anchors.fill:parent
             color: "#2F3243"
+              Rectangle { //Ground speed
+                  width: parent.width*0.5
+                  height: parent.height*0.5
+                  anchors.top: parent.top
+                  anchors.left:parent.left
+                  anchors.leftMargin: 0.08*width
+                  color: "transparent"
+                  Image {
+                      width: parent.width*0.98
+                      height: parent.height*0.98
+                      anchors.centerIn: parent
+                      source: "qrc:/assetsMenu/SpeedParametr.png"
+
+                  }
+                  Text {
+                      color: "#F5F0F0"
+                      anchors {
+                       verticalCenter: parent.verticalCenter
+                       verticalCenterOffset: -parent.height*0.06
+                       horizontalCenter: parent.horizontalCenter
+                       horizontalCenterOffset: -parent.width*0.052
+                      }
+                      font.pointSize: (parent.height*0.11).toFixed(0)
+                      text: groundSpeed.toFixed(0).toString() + "km/h"
+                  }
+              }
+              Rectangle { //Heigth
+                  width: parent.width*0.5
+                  height: parent.height*0.5
+                  anchors.top: parent.top
+                  anchors.right: parent.right
+                  anchors.rightMargin: -0.1*width
+                  color: "transparent"
+                  Image {
+                      width: parent.width
+                      height: parent.height
+                      anchors.centerIn: parent
+                      source: "qrc:/assetsMenu/Height.png"
+
+                  }
+                  Text {
+                      color: "#F5F0F0"
+                      anchors {
+                       verticalCenter: parent.verticalCenter
+                       verticalCenterOffset: -parent.height*0.06
+                       horizontalCenter: parent.horizontalCenter
+                       horizontalCenterOffset: -parent.width*0.052
+                      }
+                      font.pointSize: (parent.height*0.12).toFixed(0)
+                      text: altitude.toFixed(0).toString() + "m"
+                  }
+              }
+              Rectangle { //connectionPower
+                  width: parent.width*0.5
+                  height: parent.height*0.5
+                  anchors.bottom: parent.bottom
+                  anchors.left:parent.left
+                  anchors.leftMargin: 0.08*width
+                  color: "transparent"
+                  Image {
+                      width: parent.width*0.98
+                      height: parent.height*0.98
+                      anchors.centerIn: parent
+                      source: "qrc:/assetsMenu/connectionPower.png"
+
+                  }
+                  Text {
+                      color: "#F5F0F0"
+                      anchors {
+                       verticalCenter: parent.verticalCenter
+                       verticalCenterOffset: -parent.height*0.06
+                       horizontalCenter: parent.horizontalCenter
+                       horizontalCenterOffset: -parent.width*0.052
+                      }
+                      font.pointSize: (parent.height*0.11).toFixed(0)
+                      text: connectionPower.toFixed(0).toString() + "%"
+                  }
+              }
+              Rectangle { //Distance
+                  width: parent.width*0.5
+                  height: parent.height*0.5
+                  anchors.bottom: parent.bottom
+                  anchors.right: parent.right
+                  anchors.rightMargin: -0.1*width
+                  color: "transparent"
+                  Image {
+                      width: parent.width
+                      height: parent.height
+                      anchors.centerIn: parent
+                      source: "qrc:/assetsMenu/Distance.png"
+
+                  }
+                  Text {
+                      color: "#F5F0F0"
+                      anchors {
+                       verticalCenter: parent.verticalCenter
+                       verticalCenterOffset: -parent.height*0.06
+                       horizontalCenter: parent.horizontalCenter
+                       horizontalCenterOffset: -parent.width*0.052
+                      }
+                      font.pointSize: (parent.height*0.12).toFixed(0)
+                      text: distanceToNextPoint.toFixed(2).toString() + "km"
+                  }
+              }
 
         }
     }
@@ -204,6 +335,7 @@ Item {
         id: mapWidget
         height: parent.height*0.5
         width: parent.width*0.5
+        state: "started"
         anchors {
             top: parent.top
             topMargin: parent.height*0.05
@@ -211,22 +343,120 @@ Item {
             leftMargin: parent.width*0.05
 
         }
+        Behavior on width { SmoothedAnimation {id:anim1
+                velocity: Number.POSITIVE_INFINITY
+            } }
+        Behavior on height { SmoothedAnimation {id:anim2
+                velocity: Number.POSITIVE_INFINITY
+            } }
+        Behavior on anchors.topMargin  { SmoothedAnimation {id:anim3
+                velocity: Number.POSITIVE_INFINITY } }
+        Behavior on anchors.leftMargin { SmoothedAnimation {id:anim4
+                velocity: Number.POSITIVE_INFINITY } }
+        states: [
+        State {
+                name: "windowed"
+
+            },
+        State {
+                name: "fullPage"
+            }
+
+        ]
+
+
+    onStateChanged: {
+        console.log("Map State Changed")
+        if(mapWidget.state === "fullPage") {
+            anim1.velocity = 1450
+            anim2.velocity = 750
+            anim3.velocity = 70
+            anim4.velocity = 120
+            mapWidget.anchors.topMargin = 0
+            mapWidget.anchors.leftMargin = 0
+            mapWidget.width = parent.width
+            mapWidget.height = parent.height
+        }
+        else if(mapWidget.state === "windowed") {
+            mapWidget.anchors.topMargin = 0.05*parent.height
+            mapWidget.anchors.leftMargin = 0.05*parent.width
+            mapWidget.width = parent.width*0.5
+            mapWidget.height = parent.height*0.5
+
+        }
+    }
 
         Rectangle {
             anchors.fill: parent
             color : "#2F3243"
-            radius: parent.height*0.02
-            Plugin {
-                id: mapPlugin
-                name: "osm"  //change to mapboxgl
+            //radius: parent.height*0.02
+            Map { //map
+               id: map
+               anchors.fill: parent
+                anchors {
+                    bottom: parent.bottom
+                    left: parent.left
+                }
+                plugin: Plugin{
+                    name: "mapbox"
+                    PluginParameter{
+                        name: "mapbox.access_token"
+                        value: "***"  //add your own acces token
+                    }
+                    PluginParameter{
+                        name: "mapbox.mapping.map_id"
+                        value: "mapbox.dark"
+                    }
+                }
+
             }
 
+            Rectangle { //bottomBar
+                color: parent.color
+                width: parent.width
+                height: parent.parent.parent.height*0.1*0.5
+                opacity: 0.85
+                anchors {
+                    bottom: parent.bottom
+                    left: parent.left
+
+                }
+                Rectangle {
+                width: parent.height*0.95
+                height: parent.height*0.95
+                color: "transparent"
+                opacity: 1
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                Image {
+                    id : fullPageIcon
+                    width: parent.width*0.6
+                    height: parent.height*0.6
+                    anchors.centerIn: parent
+                    source: "qrc:/assetsMenu/mapFullScreen.png"
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        console.log("Mouse area here")
+                        console.log(mapWidget.state)
+                         if(mapWidget.state == "windowed"||mapWidget.state =="started") {mapWidget.state = "fullPage"}
+                         else {mapWidget.state = "windowed"}
+                         console.log(mapWidget.state)
+                    }
+                }
+
+                }
+
+            }
 
             Rectangle { //topBar
                 color: parent.color
                 width: parent.width
-                height: parent.height*0.2
-                radius: parent.height*0.02
+                height: parent.parent.parent.height*0.2*0.5
+                //radius: parent.height*0.02
+                opacity: 0.85
                 anchors {
                     top: parent.top
 
@@ -239,13 +469,13 @@ Item {
                     anchors {
                         verticalCenter: parent.verticalCenter
                         left: parent.left
-                        leftMargin: parent.width*0.03
+                        leftMargin: root.width*0.015
                     }
                     Text {
                         id: numberOfPointsTXT
                         text: numberOfPoint.toString()
                         color: "#F5F0F0"
-                        font.pointSize: (parent.parent.width*0.04).toFixed(0)
+                        font.pointSize: (root.width*0.016).toFixed(0)
                         anchors {
                             left: parent.right
                             leftMargin: parent.width*2
@@ -279,7 +509,7 @@ Item {
                         id: distanceToNextPointTXT
                         text: distanceToNextPoint.toFixed(2).toString()+" km"
                         color: "#F5F0F0"
-                        font.pointSize: (parent.parent.width*0.04).toFixed(0)
+                        font.pointSize: (root.width*0.016).toFixed(0)
                         anchors {
                             left: parent.right
                             leftMargin: parent.width*2
@@ -313,7 +543,7 @@ Item {
                         id: longitudeTXT
                         text: longitude.toFixed(5).toString()
                         color: "#F5F0F0"
-                        font.pointSize: (parent.parent.width*0.04).toFixed(0)
+                        font.pointSize: (root.width*0.016).toFixed(0)
                         anchors {
                             left: parent.right
                             leftMargin: parent.width*2
@@ -347,7 +577,7 @@ Item {
                         id: latitudeTXT
                         text: latitude.toFixed(5).toString()
                         color: "#F5F0F0"
-                        font.pointSize: (parent.parent.width*0.04).toFixed(0)
+                        font.pointSize: (root.width*0.016).toFixed(0)
                         anchors {
                             left: parent.right
                             leftMargin: parent.width*2
@@ -371,18 +601,6 @@ Item {
 
     }
     }
-        Map { //map
-           height: parent.height*0.8
-           width: parent.width
-            plugin: mapPlugin
-            center: QtPositioning.coordinate(59.91, 10.75)// Oslo example
-            zoomLevel: 12
-            anchors {
-                bottom: parent.bottom
-                left: parent.left
-                right: parent.right
-            }
 
-        }
     }
 }
