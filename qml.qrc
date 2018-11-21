@@ -17,5 +17,6 @@
         <file>SettingsPage.qml</file>
         <file>assetsMenu/mapFullScreen.png</file>
         <file>assetsMenu/CHARTS.png</file>
+        <file>assetsMenu/planeMarker.png</file>
     </qresource>
 </RCC>

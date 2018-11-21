@@ -7,8 +7,10 @@ import QtLocation 5.9
 Window {
     id: root
     visible: true
-    width: 1600
-    height: 900
+    x: 100
+    y: 40
+    width: 1420
+    height: 800
     title: qsTr("GPS Location Software")
 
     Connections {
