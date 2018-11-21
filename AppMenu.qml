@@ -19,6 +19,22 @@ Item {
         right:parent.right
         }
         Text{
+            color: "#F1F1F1"
+            text: new Date().toLocaleString(Qt.locale(),"hh:mm")
+            font {
+                pointSize: (parent.height*0.2).toFixed(0)
+                bold: true
+            }
+
+            anchors {
+                verticalCenter: parent.verticalCenter
+                verticalCenterOffset: -parent.height*0.025
+                right: connectionText.left
+                rightMargin: parent.width*0.02
+            }
+        }
+        Text{
+            id:connectionText
             text: qsTr("Connect:")
             color: "#F1F1F1"
             font {
