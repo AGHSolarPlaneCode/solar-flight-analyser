@@ -21,7 +21,6 @@ Item {
         Text{
             id: timeObj
             color: "#F1F1F1"
-            text: new Date().toLocaleString(Qt.locale(),"hh:mm")
             font {
                 pointSize: (parent.height*0.2).toFixed(0)
                 bold: true
@@ -32,6 +31,14 @@ Item {
                 verticalCenterOffset: -parent.height*0.025
                 right: connectionText.left
                 rightMargin: parent.width*0.02
+            }
+            Timer{
+                id: timeTimer
+                interval: 100
+                repeat: true
+                running: true
+                triggeredOnStart: true
+                onTriggered: timeObj.text=new Date().toLocaleString(Qt.locale(),"hh:mm")
             }
         }
         Text{
@@ -49,6 +56,14 @@ Item {
                 top: timeObj.bottom
                 rightMargin: parent.width*0.02
                 left: timeObj.left
+            }
+            Timer{
+                id: dateTimer
+                interval: 100
+                repeat: true
+                running: true
+                triggeredOnStart: true
+                onTriggered: dateObj.text=new Date().toLocaleString(Qt.locale(),"dd.MM.yyyy")
             }
         }
 
