@@ -18,5 +18,6 @@
         <file>assetsMenu/mapFullScreen.png</file>
         <file>assetsMenu/CHARTS.png</file>
         <file>assetsMenu/planeMarker.png</file>
+        <file>Marker.qml</file>
     </qresource>
 </RCC>

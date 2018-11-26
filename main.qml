@@ -12,7 +12,7 @@ Window {
     width: 1420
     height: 800
     title: qsTr("GPS Location Software")
-
+    property int counter: 1
     Connections {
         target: mainMenu
         onConnectionChanged: {

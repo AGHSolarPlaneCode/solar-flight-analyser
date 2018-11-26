@@ -296,13 +296,84 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
-                        value: "*****"  //add your own acces token
+                        value: "****"  //add your own acces token
                     }
                     PluginParameter{
                         name: "mapbox.mapping.map_id"
                         value: "mapbox.dark"
                     }
                 }
+                center: QtPositioning.coordinate(52.21676,19.365343)
+                zoomLevel: 6.3
+
+                // MARKER
+                Marker{
+
+                    id: plane
+                    coordinate: firstRoute.point //  to change for class object
+
+                    SequentialAnimation{
+                        id: planeAnimation
+                        property real direction: 0
+
+                        //- First Animation - rotate the plane to correct direction
+
+                        NumberAnimation{
+                            id: rotateAnimation
+                            target: plane
+                            property: "rotate" // type of rotation 0 - 360 degrees
+                            duration: 1500
+                            easing.type: Easing.InOutQuad
+                            to: planeAnimation.direction  // set direction before
+                            //running animation
+                        }
+
+                        //- Second Animation - move plane
+                        CoordinateAnimation{
+                            id: planeMoveAnimation
+                            duration: 10000
+                            target: firstRoute
+                            property: "point"
+                            easing.type: Easing.InOutQuad
+                        }
+
+                    }
+
+                    MouseArea{
+                        anchors.fill: parent
+                            onClicked: {
+
+                                if (planeAnimation.running) {
+                                    console.log("Plane is flying.");
+                                    return;
+                                }
+
+                                if (firstRoute.point === firstRoute.endPoint) {
+                                    planeMoveAnimation.from = firstRoute.endPoint;
+                                    planeMoveAnimation.to = firstRoute.startPoint;
+                                } else if (firstRoute.point === firstRoute.startPoint) {
+                                    planeMoveAnimation.from = firstRoute.startPoint;
+                                    planeMoveAnimation.to = firstRoute.endPoint;
+                                }
+
+                                if(counter != 1){
+                                    planeAnimation.direction = firstRoute.point.azimuthTo(planeMoveAnimation.to);
+                                    planeAnimation.start();
+                                }else{
+                                    planeAnimation.start();
+                                }
+                               counter = counter+1;
+                            }
+                    }
+                    /*
+                    Component.onCompleted: {
+                        firstRoute.point = cracow;
+                    }
+                    */
+
+                }
+
+                //- end of MARKER
 
             }
 
