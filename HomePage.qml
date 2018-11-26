@@ -296,7 +296,7 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
-                        value: "****"  //add your own acces token
+                        value: "pk.eyJ1IjoibWFyY2lubTk3IiwiYSI6ImNqb29xdHBidTAzd2gza292ZWdob296ODIifQ.bBZPXe0BbqWooVh83P7IcA"  //add your own acces token
                     }
                     PluginParameter{
                         name: "mapbox.mapping.map_id"
@@ -314,7 +314,7 @@ Item {
 
                     SequentialAnimation{
                         id: planeAnimation
-                        property real direction: 0
+                        property real direction: -9
 
                         //- First Animation - rotate the plane to correct direction
 
@@ -361,6 +361,7 @@ Item {
                                     planeAnimation.start();
                                 }else{
                                     planeAnimation.start();
+
                                 }
                                counter = counter+1;
                             }

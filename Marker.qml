@@ -6,7 +6,7 @@ import QtLocation 5.9
 MapQuickItem {
 
     id: marker
-    property int rotate: 0;  // variable to change rotation
+    property int rotate: -9;  // variable to change rotation
     property string city;
     anchorPoint.x: image.width/2
     anchorPoint.y: image.height/2
