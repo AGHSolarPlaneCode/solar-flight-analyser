@@ -12,8 +12,14 @@ Item {
     property string porttxt : "COM8" //get from settings (database)
     property bool connected: false //get from backend
     property real transmitterDistance : 2.2515 //get from backend
+    property var point : firstRoute.point
+    property bool mapFollow : followSwitch.status
 
-
+    onPointChanged: {
+        if(mapFollow==true){
+            map.center = firstRoute.point
+        }
+    }
 
     anchors.fill: parent
 
@@ -225,7 +231,10 @@ Item {
 
         }
     }
-    Item {
+
+    //---------------------------------------------------------------------
+    //Map Section
+    Item { //mapWidget
 
         id: mapWidget
         height: parent.height*0.5
@@ -284,7 +293,6 @@ Item {
         Rectangle {
             anchors.fill: parent
             color : "#2F3243"
-            //radius: parent.height*0.02
             Map { //map
                id: map
                anchors.fill: parent
@@ -303,7 +311,12 @@ Item {
                         value: "mapbox.dark"
                     }
                 }
-                center: QtPositioning.coordinate(52.21676,19.365343)
+                center: {
+                    if(mapFollow==true){
+                        center = firstRoute.point
+                    }
+                }
+
                 zoomLevel: 6.3
 
                 // MARKER
@@ -415,7 +428,33 @@ Item {
                 }
 
                 }
+                Rectangle {
+                width: parent.height*0.95
+                height: parent.height*0.95
+                color: "transparent"
+                opacity: 1
+                anchors.left: parent.left
+                anchors.leftMargin: parent.height*0.5
+                anchors.verticalCenter: parent.verticalCenter
+                SliderSwitch {
+                    id: followSwitch
+                    anchors.fill: parent
+                    size: parent.width*0.8
+                    onstatecolor: "#009688"
+                    offstatecolor: "#424D5C"
+                    state: "on"
+                }
+                Text{
+                    text: "Follow"
+                    font.pointSize: (parent.height*0.3).toFixed(0)
+                    anchors.left: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.leftMargin: parent.width*0.2
+                    color: "#707070"
 
+                }
+
+            }
             }
 
             Rectangle { //topBar
