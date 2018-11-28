@@ -20,6 +20,11 @@ Item {
             map.center = firstRoute.point
         }
     }
+    onMapFollowChanged: {
+        if(mapFollow==true){
+            map.center = firstRoute.point
+        }
+    }
 
     anchors.fill: parent
 
@@ -304,7 +309,7 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
-                        value: "pk.eyJ1IjoibWFyY2lubTk3IiwiYSI6ImNqb29xdHBidTAzd2gza292ZWdob296ODIifQ.bBZPXe0BbqWooVh83P7IcA"  //add your own acces token
+                        value: "pk.eyJ1IjoiYndpZWN6b3JlayIsImEiOiJjam95dzAxZDkyZmgzM2tvOXhuMXI5bWUzIn0.lN04GLOeQ8HbItp9XYxQaw"  //add your own acces token
                     }
                     PluginParameter{
                         name: "mapbox.mapping.map_id"
@@ -312,6 +317,11 @@ Item {
                     }
                 }
                 center: {
+                    if(mapFollow==true){
+                        center = firstRoute.point
+                    }
+                }
+                onCenterChanged: {
                     if(mapFollow==true){
                         center = firstRoute.point
                     }
