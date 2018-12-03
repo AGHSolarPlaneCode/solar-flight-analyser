@@ -1,11 +1,14 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include "flightdatacontroller.h"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
+
+    FlightDataController controller;
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
