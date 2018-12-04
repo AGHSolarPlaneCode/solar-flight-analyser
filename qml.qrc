@@ -21,5 +21,9 @@
         <file>assetsMenu/Height.png</file>
         <file>assetsMenu/connectionPower.png</file>
         <file>assetsMenu/Distance.png</file>
+        <file>assetsMenu/NotificationIcon.png</file>
+        <file>assetsMenu/exampleAlertIcon.png</file>
+        <file>assetsMenu/exampleAlertIcon2.png</file>
+        <file>assetsMenu/PROPERTIES SQUARES.png</file>
     </qresource>
 </RCC>

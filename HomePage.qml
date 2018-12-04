@@ -136,6 +136,132 @@ Item {
             id: alertsBackground
             anchors.fill:parent
             color: "#2F3243"
+            radius: height*0.02
+            Rectangle { //tob bar
+                id: alertsTopBar
+                height: parent.height
+                width: parent.width
+                radius: parent.height*0.02
+                color: "#313646"
+                anchors {
+                    top:parent.top
+                    horizontalCenter: parent.horizontalCenter
+
+                }
+                Image { //properties squares
+                    height: parent.height*0.15
+                    width: parent.width*0.01
+                    source: "qrc:/assetsMenu/PROPERTIES SQUARES.png"
+                    anchors {
+                        top: parent.top
+                        topMargin: parent.height*0.12
+                        right: parent.right
+                        rightMargin: 0.03*parent.width
+                    }
+                }
+                Image { //alert icon
+                    height: parent.height*0.2
+                    width: parent.width*0.08
+                    source: "qrc:/assetsMenu/NotificationIcon.png"
+                    anchors {
+                        top: parent.top
+                        topMargin: parent.height*0.07
+                        left: parent.left
+                        leftMargin: 0.03*parent.width
+                    }
+                    Text {
+                        font.pointSize: (parent.height*0.8).toFixed(0)
+                        text: "Alerts"
+                        color: "#999AA3"
+                        anchors {
+                            verticalCenter: parent.verticalCenter
+                            horizontalCenter: parent.horizontalCenter
+                            horizontalCenterOffset: parent.width*2.2
+                        }
+
+                    }
+
+                }
+                Rectangle { //bottom alert
+                    radius: parent.radius
+                    color: "#424D5C"
+                    height: parent.height*0.6
+                    width: parent.width
+                    anchors{
+                        bottom: parent.bottom
+                        horizontalCenter: parent.horizontalCenter
+
+                    }
+                    Image {
+                        height: parent.height*0.25
+                        width: parent.height*0.25
+                        source: "qrc:/assetsMenu/exampleAlertIcon.png"
+                        anchors {
+                            left: parent.left
+                            leftMargin: 0.03*parent.width
+                            bottom: parent.bottom
+                            bottomMargin: parent.height*0.1
+                        }
+                            Text {
+                                font.pointSize: (parent.height*0.5).toFixed(0)
+                                text: "Test text" //add text
+                                color: "#2281D1"
+                                anchors {
+                                    verticalCenter: parent.verticalCenter
+                                    horizontalCenter: parent.horizontalCenter
+                                    horizontalCenterOffset: parent.width*2.2
+                                }
+
+                        }
+                    }
+                }
+                Rectangle{ //spacer
+                    id: alertSpacer
+                    width: parent.width
+                    height: parent.height*0.005
+                    color: "#707070"
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                        verticalCenterOffset: parent.height*0.2
+                    }
+
+                }
+                Rectangle { //middle bar
+                color: "#424D5C"
+                height: parent.height*0.35
+                width: parent.width
+                anchors{
+                    bottom: alertSpacer.top
+                    horizontalCenter: parent.horizontalCenter
+
+                }
+                Image {
+                    height: parent.height*0.45
+                    width: parent.height*0.45
+                    anchors{
+                        verticalCenter: parent.verticalCenter
+                        left: parent.left
+                        leftMargin: parent.width*0.03
+                    }
+
+                    source: "qrc:/assetsMenu/exampleAlertIcon2.png"
+                Text {
+                    font.pointSize: (parent.height*0.5).toFixed(0)
+                    text: "Test text"  //add text
+                    color: "#DB3D40"
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                        horizontalCenter: parent.horizontalCenter
+                        horizontalCenterOffset: parent.width*2.2
+                    }
+
+
+                }
+                }
+
+
+            }
+            }
 
         }
     }
@@ -222,7 +348,7 @@ Item {
         {
             id: parametersBackground
             anchors.fill:parent
-            color: "#2F3243"
+            color: "#292B38"
               Rectangle { //Ground speed
                   width: parent.width*0.5
                   height: parent.height*0.5
