@@ -1,37 +1,69 @@
 #include "servermanager.h"
 #include <QThread> //For testing only, remove on implementation
 
-ServerManager::ServerManager(QObject *parent) : QObject(parent)
-{
+ServerManager::ServerManager(const QUrl& url,QObject *parent) : QObject(parent),
+    network(new QNetworkAccessManager(this)), endpoint(url), request(), frame(new JSONManager(this)) {
+    //- set endpoint request
+    request.setUrl(endpoint);
+    setConnections();
+    mode = State::STOP;
+}
 
+void ServerManager::setConnections(){
+
+    // - connect request with JSONManager method
+    QObject::connect(network, SIGNAL(finished(QNetworkReply*)),this, SLOT(getRequestData(QNetworkReply*)));
+
+    // - more than one error handling
+    QObject::connect(network, SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError> &)),
+    this, SLOT(handleErrors(QNetworkReply*, const QList<QSslError>&)));
+
+    // - send a signal to JSONManager about recived JSON
+    QObject::connect(this,SIGNAL(JSONState(bool)), frame, SLOT(ifDownload(bool)));
+}
+
+void ServerManager::HttpGETRequest(){
+    network->get(request); // use ERROR
 }
 
 void ServerManager::Update(){
-    QThread::msleep(30);
-    FlightData dummy{
-        10,
-        20,
-        45,
-        1000,
-        500,
-        40,
-        1,
-        2,
-        0
-        /*uint32_t TimeBootMs;
-        int32_t Lat;
-        int32_t Lon;
-        int32_t Alt;
-        int32_t RelativeAlt;
-        int16_t Vx;
-        int16_t Vy;
-        int16_t Vz;
-        uint16_t Hdg;*/
-    };
-    data = dummy;
-    return;
+    if(State::STOP == mode)
+        mode = State::RUN;
+    // QThread::msleep(30); test
+    HttpGETRequest();
 }
 
-FlightData ServerManager::GetData(){
-    return data;
+void ServerManager::getRequestData(QNetworkReply* reply){
+
+    if(QNetworkReply::NetworkError::NoError == reply->error()){
+        auto json(reply->readAll());
+
+        frame->getJSON(json);
+        frame->parseJSON();      // - parsing data
+    }else{
+        qDebug()<<"ONE ERROR";   // temporary qDebug()
+        /*
+
+            // ... errors analysis (more than one)  -> class
+
+        */
+    }
+    //in catch emit signal to frontend and end all connections
+    reply->deleteLater();
+    reply->manager()->deleteLater();
 }
+
+void ServerManager::handleErrors(QNetworkReply* reply, const QList<QSslError>& errors){
+    qDebug()<<"MORE THAN ONE ERROR";
+    /*
+
+        // ... errors analysis (more than one)  -> class
+
+    */
+}
+
+FlightData ServerManager::getData(){
+    emit JSONState(true); // data recived
+    return frame->getReadyFlightData();
+}
+

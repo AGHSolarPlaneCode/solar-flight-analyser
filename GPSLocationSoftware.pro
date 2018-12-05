@@ -1,4 +1,4 @@
-QT += quick
+QT += quick network
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -17,7 +17,8 @@ SOURCES += \
     flightdatacontroller.cpp \
     flightdataadapter.cpp \
     flightdataworker.cpp \
-    servermanager.cpp
+    servermanager.cpp \
+    jsonmanager.cpp
 
 RESOURCES += qml.qrc
 
@@ -37,4 +38,5 @@ HEADERS += \
     flightdataadapter.h \
     flightdataworker.h \
     flightdatastruct.h \
-    servermanager.h
+    servermanager.h \
+    jsonmanager.h
