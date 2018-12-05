@@ -14,8 +14,6 @@ FlightDataController::FlightDataController(QObject *parent) : QObject(parent)
     thread.start();
 }
 
-
-
 void FlightDataController::StartWorkerIfFree(){
     if(workerIsFree){
         emit StartWorker();

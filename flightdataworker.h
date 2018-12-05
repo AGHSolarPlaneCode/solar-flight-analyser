@@ -15,7 +15,7 @@ signals:
 public slots:
     void start();
 private:
-    ServerManager servermanager{this};
+    ServerManager servermanager{QString("REST-URL"),this};
     FlightDataAdapter adapter{this};
 };
 

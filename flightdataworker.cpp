@@ -12,7 +12,7 @@ void FlightDataWorker::start(){
         //qDebug()<<"From worker thread: "<<QThread::currentThreadId();
         servermanager.Update();
         //qDebug()<<"Finished sleeping";
-        adapter.SetFlightData(servermanager.GetData());
+        adapter.SetFlightData(servermanager.getData());
     } catch (std::exception e) {
         qDebug()<<e.what();
     }
