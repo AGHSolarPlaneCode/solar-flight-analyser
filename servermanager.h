@@ -9,6 +9,7 @@
 #include <QUrl>
 #include <QNetworkReply>
 #include <QDebug>
+#include <QSsl>
 
 class ServerManager : public QObject
 {
@@ -34,7 +35,6 @@ private:
     QNetworkAccessManager* network;
     QUrl endpoint;
     QNetworkRequest request;
-
 };
 
 #endif // SERVERMANAGER_H

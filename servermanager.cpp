@@ -50,7 +50,6 @@ void ServerManager::getRequestData(QNetworkReply* reply){
     }
     //in catch emit signal to frontend and end all connections
     reply->deleteLater();
-    reply->manager()->deleteLater();
 }
 
 void ServerManager::handleErrors(QNetworkReply* reply, const QList<QSslError>& errors){
