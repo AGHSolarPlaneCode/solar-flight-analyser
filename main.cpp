@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
-    FlightDataController controller;
+    FlightDataController *controller = new FlightDataController();
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
