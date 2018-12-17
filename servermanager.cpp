@@ -41,7 +41,7 @@ void ServerManager::getRequestData(QNetworkReply* reply){
         frame->getJSON(json);
         frame->parseJSON();      // - parsing data
     }else{
-        qDebug()<<"ONE ERROR";   // temporary qDebug()
+        //qDebug()<<"ONE ERROR";   // temporary qDebug()
         /*
 
             // ... errors analysis (more than one)  -> class
