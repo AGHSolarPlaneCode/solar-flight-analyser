@@ -25,5 +25,6 @@
         <file>assetsMenu/exampleAlertIcon.png</file>
         <file>assetsMenu/exampleAlertIcon2.png</file>
         <file>assetsMenu/PROPERTIES SQUARES.png</file>
+        <file>assetsMenu/markerIcon.png</file>
     </qresource>
 </RCC>

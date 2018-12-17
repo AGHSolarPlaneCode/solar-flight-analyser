@@ -18,6 +18,7 @@ Window {
         }
 
     }
+    //
     AppMenu {
         id: mainMenu
         anchors.fill: parent

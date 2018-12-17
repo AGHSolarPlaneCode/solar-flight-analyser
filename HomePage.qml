@@ -17,6 +17,7 @@ Item {
 
     anchors.fill: parent
 
+
     onConnectedChanged: {
 
         if(connected == true )
@@ -48,6 +49,7 @@ Item {
             width: 1
             color: "#333644"
         }
+
         onHeightChanged: {
             if(mapWidget.state == "windowed") {
                 mapWidget.height = parent.height*0.5
@@ -203,6 +205,7 @@ Item {
                             bottomMargin: parent.height*0.1
                         }
                             Text {
+                                id: bottomAlertText
                                 font.pointSize: (parent.height*0.5).toFixed(0)
                                 text: "Test text" //add text
                                 color: "#2281D1"
@@ -457,7 +460,6 @@ Item {
         }
     }
     Item {
-
         id: mapWidget
         height: parent.height*0.5
         width: parent.width*0.5
@@ -512,10 +514,14 @@ Item {
         }
     }
 
+
+
+
         Rectangle {
             anchors.fill: parent
             color : "#2F3243"
             //radius: parent.height*0.02
+
             Map { //map
                id: map
                anchors.fill: parent
@@ -527,17 +533,26 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
-                        value: "***"  //add your own acces token
+                        value: "pk.eyJ1IjoiYndpZWN6b3JlayIsImEiOiJjanAxaWh1OGUybzlpM2tzM3V6ZXc3M3o0In0.Mu-aBlEsiW1simwv608Rtw"  //add your own acces token
                     }
                     PluginParameter{
                         name: "mapbox.mapping.map_id"
                         value: "mapbox.dark"
                     }
                 }
+                DropArea {
+                    anchors.fill: parent
+                    onDropped: {
+                        var coord = map.toCoordinate(Qt.point(drop.x, drop.y));
+                        anim.running = true;
+
+                    }
+                }
 
             }
 
             Rectangle { //bottomBar
+                id: bottomBar
                 color: parent.color
                 width: parent.width
                 height: parent.parent.parent.height*0.1*0.5
@@ -560,6 +575,7 @@ Item {
                     height: parent.height*0.6
                     anchors.centerIn: parent
                     source: "qrc:/assetsMenu/mapFullScreen.png"
+
                 }
 
                 MouseArea {
@@ -576,6 +592,8 @@ Item {
                 }
 
             }
+
+
 
             Rectangle { //topBar
                 color: parent.color
@@ -726,6 +744,35 @@ Item {
         }
 
     }
+            Image {
+                id: dragAndDropIcon
+                source: "qrc:/assetsMenu/markerIcon.png"
+                width: bottomBar.height*0.55
+                height: bottomBar.height*0.8
+                x: mapWidget.width*0.95
+                y: root.height*0.03
+                Drag.active: markerDragAndDropMouseArea.drag.active
+                Drag.hotSpot.x: 20
+                Drag.hotSpot.y: 20
+                SequentialAnimation {
+                    id: anim
+                    running: false
+                    NumberAnimation { target: dragAndDropIcon; property: "opacity"; to: 0; duration: 500 }
+                    PropertyAction { target: dragAndDropIcon; property: "x"; value: mapWidget.width*0.95 }
+                    PropertyAction { target: dragAndDropIcon; property: "y"; value: root.height*0.03 }
+                    NumberAnimation { target: dragAndDropIcon; property: "opacity"; to: 1; duration: 500 }
+                }
+                MouseArea {
+                    id: markerDragAndDropMouseArea
+                    anchors.fill: parent
+                    drag.target: dragAndDropIcon
+                    propagateComposedEvents: true
+                    onReleased: {
+                        dragAndDropIcon.Drag.drop()
+                    }
+                }
+
+            }
     }
 
     }
