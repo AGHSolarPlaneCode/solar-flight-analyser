@@ -26,5 +26,7 @@
         <file>assetsMenu/exampleAlertIcon2.png</file>
         <file>assetsMenu/PROPERTIES SQUARES.png</file>
         <file>assetsMenu/markerIcon.png</file>
+        <file>MapMarker.qml</file>
+        <file>MarkerGenerator.js</file>
     </qresource>
 </RCC>
