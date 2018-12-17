@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtLocation 5.9
 import QtPositioning 5.8
+import "MarkerGenerator.js" as MarkerGenerator
 
 Item {
     id: root
@@ -544,6 +545,7 @@ Item {
                     anchors.fill: parent
                     onDropped: {
                         var coord = map.toCoordinate(Qt.point(drop.x, drop.y));
+                        MarkerGenerator.createMarkerObjects(coord);
                         anim.running = true;
 
                     }
@@ -731,7 +733,7 @@ Item {
 
                         }
                     Text {
-                        text: "Longitude"
+                        text: "latitude"
                         font.pointSize: (longitudeTXT.font.pointSize*0.4).toFixed(0)
                         color: "#707070"
                         anchors {

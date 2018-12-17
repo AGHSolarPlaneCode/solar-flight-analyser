@@ -16,9 +16,7 @@ Window {
         onConnectionChanged: {
         pageLoader.item.connected = connectionState
         }
-
     }
-    //
     AppMenu {
         id: mainMenu
         anchors.fill: parent
@@ -26,7 +24,6 @@ Window {
         mousecontainscolor: "#F8C238"
         switchedcolor: "#F8C238"
         state: "home"
-
 
         Rectangle {
             id: mainPage
