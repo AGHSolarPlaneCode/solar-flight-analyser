@@ -37,6 +37,19 @@ FlightData JSONManager::getReadyFlightData(){
         return data;
 }
 
+void JSONManager::setFlightData(const QJsonObject& object){
+    // temporary
+    qDebug()<<object.value("TimeBootMs");
+    qDebug()<<object.value("Lat");
+    qDebug()<<object.value("Lon");
+    qDebug()<<object.value("Alt");
+    qDebug()<<object.value("RelativeAlt");
+    qDebug()<<object.value("Vx");
+    qDebug()<<object.value("Vy");
+    qDebug()<<object.value("Vz");
+    qDebug()<<object.value("Hdg");
+
+}
 void JSONManager::parseJSON(){
     // parsing frame
     // add error handling to json
@@ -44,17 +57,7 @@ void JSONManager::parseJSON(){
     if(!frame.isEmpty()){
         QJsonDocument jsonDoc(QJsonDocument::fromJson(frame));
         auto object(jsonDoc.object());
-
-        // temporary
-        qDebug()<< object.value("TimeBootMs");
-        qDebug() << object.value("Lat");
-        qDebug() << object.value("Lon");
-        qDebug() << object.value("Alt");
-        qDebug() << object.value("RelativeAlt");
-        qDebug() << object.value("Vx");
-        qDebug() << object.value("Vy");
-        qDebug() << object.value("Vz");
-        qDebug() << object.value("Hdg");
+        setFlightData(object);
 
         json_state = JSON_STATE::PARSED;
     }else{
