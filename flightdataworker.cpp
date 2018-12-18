@@ -9,9 +9,9 @@ FlightDataWorker::FlightDataWorker(QObject *parent) : QObject(parent)
 
 void FlightDataWorker::start(){
     try {
-        //qDebug()<<"From worker thread: "<<QThread::currentThreadId();
+        qDebug()<<"From worker thread: "<<QThread::currentThreadId();
         servermanager.Update();
-        //qDebug()<<"Finished sleeping";
+        qDebug()<<"Finished sleeping";
         adapter.SetFlightData(servermanager.getData());
     } catch (std::exception e) {
         qDebug()<<e.what();

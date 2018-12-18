@@ -15,7 +15,7 @@ signals:
 public slots:
     void start();
 private:
-    ServerManager servermanager{QString("http://localhost:8080/gps"),this};
+    ServerManager servermanager{QString("localhost:8080/gps"),this};
     FlightDataAdapter adapter{this};
 };
 
