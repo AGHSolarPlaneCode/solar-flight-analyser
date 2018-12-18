@@ -18,6 +18,7 @@ public:
     void getJSON(const QByteArray& json) {frame = json;}
     void parseJSON();
     void moveToStruct();
+    void setFlightData(const QJsonObject& obj);
     FlightData getReadyFlightData();
 signals:
 
