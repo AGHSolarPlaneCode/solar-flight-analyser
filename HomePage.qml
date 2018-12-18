@@ -18,11 +18,13 @@ Item {
 
     anchors.fill: parent
 
+    signal connectSignal(var ConnectState)
 
     onConnectedChanged: {
 
         if(connected == true )
         {
+                connectSignal(true)
                 transmitterTXT.color = "#38865B" //green
                 portTXT.color = "#38865B"
                 portTXT.text = "Correctly Connected"
@@ -32,6 +34,7 @@ Item {
         }
             else
             {
+                 connectSignal(false)
                  transmitterTXT.color = "#DB3D40"
                  portTXT.color = "#DB3D40"//red
                  portTXT.text = "Not Connected"
@@ -534,7 +537,7 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
-                        value: "pk.eyJ1IjoiYndpZWN6b3JlayIsImEiOiJjanAxaWh1OGUybzlpM2tzM3V6ZXc3M3o0In0.Mu-aBlEsiW1simwv608Rtw"  //add your own acces token
+                        value: "pk.eyJ1IjoiYndpZWN6b3JlayIsImEiOiJjanBzcXFudDAwM3VjM3hvNjRzdTkwNnkwIn0.MwHLcTelSoUUaYfKqBoWiQ"  //add your own acces token
                     }
                     PluginParameter{
                         name: "mapbox.mapping.map_id"
