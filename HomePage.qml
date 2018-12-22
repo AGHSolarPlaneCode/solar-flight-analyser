@@ -2,22 +2,29 @@ import QtQuick 2.0
 import QtLocation 5.9
 import QtPositioning 5.8
 import "MarkerGenerator.js" as MarkerGenerator
+import "distanceCalculator.js" as DistanceCalculator
 
 Item {
     id: root
-    property int numberOfPoint : 5  //get from JS function
-    property real distanceToNextPoint: 2.52545 //get from JS function
-    property real longitude : 59.91325434 //get from backend
-    property real latitude: 10.7534543  //get from backend
+    property int numberOfPoint : 0  //get from JS function
+    property real distanceToNextPoint: DistanceCalculator.distanceCalculate(); //get from JS function
+    property real longitude : planePosition.longitude //get from backend
+    property real latitude: planePosition.latitude  //get from backend
     property string porttxt : "COM8" //get from settings (database)
     property bool connected: false //get from backend
     property real transmitterDistance : 2.2515 //get from backend
     property real groundSpeed : 25.46656 //get from backend
     property real altitude : 254.5465 //get from backend
     property real connectionPower : 98.65 //get from backend
+    property var planePosition: QtPositioning.coordinate(59.91,10.75)
 
     anchors.fill: parent
 
+
+
+    onNumberOfPointChanged: {
+       distanceToNextPoint = DistanceCalculator.distanceCalculate();
+                      }
 
     onConnectedChanged: {
 
@@ -528,6 +535,7 @@ Item {
             Map { //map
                id: map
                anchors.fill: parent
+
                 anchors {
                     bottom: parent.bottom
                     left: parent.left
@@ -536,7 +544,7 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
-                        value: "pk.eyJ1IjoiYndpZWN6b3JlayIsImEiOiJjanBzcXFudDAwM3VjM3hvNjRzdTkwNnkwIn0.MwHLcTelSoUUaYfKqBoWiQ"  //add your own acces token
+                        value: "pk.eyJ1IjoiYndpZWN6b3JlayIsImEiOiJjanB6bjJ6b2MwY2x3NDhwcDljNXFkMGVqIn0.MQQvUb7NWXycpCsVVzprmA"  //add your own acces token
                     }
                     PluginParameter{
                         name: "mapbox.mapping.map_id"
