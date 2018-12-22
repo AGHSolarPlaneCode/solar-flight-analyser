@@ -18,3 +18,7 @@ void FlightDataWorker::start(){
     }
     emit finished();
 }
+
+FlightDataAdapter* FlightDataWorker::getAdapter(){
+    return &adapter;
+}

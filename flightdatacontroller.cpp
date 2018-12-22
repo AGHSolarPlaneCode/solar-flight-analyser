@@ -9,7 +9,8 @@ FlightDataController::FlightDataController(QObject *parent) : QObject(parent)
     QObject::connect(&worker, SIGNAL(finished()), this, SLOT(workerHasFinished()));
     QObject::connect(this, SIGNAL(StartWorker()), &worker, SLOT(start()));
 
-    timer.start(30);
+    QObject::connect(this, SIGNAL(StartClock(int)), &timer, SLOT(start(int)));
+    QObject::connect(this, SIGNAL(StopClock()),&timer,SLOT(stop()));
     worker.moveToThread(&thread);
     thread.start();
 }
@@ -26,4 +27,16 @@ void FlightDataController::StartWorkerIfFree(){
 
 void FlightDataController::workerHasFinished(){
     workerIsFree = true;
+}
+
+void FlightDataController::doUpdates(bool startflag){
+    if (startflag){
+        emit StartClock(500);
+    } else {
+        emit StopClock();
+    }
+}
+
+FlightDataAdapter * FlightDataController::getAdapter(){
+    return worker.getAdapter();
 }

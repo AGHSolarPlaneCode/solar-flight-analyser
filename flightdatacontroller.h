@@ -20,13 +20,15 @@ class FlightDataController : public QObject
     Q_OBJECT
 public:
     explicit FlightDataController(QObject *parent = nullptr);
-
+    FlightDataAdapter * getAdapter();
 signals:
     void StartWorker();
+    void StartClock(int ms);
+    void StopClock();
 public slots:
     void workerHasFinished();
     void StartWorkerIfFree();
-
+    void doUpdates(bool startflag);
 private:
     bool workerIsFree = true;
     FlightDataWorker worker;
