@@ -18,13 +18,12 @@ Item {
 
     anchors.fill: parent
 
-    signal connectSignal(var ConnectState)
 
     onConnectedChanged: {
 
         if(connected == true )
         {
-                connectSignal(true)
+                controller.doUpdates(true)
                 transmitterTXT.color = "#38865B" //green
                 portTXT.color = "#38865B"
                 portTXT.text = "Correctly Connected"
@@ -34,7 +33,7 @@ Item {
         }
             else
             {
-                 connectSignal(false)
+                 controller.doUpdates(false)
                  transmitterTXT.color = "#DB3D40"
                  portTXT.color = "#DB3D40"//red
                  portTXT.text = "Not Connected"
