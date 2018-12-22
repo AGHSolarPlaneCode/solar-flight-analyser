@@ -28,5 +28,6 @@
         <file>assetsMenu/markerIcon.png</file>
         <file>MapMarker.qml</file>
         <file>MarkerGenerator.js</file>
+        <file>distanceCalculator.js</file>
     </qresource>
 </RCC>

@@ -16,6 +16,7 @@ Window {
         onConnectionChanged: {
         pageLoader.item.connected = connectionState
         }
+
     }
     AppMenu {
         id: mainMenu
@@ -69,6 +70,7 @@ Window {
                 }
 
             }
+
             states: [
             State {
                     name: "home"
