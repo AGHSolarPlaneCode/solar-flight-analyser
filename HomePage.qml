@@ -543,7 +543,7 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
-                        value: "pk.eyJ1IjoiYndpZWN6b3JlayIsImEiOiJjanEwM2xmeXkwaDczNDhwbG9jZ3d4bDJxIn0.YuPSAy1r4gOVB0GI7cCGsQ"  //add your own acces token
+                        value: "pk.eyJ1IjoiYndpZWN6b3JlayIsImEiOiJjanExNmtpbTcwczA3NDNubTc4N3FheGZpIn0.TPJiiIL-8v0UH250L6LKfg"  //add your own acces token
                     }
                     PluginParameter{
                         name: "mapbox.mapping.map_id"
@@ -658,7 +658,7 @@ Item {
                     anchors {
                         verticalCenter: parent.verticalCenter
                         left: parent.left
-                        leftMargin: numberOfPointsTXTstatic.width*1.5
+                        leftMargin: numberOfPointsTXTstatic.width*1.8
                     }
                     Text {
                         id: distanceToNextPointTXT
@@ -692,7 +692,7 @@ Item {
                     anchors {
                         verticalCenter: parent.verticalCenter
                         left: parent.left
-                        leftMargin: numberOfPointsTXTstatic.width*3
+                        leftMargin: numberOfPointsTXTstatic.width*3.5
                     }
                     Text {
                         id: longitudeTXT
@@ -726,7 +726,7 @@ Item {
                     anchors {
                         verticalCenter: parent.verticalCenter
                         left: parent.left
-                        leftMargin: numberOfPointsTXTstatic.width*4.5
+                        leftMargin: numberOfPointsTXTstatic.width*5.5
                     }
                     Text {
                         id: latitudeTXT
@@ -742,7 +742,7 @@ Item {
 
                         }
                     Text {
-                        text: "latitude"
+                        text: "Latitude"
                         font.pointSize: (longitudeTXT.font.pointSize*0.4).toFixed(0)
                         color: "#707070"
                         anchors {

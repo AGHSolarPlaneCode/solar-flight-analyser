@@ -6,7 +6,7 @@ function  distanceCalculate(){
     var index;
     for(index = 0; numberOfPoint>index; index++){
         var distanceToPoint = checkDistance(map.mapItems[index])
-        if(distanceToPoint<=2000){
+        if(distanceToPoint<=20){
             map.removeMapItem(map.mapItems[index]);
             numberOfPoint--;
         }
