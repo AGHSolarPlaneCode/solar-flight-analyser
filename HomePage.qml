@@ -16,10 +16,9 @@ Item {
     property real groundSpeed : 25.46656 //get from backend
     property real altitude : 254.5465 //get from backend
     property real connectionPower : 98.65 //get from backend
-    property var planePosition: QtPositioning.coordinate(59.91,10.75)
+    property var planePosition: QtPositioning.coordinate(59.91456456,10.75456456456)
 
     anchors.fill: parent
-
 
 
     onNumberOfPointChanged: {
@@ -544,7 +543,7 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
-                        value: "pk.eyJ1IjoiYndpZWN6b3JlayIsImEiOiJjanB6bjJ6b2MwY2x3NDhwcDljNXFkMGVqIn0.MQQvUb7NWXycpCsVVzprmA"  //add your own acces token
+                        value: "pk.eyJ1IjoiYndpZWN6b3JlayIsImEiOiJjanEwM2xmeXkwaDczNDhwbG9jZ3d4bDJxIn0.YuPSAy1r4gOVB0GI7cCGsQ"  //add your own acces token
                     }
                     PluginParameter{
                         name: "mapbox.mapping.map_id"
@@ -554,7 +553,7 @@ Item {
                 DropArea {
                     anchors.fill: parent
                     onDropped: {
-                        var coord = map.toCoordinate(Qt.point(drop.x, drop.y));
+                        var coord = map.toCoordinate(Qt.point((drop.x-10), (drop.y+9)));
                         MarkerGenerator.createMarkerObjects(coord);
                         anim.running = true;
 
