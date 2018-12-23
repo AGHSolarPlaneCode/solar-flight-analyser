@@ -28,3 +28,8 @@ function finishCreation(pos) {
         console.log("Error loading component:", component.errorString());
     }
 }
+function removeMarker(marker){
+    map.removeMapItem(marker);
+    numberOfPoint--;
+}
+
