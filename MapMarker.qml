@@ -10,6 +10,7 @@ anchorPoint.y: image.height
 visible: true
 width: 25
 height: 32
+property bool isPositionMarker: true
 signal markerDeleted()
 
 sourceItem: Image {
