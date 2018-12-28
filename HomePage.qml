@@ -17,9 +17,20 @@ Item {
     property real altitude : 254.5465 //get from backend
     property real connectionPower : 98.65 //get from backend
     property var planePosition: QtPositioning.coordinate(59.91456456,10.75456456456)
+    property bool mapFollow: followSwitch.status
+
 
     anchors.fill: parent
-
+    onPlanePositionChanged: {
+        if(mapFollow==true){
+            map.center = planePosition
+        }
+    }
+    onMapFollowChanged: {
+        if(mapFollow==true){
+            map.center = planePosition
+        }
+    }
 
     onNumberOfPointChanged: {
        distanceToNextPoint = DistanceCalculator.distanceCalculate();
@@ -539,6 +550,11 @@ Item {
                     bottom: parent.bottom
                     left: parent.left
                 }
+                onCenterChanged: {
+                    if(mapFollow==true){
+                        center = planePosition
+                    }
+                }
                 plugin: Plugin{
                     name: "mapbox"
                     PluginParameter{
@@ -599,7 +615,34 @@ Item {
                          console.log(mapWidget.state)
                     }
                 }
+                }
+                Rectangle {
+                width: parent.height*0.95
+                height: parent.height*0.95
+                color: "transparent"
+                opacity: 1
+                anchors.left: parent.left
+                anchors.leftMargin: parent.height*0.5
+                anchors.verticalCenter: parent.verticalCenter
+                SliderSwitch {
+                    id: followSwitch
+                    anchors.fill: parent
+                    size: parent.width*0.8
+                    onstatecolor: "#009688"
+                    offstatecolor: "#424D5C"
+                    state: "on"
+                }
+                Text{
+                    text: "Follow"
+                    font.pointSize: (parent.height*0.3).toFixed(0)
+                    anchors.left: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.leftMargin: parent.width*0.2
+                    color: "#707070"
 
+
+
+            }
                 }
 
             }
