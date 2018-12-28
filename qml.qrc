@@ -29,5 +29,7 @@
         <file>MarkerGenerator.js</file>
         <file>distanceCalculator.js</file>
         <file>assetsMenu/Server status.png</file>
+        <file>PlaneMarker.qml</file>
+        <file>assetsMenu/planeMarker.png</file>
     </qresource>
 </RCC>
