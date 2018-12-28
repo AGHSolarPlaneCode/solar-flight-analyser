@@ -10,7 +10,6 @@
         <file>assetsMenu/settingsIcon.png</file>
         <file>SliderSwitch.qml</file>
         <file>HomePage.qml</file>
-        <file>assetsMenu/PORT STATUS.png</file>
         <file>assetsMenu/TRANSMITTER DISTANCE.png</file>
         <file>ParametersPage.qml</file>
         <file>HistoricalPage.qml</file>
@@ -29,5 +28,6 @@
         <file>MapMarker.qml</file>
         <file>MarkerGenerator.js</file>
         <file>distanceCalculator.js</file>
+        <file>assetsMenu/Server status.png</file>
     </qresource>
 </RCC>
