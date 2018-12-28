@@ -2,8 +2,9 @@ import QtQuick 2.0
 
 Item {
     property real size
-    property string onstatecolor
-    property string offstatecolor
+    property color onstatecolor
+    property color offstatecolor
+    property bool status: false
 id: root
 width: size*1.3
 height: size*1.1
@@ -44,14 +45,19 @@ height: size*1.1
         State {
                 name: "off"
                 PropertyChanges {
-                    target: ball;
+                    target: ball
                     anchors.horizontalCenterOffset: -size/2
                     color: "#F1F1F1"
                 }
                 PropertyChanges {
                     target: slider
                     color: offstatecolor
+                    opacity: 1
 
+                }
+                PropertyChanges {
+                    target: root
+                    status: false
                 }
             },
     State {
@@ -67,6 +73,10 @@ height: size*1.1
                 color: onstatecolor
                 opacity: 0.5
 
+            }
+            PropertyChanges {
+                target: root
+                status: true
             }
         }
 
