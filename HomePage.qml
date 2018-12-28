@@ -18,6 +18,8 @@ Item {
     property real connectionPower : 98.65 //get from backend
     property var planePosition: QtPositioning.coordinate(59.91456456,10.75456456456)
     property bool mapFollow: followSwitch.status
+    property real xVelocity: 25
+    property real yVelocity: 31
 
 
     anchors.fill: parent
@@ -29,6 +31,7 @@ Item {
     onMapFollowChanged: {
         if(mapFollow==true){
             map.center = planePosition
+
         }
     }
 
@@ -574,6 +577,11 @@ Item {
                         anim.running = true;
 
                     }
+                }
+                PlaneMarker {
+                    id: planePositionMarker
+                    coordinate: planePosition
+                    planeAzimut: Math.atan2(xVelocity,yVelocity)*180/Math.PI //The azimuth = arctan((x2 –x1)/(y2 –y1))
                 }
 
             }
