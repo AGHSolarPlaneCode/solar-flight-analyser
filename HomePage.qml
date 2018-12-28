@@ -10,7 +10,7 @@ Item {
     property real distanceToNextPoint: DistanceCalculator.distanceCalculate(); //get from JS function
     property real longitude : planePosition.longitude //get from backend
     property real latitude: planePosition.latitude  //get from backend
-    property string porttxt : "COM8" //get from settings (database)
+    property string serverAdress : "197.168.0.1" //get from settings (database)
     property bool connected: false //get from backend
     property real transmitterDistance : 2.2515 //get from backend
     property real groundSpeed : 25.46656 //get from backend
@@ -34,7 +34,7 @@ Item {
                 portTXT.color = "#38865B"
                 portTXT.text = "Correctly Connected"
                 port.color = "#38865B"
-                port.text = porttxt.toUpperCase()
+                port.text = serverAdress.toUpperCase()
                 transmitterTXT.text = transmitterDistance.toFixed(1).toString() + "m"
         }
             else
@@ -314,7 +314,7 @@ Item {
             color: "#2F3243"
             Image {
                 anchors.fill:parent
-                source: "qrc:/assetsMenu/PORT STATUS.png"
+                source: "qrc:/assetsMenu/Server status.png"
             }
             Text {
                 id: portTXT
@@ -332,7 +332,7 @@ Item {
             Text {
                 id: port
                 color: "#DB3D40" //red
-                font.pointSize: (parent.height*0.15).toFixed(0)
+                font.pointSize: (parent.height*0.1).toFixed(0)
                 anchors {
                     verticalCenter: parent.verticalCenter
                     horizontalCenter: parent.horizontalCenter
