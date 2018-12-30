@@ -21,6 +21,7 @@ Item {
     property real xVelocity: 25
     property real yVelocity: 31
     property string fontFamily: "Agency FB"
+    property bool notify: false
 
 
     anchors.fill: parent
