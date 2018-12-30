@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import "NotifyMenu.js" as NotifyMenu
 
 Item {
     property string standardcolor
@@ -9,6 +10,7 @@ Item {
 
     signal buttonClicked(var buttonState)
     signal connectionChanged(var connectionState)  //send this to backend
+    signal notifyChange(var notifyState)
 
     Rectangle {
         id: topBar
@@ -31,8 +33,8 @@ Item {
             anchors {
                 verticalCenter: parent.verticalCenter
                 verticalCenterOffset: -parent.height*0.025
-                right: connectionText.left
-                rightMargin: parent.width*0.02
+                right: notifyBell.right
+                rightMargin: parent.width*0.05
             }
             Timer{
                 id: timeTimer
@@ -69,40 +71,79 @@ Item {
                 onTriggered: dateObj.text=new Date().toLocaleString(Qt.locale(),"dd.MM.yyyy")
             }
         }
+        Image { //connectButton
+             id: connectionSlider
+             source: "qrc:/assetsMenu/START BUTTON.png"
+             width: parent.width*0.1
+             height: parent.height*0.3
+             anchors {
+                 right: dateObj.right
+                 rightMargin: parent.width*0.05
+                 verticalCenter: parent.verticalCenter
+             }
+             MouseArea {
+                 anchors.fill: parent
+                 hoverEnabled: true
+                 onClicked: {
+                    if(parent.source=="qrc:/assetsMenu/START BUTTON.png"){
+                        connectionChanged(true);
+                        parent.source="qrc:/assetsMenu/STOP BUTTON.png"
+                    }
+                    else {
+                       parent.source="qrc:/assetsMenu/START BUTTON.png";
+                       connectionChanged(false);
+                    }
+                 }
+             }
 
-        Text{
-            id:connectionText
-            text: qsTr("Connect:")
-            color: "#F1F1F1"
-            font.family: fontFamily
-            font {
-                pointSize: (parent.height*0.2).toFixed(0)
-                bold: true
-            }
-
-
-            anchors{
-                verticalCenter: parent.verticalCenter
-                right: connectionSlider.left
-                rightMargin: parent.width*0.02
-                verticalCenterOffset: -parent.height*0.025
-            }
         }
-        SliderSwitch {
-            id: connectionSlider
-            size: parent.height*0.4
-            offstatecolor: "#424D5C"
-            onstatecolor: "#009688"
+        Image {
+            id: notifyBell
+            source: "qrc:/assetsMenu/NOTIFY BELL.png"
+            property bool menu
+            property bool notify: false
+            property var menuObj: undefined
             anchors {
                 right: parent.right
-                rightMargin: parent.width*0.05
+                rightMargin: parent.width*0.1
                 verticalCenter: parent.verticalCenter
             }
-            onStateChanged: {
-                if(connectionSlider.state == "on"){connectionChanged(true)}
-                else {connectionChanged(false)}
+            height: parent.height*0.5
+            width: parent.width*0.04
+            MouseArea {
+                anchors.fill: notifyBell
+                onClicked: {
+                    if(parent.menuObj==undefined){
+                        parent.menu==true;
+                        NotifyMenu.createMenu();
+
+                    }
+                    else {
+                        NotifyMenu.deleteMenu();
+                        parent.menu=false;
+                        parent.menuObj=undefined;
+                        console.log("MenuDelete")
+                    }
+                }
+
             }
         }
+
+//        SliderSwitch {
+
+//            size: parent.height*0.4
+//            offstatecolor: "#424D5C"
+//            onstatecolor: "#009688"
+//            anchors {
+//                right: parent.right
+//                rightMargin: parent.width*0.05
+//                verticalCenter: parent.verticalCenter
+//            }
+//            onStateChanged: {
+//                if(connectionSlider.state == "on"){connectionChanged(true)}
+//                else {connectionChanged(false)}
+//            }
+//        }
 
         Image {
             source: "qrc:/assetsMenu/AGHSOLARLOGO.png"

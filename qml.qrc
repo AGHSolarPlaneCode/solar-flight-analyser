@@ -31,5 +31,13 @@
         <file>assetsMenu/Server status.png</file>
         <file>PlaneMarker.qml</file>
         <file>assetsMenu/planeMarker.png</file>
+        <file>assetsMenu/START BUTTON.png</file>
+        <file>assetsMenu/STOP BUTTON.png</file>
+        <file>assetsMenu/NOTIFY BELL.png</file>
+        <file>NotifyMenu.js</file>
+        <file>AlertMenu.qml</file>
+        <file>assetsMenu/NOTIFY DIALOG OFF.png</file>
+        <file>assetsMenu/NOTIFY DIALOG ON.png</file>
+        <file>assetsMenu/NOTIFY BELL ON.png</file>
     </qresource>
 </RCC>

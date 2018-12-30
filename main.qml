@@ -16,7 +16,9 @@ Window {
         onConnectionChanged: {
         pageLoader.item.connected = connectionState
         }
-
+        onNotifyChange:{
+            pageLoader.item.notify = notifyState
+        }
     }
     AppMenu {
         id: mainMenu
