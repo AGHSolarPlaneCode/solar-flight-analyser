@@ -20,6 +20,7 @@ Item {
     property bool mapFollow: followSwitch.status
     property real xVelocity: 25
     property real yVelocity: 31
+    property string fontFamily: "Agency FB"
 
 
     anchors.fill: parent
@@ -133,6 +134,7 @@ Item {
                 id: transmitterTXT
                 color: "#DB3D40"
                 font.pointSize: (parent.width*0.12).toFixed(0)
+                font.family: fontFamily
                 anchors {
                     verticalCenter: parent.verticalCenter
                     horizontalCenter: parent.horizontalCenter
@@ -196,6 +198,7 @@ Item {
                     }
                     Text {
                         font.pointSize: (parent.height*0.8).toFixed(0)
+                        font.family: fontFamily
                         text: "Alerts"
                         color: "#999AA3"
                         anchors {
@@ -229,6 +232,7 @@ Item {
                         }
                             Text {
                                 id: bottomAlertText
+                                font.family: fontFamily
                                 font.pointSize: (parent.height*0.5).toFixed(0)
                                 text: "Test text" //add text
                                 color: "#2281D1"
@@ -274,6 +278,7 @@ Item {
                 Text {
                     font.pointSize: (parent.height*0.5).toFixed(0)
                     text: "Test text"  //add text
+                    font.family: fontFamily
                     color: "#DB3D40"
                     anchors {
                         verticalCenter: parent.verticalCenter
@@ -332,6 +337,7 @@ Item {
             }
             Text {
                 id: portTXT
+                font.family: fontFamily
                 color: "#DB3D40" //red
                 font.pointSize: (parent.height*0.05).toFixed(0)
                 anchors {
@@ -345,6 +351,7 @@ Item {
             }
             Text {
                 id: port
+                font.family: fontFamily
                 color: "#DB3D40" //red
                 font.pointSize: (parent.height*0.1).toFixed(0)
                 anchors {
@@ -391,6 +398,7 @@ Item {
                   }
                   Text {
                       color: "#F5F0F0"
+                      font.family: fontFamily
                       anchors {
                        verticalCenter: parent.verticalCenter
                        verticalCenterOffset: -parent.height*0.06
@@ -417,6 +425,7 @@ Item {
                   }
                   Text {
                       color: "#F5F0F0"
+                      font.family: fontFamily
                       anchors {
                        verticalCenter: parent.verticalCenter
                        verticalCenterOffset: -parent.height*0.06
@@ -443,6 +452,7 @@ Item {
                   }
                   Text {
                       color: "#F5F0F0"
+                      font.family: fontFamily
                       anchors {
                        verticalCenter: parent.verticalCenter
                        verticalCenterOffset: -parent.height*0.06
@@ -469,6 +479,7 @@ Item {
                   }
                   Text {
                       color: "#F5F0F0"
+                      font.family: fontFamily
                       anchors {
                        verticalCenter: parent.verticalCenter
                        verticalCenterOffset: -parent.height*0.06
@@ -642,6 +653,7 @@ Item {
                 }
                 Text{
                     text: "Follow"
+                    font.family: fontFamily
                     font.pointSize: (parent.height*0.3).toFixed(0)
                     anchors.left: parent.right
                     anchors.verticalCenter: parent.verticalCenter
@@ -680,6 +692,7 @@ Item {
                     Text {
                         id: numberOfPointsTXT
                         text: numberOfPoint.toString()
+                        font.family: fontFamily
                         color: "#F5F0F0"
                         font.pointSize: (root.width*0.016).toFixed(0)
                         anchors {
@@ -693,6 +706,7 @@ Item {
                     Text {
                         id: numberOfPointsTXTstatic
                         text: "Number of Points"
+                        font.family: fontFamily
                         font.pointSize: (numberOfPointsTXT.font.pointSize*0.4).toFixed(0)
                         color: "#707070"
                         anchors {
@@ -714,6 +728,7 @@ Item {
                     Text {
                         id: distanceToNextPointTXT
                         text: distanceToNextPoint.toFixed(2).toString()+" km"
+                        font.family: fontFamily
                         color: "#F5F0F0"
                         font.pointSize: (root.width*0.016).toFixed(0)
                         anchors {
@@ -726,6 +741,7 @@ Item {
                         }
                     Text {
                         text: "Distance To Next Point"
+                        font.family: fontFamily
                         font.pointSize: (numberOfPointsTXT.font.pointSize*0.4).toFixed(0)
                         color: "#707070"
                         anchors {
@@ -747,6 +763,7 @@ Item {
                     }
                     Text {
                         id: longitudeTXT
+                        font.family: fontFamily
                         text: longitude.toFixed(5).toString()
                         color: "#F5F0F0"
                         font.pointSize: (root.width*0.016).toFixed(0)
@@ -760,6 +777,7 @@ Item {
                         }
                     Text {
                         text: "Longitude"
+                        font.family: fontFamily
                         font.pointSize: (longitudeTXT.font.pointSize*0.4).toFixed(0)
                         color: "#707070"
                         anchors {
@@ -781,6 +799,7 @@ Item {
                     }
                     Text {
                         id: latitudeTXT
+                        font.family: fontFamily
                         text: latitude.toFixed(5).toString()
                         color: "#F5F0F0"
                         font.pointSize: (root.width*0.016).toFixed(0)
@@ -794,6 +813,7 @@ Item {
                         }
                     Text {
                         text: "Latitude"
+                        font.family: fontFamily
                         font.pointSize: (longitudeTXT.font.pointSize*0.4).toFixed(0)
                         color: "#707070"
                         anchors {
