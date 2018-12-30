@@ -4,6 +4,7 @@ Item {
     property string standardcolor
     property string switchedcolor
     property string mousecontainscolor
+    property string fontFamily: "Agency FB"
     antialiasing: true
 
     signal buttonClicked(var buttonState)
@@ -20,6 +21,7 @@ Item {
         }
         Text{
             id: timeObj
+            font.family: fontFamily
             color: "#F1F1F1"
             font {
                 pointSize: (parent.height*0.2).toFixed(0)
@@ -44,6 +46,7 @@ Item {
         Text{
             id: dateObj
             color: "#F1F1F1"
+            font.family: fontFamily
             text: new Date().toLocaleString(Qt.locale(),"dd.MM.yyyy")
             font {
                 pointSize: (parent.height*0.1).toFixed(0)
@@ -71,6 +74,7 @@ Item {
             id:connectionText
             text: qsTr("Connect:")
             color: "#F1F1F1"
+            font.family: fontFamily
             font {
                 pointSize: (parent.height*0.2).toFixed(0)
                 bold: true
