@@ -5,6 +5,8 @@
 #include <QThread>
 #include <QTimer>
 #include "flightdataworker.h"
+#include "flightdataadapter.h"
+
 
 /*This class:
  * Makes a worker
@@ -26,11 +28,12 @@ signals:
     void StartClock(int ms);
     void StopClock();
 public slots:
-    void workerHasFinished();
+    void workerHasFinished(FlightData);
     void StartWorkerIfFree();
     void doUpdates(bool startflag);
 private:
     bool workerIsFree = true;
+    FlightDataAdapter adapter;
     FlightDataWorker worker;
     QThread thread;
     QTimer timer;
