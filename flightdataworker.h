@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <servermanager.h>
-#include <flightdataadapter.h>
+#include <flightdatastruct.h>
 
 class FlightDataWorker : public QObject
 {
@@ -12,13 +12,12 @@ public:
     explicit FlightDataWorker(QObject *parent = nullptr);
 
 signals:
-    void finished();
+    void finished(FlightData);
 public slots:
     void start();
-    FlightDataAdapter* getAdapter();
 private:
     ServerManager servermanager{QString("localhost:8080/gps"),this};
-    FlightDataAdapter adapter{this};
+    FlightData data;
 };
 
 #endif // FLIGHTDATAWORKER_H

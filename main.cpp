@@ -8,6 +8,7 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
+    qRegisterMetaType<FlightData>("FlightData");
     FlightDataController *controller = new FlightDataController();
 
 
