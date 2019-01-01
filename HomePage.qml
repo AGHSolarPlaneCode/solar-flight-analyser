@@ -20,8 +20,13 @@ Item {
     property bool mapFollow: followSwitch.status
     property real xVelocity: 25
     property real yVelocity: 31
-    property string fontFamily: "Agency FB"
+    property string fontFamily: standardFont.name
     property bool notify: false
+
+    FontLoader {
+        id: standardFont
+        source: "qrc:/assetsMenu/agency_fb.ttf"
+    }
 
 
     anchors.fill: parent
