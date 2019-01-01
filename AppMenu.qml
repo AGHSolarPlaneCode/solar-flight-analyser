@@ -5,13 +5,17 @@ Item {
     property string standardcolor
     property string switchedcolor
     property string mousecontainscolor
-    property string fontFamily: "Agency FB"
+    property string fontFamily: standardFont.name
     antialiasing: true
 
     signal buttonClicked(var buttonState)
     signal connectionChanged(var connectionState)  //send this to backend
     signal notifyChange(var notifyState)
 
+    FontLoader { //load Agency FB from assets
+        id: standardFont
+        source: "qrc:/assetsMenu/agency_fb.ttf"
+    }
     Rectangle {
         id: topBar
         width: parent.width*0.92
@@ -33,8 +37,8 @@ Item {
             anchors {
                 verticalCenter: parent.verticalCenter
                 verticalCenterOffset: -parent.height*0.025
-                right: notifyBell.right
-                rightMargin: parent.width*0.05
+                left: notifyBell.left
+                leftMargin: -parent.width*0.075
             }
             Timer{
                 id: timeTimer
@@ -42,43 +46,43 @@ Item {
                 repeat: true
                 running: true
                 triggeredOnStart: true
-                onTriggered: timeObj.text=new Date().toLocaleString(Qt.locale(),"hh:mm")
+                onTriggered: timeObj.text=new Date().toLocaleString(Qt.locale(),"hh:mm:ss")
             }
         }
-        Text{
-            id: dateObj
-            color: "#F1F1F1"
-            font.family: fontFamily
-            text: new Date().toLocaleString(Qt.locale(),"dd.MM.yyyy")
-            font {
-                pointSize: (parent.height*0.1).toFixed(0)
-                bold: true
-            }
+//        Text{
+//            id: dateObj
+//            color: "#F1F1F1"
+//            font.family: fontFamily
+//            text: new Date().toLocaleString(Qt.locale(),"dd.MM.yyyy")
+//            font {
+//                pointSize: (parent.height*0.1).toFixed(0)
+//                bold: true
+//            }
 
-            anchors {
-                verticalCenter: parent.verticalCenter
-                verticalCenterOffset: -parent.height*0.025
-                top: timeObj.bottom
-                rightMargin: parent.width*0.02
-                left: timeObj.left
-            }
-            Timer{
-                id: dateTimer
-                interval: 100
-                repeat: true
-                running: true
-                triggeredOnStart: true
-                onTriggered: dateObj.text=new Date().toLocaleString(Qt.locale(),"dd.MM.yyyy")
-            }
-        }
+//            anchors {
+//                verticalCenter: parent.verticalCenter
+//                verticalCenterOffset: -parent.height*0.025
+//                top: timeObj.bottom
+//                rightMargin: parent.width*0.02
+//                left: timeObj.left
+//            }
+//            Timer{
+//                id: dateTimer
+//                interval: 100
+//                repeat: true
+//                running: true
+//                triggeredOnStart: true
+//                onTriggered: dateObj.text=new Date().toLocaleString(Qt.locale(),"dd.MM.yyyy")
+//            }
+//        }
         Image { //connectButton
              id: connectionSlider
              source: "qrc:/assetsMenu/START BUTTON.png"
              width: parent.width*0.1
              height: parent.height*0.3
              anchors {
-                 right: dateObj.right
-                 rightMargin: parent.width*0.05
+                 right: topBar.right
+                 rightMargin: parent.width*0.22
                  verticalCenter: parent.verticalCenter
              }
              MouseArea {
