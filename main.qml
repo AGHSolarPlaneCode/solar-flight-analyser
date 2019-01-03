@@ -20,6 +20,13 @@ Window {
             pageLoader.item.notify = notifyState
         }
     }
+    Connections {
+        target: mainMenu
+        onButtonClicked:{
+            mainMenu.state = buttonState;
+        }
+    }
+
     AppMenu {
         id: mainMenu
         anchors.fill: parent
@@ -57,18 +64,20 @@ Window {
             {
                 console.log("state changed")
                 if(mainMenu.state === "home") {
-                  //pageLoader.sourceComponent = undefined
+                  pageLoader.sourceComponent = undefined
                   pageLoader.source = "HomePage.qml"
                 }
                 else if(mainMenu.state === "parameters") {
-                    //pageLoader.sourceComponent = undefined
-                //add component to load
+                  pageLoader.sourceComponent = undefined
+                  pageLoader.source = "ParametersPage.qml"
                 }
                 else if(mainMenu.state === "historical") {
-                //add component to load
+                    pageLoader.sourceComponent = undefined
+                    pageLoader.source = "HistoricalPage.qml"
                 }
                 else if(mainMenu.state === "settings") {
-                //add component to load
+                    pageLoader.sourceComponent = undefined
+                    pageLoader.source = "SettingsPage.qml"
                 }
 
             }
