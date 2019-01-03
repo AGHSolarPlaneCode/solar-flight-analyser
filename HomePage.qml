@@ -11,15 +11,15 @@ Item {
     property real longitude : planePosition.longitude //get from backend
     property real latitude: planePosition.latitude  //get from backend
     property string serverAdress : "197.168.0.1" //get from settings (database)
-    property bool connected: false //get from backend
+    property bool connected: false
     property real transmitterDistance : 2.2515 //get from backend
-    property real groundSpeed : 25.46656 //get from backend
+    property real groundSpeed : Math.sqrt((adapter.Vx)^2+(adapter.Vy)^2) //get from backend
     property real altitude : 254.5465 //get from backend
     property real connectionPower : 98.65 //get from backend
-    property var planePosition: QtPositioning.coordinate(59.91456456,10.75456456456)
+    property var planePosition: QtPositioning.coordinate(adapter.Lat,adapter.Lon)
     property bool mapFollow: followSwitch.status
-    property real xVelocity: 25
-    property real yVelocity: 31
+    property real xVelocity: adapter.Vx
+    property real yVelocity: adapter.Vy
     property string fontFamily: standardFont.name
     property bool notify: false
 
