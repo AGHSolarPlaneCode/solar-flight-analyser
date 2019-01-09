@@ -10,7 +10,7 @@ Item {
     property real distanceToNextPoint: DistanceCalculator.distanceCalculate(); //get from JS function
     property real longitude : planePosition.longitude //get from backend
     property real latitude: planePosition.latitude  //get from backend
-    property string serverAdress : "197.168.0.1" //get from settings (database)
+    property string serverAdress : "LOCALHOST" //get from settings (database)
     property bool connected: false
     property real transmitterDistance : 2.2515 //get from backend
     property real groundSpeed : Math.sqrt((adapter.Vx)^2+(adapter.Vy)^2) //get from backend
@@ -22,6 +22,7 @@ Item {
     property real yVelocity: adapter.Vy
     property string fontFamily: standardFont.name
     property bool notify: false
+    property string realPortS: "8080"
 
     FontLoader {
         id: standardFont
@@ -55,6 +56,8 @@ Item {
                 portTXT.color = "#38865B"
                 portTXT.text = "Correctly Connected"
                 port.color = "#38865B"
+                realPort.color = "#38865B"
+                realPort.text = "Port: " + realPortS
                 port.text = serverAdress.toUpperCase()
                 transmitterTXT.text = transmitterDistance.toFixed(1).toString() + "m"
         }
@@ -66,6 +69,8 @@ Item {
                  portTXT.text = "Not Connected"
                  port.color = "#DB3D40"
                  port.text =  "---"
+                 realPort.text = "---"
+                 realPort.color = "#DB3D40"
                  transmitterTXT.text = "---"
             }
 
@@ -339,7 +344,7 @@ Item {
             color: "#2F3243"
             Image {
                 anchors.fill:parent
-                source: "qrc:/assetsMenu/Server status.png"
+                source: "qrc:/assetsMenu/REQUEST STATUS.png"
             }
             Text {
                 id: portTXT
@@ -369,6 +374,18 @@ Item {
 
                 text: "---"
 
+            }
+            Text {
+                id: realPort
+                font.family: fontFamily
+                color: "#DB3D40" //red
+                font.pointSize: (parent.height*0.1).toFixed(0)
+                anchors{
+                    verticalCenter: port.verticalCenter
+                    horizontalCenter: port.horizontalCenter
+                    verticalCenterOffset: parent.height*0.15
+                }
+                text: "---"
             }
 
         }
