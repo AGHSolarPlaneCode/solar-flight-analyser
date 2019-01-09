@@ -30,6 +30,7 @@ Item {
     }
 
 
+
     anchors.fill: parent
     onPlanePositionChanged: {
         if(mapFollow==true){
