@@ -41,5 +41,8 @@
         <file>assetsMenu/NOTIFY BELL ON.png</file>
         <file>assetsMenu/agency_fb.ttf</file>
         <file>assetsMenu/REQUEST STATUS.png</file>
+        <file>assetsMenu/warningIcon.png</file>
+        <file>assetsMenu/okIcon.png</file>
+        <file>ShowErrors.js</file>
     </qresource>
 </RCC>

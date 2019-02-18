@@ -3,6 +3,7 @@ import QtLocation 5.9
 import QtPositioning 5.8
 import "MarkerGenerator.js" as MarkerGenerator
 import "distanceCalculator.js" as DistanceCalculator
+import "ShowErrors.js" as ShowErrors
 
 Item {
     id: root
@@ -15,7 +16,6 @@ Item {
     property real transmitterDistance : 2.2515 //get from backend
     property real groundSpeed : Math.sqrt((adapter.Vx)^2+(adapter.Vy)^2) //get from backend
     property real altitude : 254.5465 //get from backend
-    property real connectionPower : 98.65 //get from backend
     property var planePosition: QtPositioning.coordinate(adapter.Lat,adapter.Lon)
     property bool mapFollow: followSwitch.status
     property real xVelocity: adapter.Vx
@@ -23,6 +23,86 @@ Item {
     property string fontFamily: standardFont.name
     property bool notify: false
     property string realPortS: "8080"
+    property int numberOfError: 1 //get from backend
+    property int numberOfWarning: 4 //get from backend
+    property int numberOfInformation: 10 //get from backend
+    property var jsonWarning: []
+    property int errorIterator: 1
+    property int informationIterator: 1
+
+    onNumberOfErrorChanged: {
+        if(!(numberOfError||numberOfWarning)){
+            errorIcon.source="qrc:/assetsMenu/okIcon.png"
+            errorTXT.text = "Everything works correctly"
+            errorTXT.color = "#38865B"
+        }
+        else {
+            ShowErrors.showErrors();
+        }
+
+    }
+    Component.onCompleted: {
+        if(!(numberOfError||numberOfWarning)){
+            errorIcon.source="qrc:/assetsMenu/okIcon.png"
+            errorTXT.text = "Everything works correctly"
+            errorTXT.color = "#38865B"
+        }
+        else {
+            ShowErrors.showErrors();
+        }
+        if(!numberOfInformation){
+            informationTXT.text = "Nothing to say"
+        }
+        else {
+            ShowErrors.showInformation();
+        }
+    }
+    onNumberOfInformationChanged: {
+        if(!numberOfInformation){
+            informationTXT.text = "Nothing to say"
+        }
+        else {
+            ShowErrors.showInformation();
+        }
+    }
+
+    onNumberOfWarningChanged: {
+        if(!(numberOfError||numberOfWarning)){
+            errorIcon.source="qrc:/assetsMenu/okIcon.png"
+            errorTXT.text = "Everything works correctly"
+            errorTXT.color = "#38865B"
+        }
+        else {
+            ShowErrors.showErrors();
+        }
+    }
+    Timer {
+        interval: 3000; running: true; repeat: true
+        onTriggered: {
+                if(errorIterator<(numberOfError+numberOfWarning)){
+                errorIterator++;
+                }
+                else {errorIterator = 1;}
+                if(informationIterator<numberOfInformation){
+                informationIterator++;
+                }
+                else {informationIterator = 1;}
+            if(!(numberOfError||numberOfWarning)){
+                errorIcon.source="qrc:/assetsMenu/okIcon.png"
+                errorTXT.text = "Everything works correctly"
+                errorTXT.color = "#38865B"
+            }
+            else {
+               ShowErrors.showErrors();
+            }
+            if(!numberOfInformation){
+                informationTXT.text = "Nothing to say"
+            }
+            else {
+                ShowErrors.showInformation();
+            }
+        }
+    }
 
     FontLoader {
         id: standardFont
@@ -243,15 +323,15 @@ Item {
                             bottomMargin: parent.height*0.1
                         }
                             Text {
-                                id: bottomAlertText
+                                id: informationTXT
                                 font.family: fontFamily
                                 font.pointSize: (parent.height*0.5).toFixed(0)
                                 text: "Test text" //add text
                                 color: "#2281D1"
                                 anchors {
                                     verticalCenter: parent.verticalCenter
-                                    horizontalCenter: parent.horizontalCenter
-                                    horizontalCenterOffset: parent.width*2.2
+                                    left: parent.right
+                                    leftMargin: parent.width
                                 }
 
                         }
@@ -278,6 +358,7 @@ Item {
 
                 }
                 Image {
+                    id: errorIcon
                     height: parent.height*0.45
                     width: parent.height*0.45
                     anchors{
@@ -288,14 +369,15 @@ Item {
 
                     source: "qrc:/assetsMenu/exampleAlertIcon2.png"
                 Text {
+                    id: errorTXT
                     font.pointSize: (parent.height*0.5).toFixed(0)
                     text: "Test text"  //add text
                     font.family: fontFamily
                     color: "#DB3D40"
                     anchors {
-                        verticalCenter: parent.verticalCenter
-                        horizontalCenter: parent.horizontalCenter
-                        horizontalCenterOffset: parent.width*2.2
+                        verticalCenter: errorIcon.verticalCenter
+                        left: errorIcon.right
+                        leftMargin: errorIcon.width
                     }
 
 
@@ -597,7 +679,7 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
-                        value: "pk.eyJ1IjoiYndpZWN6b3JlayIsImEiOiJjanExNmtpbTcwczA3NDNubTc4N3FheGZpIn0.TPJiiIL-8v0UH250L6LKfg"  //add your own acces token
+                        value: "***"  //add your own acces token
                     }
                     PluginParameter{
                         name: "mapbox.mapping.map_id"
@@ -882,4 +964,5 @@ Item {
     }
 
     }
+
 }
