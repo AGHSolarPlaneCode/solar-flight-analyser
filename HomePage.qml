@@ -23,9 +23,9 @@ Item {
     property string fontFamily: standardFont.name
     property bool notify: false
     property string realPortS: "8080"
-    property int numberOfError: 1 //get from backend
-    property int numberOfWarning: 4 //get from backend
-    property int numberOfInformation: 10 //get from backend
+    property int numberOfError: 2 //get from backend
+    property int numberOfWarning: 3 //get from backend
+    property int numberOfInformation: 6 //get from backend
     property var jsonWarning: []
     property int errorIterator: 1
     property int informationIterator: 1
@@ -297,6 +297,66 @@ Item {
                             verticalCenter: parent.verticalCenter
                             horizontalCenter: parent.horizontalCenter
                             horizontalCenterOffset: parent.width*2.2
+                        }
+                        Image {
+                            source: "qrc:/assetsMenu/exampleAlertIcon2.png"
+                            height: parent.height*0.6
+                            width: parent.height*0.6
+                            anchors{
+                                left: parent.right
+                                leftMargin: parent.height
+                                verticalCenter: parent.verticalCenter
+                            }
+                            Text {
+                                text: numberOfError
+                                font.pointSize: 0.7*parent.height.toFixed(0);
+                                color: "White"
+                                anchors{
+                                    verticalCenter: parent.verticalCenter
+                                    left: parent.right
+                                    leftMargin: 0.2*parent.width
+                                }
+                            }
+                            Image {
+                                source: "qrc:/assetsMenu/warningIcon.png"
+                                height: parent.height
+                                width: parent.width
+                                anchors{
+                                    left: parent.right
+                                    verticalCenter: parent.verticalCenter
+                                    leftMargin: 1.2*parent.width
+                                }
+                                Text {
+                                    text: numberOfWarning
+                                    font.pointSize: 0.7*parent.height.toFixed(0);
+                                    color: "White"
+                                    anchors{
+                                        verticalCenter: parent.verticalCenter
+                                        left: parent.right
+                                        leftMargin: 0.1*parent.width
+                                    }
+                                }
+                            }
+                            Image {
+                                source: "qrc:/assetsMenu/exampleAlertIcon.png"
+                                height: parent.height
+                                width: parent.width
+                                anchors{
+                                    left: parent.right
+                                    verticalCenter: parent.verticalCenter
+                                    leftMargin: 3.6*parent.width
+                                }
+                                Text {
+                                    text: numberOfInformation
+                                    font.pointSize: 0.7*parent.height.toFixed(0);
+                                    color: "White"
+                                    anchors{
+                                        verticalCenter: parent.verticalCenter
+                                        left: parent.right
+                                        leftMargin: 0.2*parent.width
+                                    }
+                                }
+                            }
                         }
 
                     }
