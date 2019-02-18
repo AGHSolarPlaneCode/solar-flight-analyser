@@ -112,8 +112,8 @@ Item {
                 rightMargin: parent.width*0.1
                 verticalCenter: parent.verticalCenter
             }
-            height: parent.height*0.5
-            width: parent.width*0.04
+            height: parent.height*0.3
+            width: parent.width*0.020
             MouseArea {
                 anchors.fill: notifyBell
                 onClicked: {

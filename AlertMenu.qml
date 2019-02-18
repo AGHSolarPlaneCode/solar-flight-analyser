@@ -2,10 +2,10 @@ import QtQuick 2.0
 
 Image {
     id: menuImage
-    width: parent.width*2.5
-    height: parent.height*1.6
+    width: parent.width*4
+    height: parent.height*2
     source: {
-        if(parent.notify==false){
+        if(parent.notify===false){
             source="qrc:/assetsMenu/NOTIFY DIALOG OFF.png"
 
         }
