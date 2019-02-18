@@ -27,10 +27,12 @@ signals:
     void StartWorker();
     void StartClock(int ms);
     void StopClock();
+    void SetWorkerUrl(const QUrl& qUrl);
 public slots:
     void workerHasFinished(FlightData);
     void StartWorkerIfFree();
     void doUpdates(bool startflag);
+    void setUrl(QString url);
 private:
     bool workerIsFree = true;
     FlightDataAdapter adapter;

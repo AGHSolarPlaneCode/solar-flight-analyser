@@ -7,6 +7,11 @@ FlightDataWorker::FlightDataWorker(QObject *parent) : QObject(parent)
 
 }
 
+void FlightDataWorker::setUrl(const QUrl& qUrl)
+{
+ servermanager.setUrl(qUrl);
+}
+
 void FlightDataWorker::start(){
     try {
         qDebug()<<"From worker thread: "<<QThread::currentThreadId();

@@ -22,7 +22,7 @@ public:
     inline QUrl getUrl() { return endpoint; }
     FlightData getData();
     void setConnections();
-    //void setUrl(const QUrl& url);
+    void setUrl(const QUrl& url);
     //void flightDataReset();
 signals:
     void JSONState(bool state);

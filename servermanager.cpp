@@ -22,6 +22,11 @@ void ServerManager::setConnections(){
     QObject::connect(this,SIGNAL(JSONState(bool)), frame, SLOT(ifDownload(bool)));
 }
 
+void ServerManager::setUrl(const QUrl &url)
+{
+    endpoint = url;
+}
+
 void ServerManager::HttpGETRequest(){
     network->get(request); // use ERROR
 }
