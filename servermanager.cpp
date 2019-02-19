@@ -39,21 +39,19 @@ void ServerManager::Update(){
 }
 
 void ServerManager::getRequestData(QNetworkReply* reply){
+    try{
+        if(QNetworkReply::NetworkError::NoError == reply->error()){
+            auto json(reply->readAll());
 
-    if(QNetworkReply::NetworkError::NoError == reply->error()){
-        auto json(reply->readAll());
-
-        frame->getJSON(json);
-        frame->parseJSON();      // - parsing data
-    }else{
-        //qDebug()<<"ONE ERROR";   // temporary qDebug()
-        /*
-
-            // ... errors analysis (more than one)  -> class
-
-        */
+            frame->getJSON(json);
+            frame->parseJSON();      // - parsing data
+        }else{
+            // - request throw
+        }
     }
-    //in catch emit signal to frontend and end all connections
+    catch(const JsonError& e){
+        e.errorValidator();
+    }
     reply->deleteLater();
 }
 
