@@ -19,7 +19,7 @@
 */
 
 
-JSONManager::JSONManager(QObject *parent) : QObject(parent), get(GET_STATE::WAITING)
+JSONManager::JSONManager(QObject *parent) : QObject(parent), err(),get(GET_STATE::WAITING)
   ,json_state(JSON_STATE::UNPARSED)
 {
 
@@ -50,20 +50,35 @@ void JSONManager::setFlightData(const QJsonObject& object){
     qDebug()<<object.value("Hdg");
 
 }
+void JSONManager::getJSON(const QByteArray& json){
+    if(!json.isEmpty() && json != frame)
+        frame = json;
+    else{
+        err = std::move(JsonError(JsonError::Errors::EMPTY));
+        throw(err);
+    }
+}
+
 void JSONManager::parseJSON(){
     // parsing frame
     // add error handling to json
     // after parse set for WAITING and PARSED
-    if(!frame.isEmpty()){
-        QJsonDocument jsonDoc(QJsonDocument::fromJson(frame));
+    using ParseError = QJsonParseError;
+
+    ParseError jerr;
+    auto jsonDoc(QJsonDocument::fromJson(frame,&jerr));
+
+    if( jerr.error != ParseError::NoError){
         auto object(jsonDoc.object());
         setFlightData(object);
-
         json_state = JSON_STATE::PARSED;
-    }else{
-        //temporary
-        json_state = JSON_STATE::UNPARSED;
-        qDebug() << "Frame is empty!";
-        return;
     }
+    else{
+        json_state = JSON_STATE::UNPARSED;
+        err = std::move(JsonError(JsonError::Errors::JSON,jerr));
+        throw(err);
+    }
+
+
+
 }
