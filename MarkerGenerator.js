@@ -16,7 +16,6 @@ function finishCreation(pos) {
         marker = component.createObject(map);
         marker.coordinate = pos;
         map.addMapItem(marker);
-        console.log("Object Created " + pos);
         numberOfPoint = numberOfPoint+1;
 
         //sprite = component.createObject(appWindow);
