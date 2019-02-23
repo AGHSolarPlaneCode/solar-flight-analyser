@@ -12,6 +12,7 @@ Item {
     signal connectionChanged(var connectionState)  //send this to backend
     signal notifyChange(var notifyState)
 
+
     FontLoader { //load Agency FB from assets
         id: standardFont
         source: "qrc:/assetsMenu/agency_fb.ttf"
@@ -49,32 +50,7 @@ Item {
                 onTriggered: timeObj.text=new Date().toLocaleString(Qt.locale(),"hh:mm:ss")
             }
         }
-//        Text{
-//            id: dateObj
-//            color: "#F1F1F1"
-//            font.family: fontFamily
-//            text: new Date().toLocaleString(Qt.locale(),"dd.MM.yyyy")
-//            font {
-//                pointSize: (parent.height*0.1).toFixed(0)
-//                bold: true
-//            }
 
-//            anchors {
-//                verticalCenter: parent.verticalCenter
-//                verticalCenterOffset: -parent.height*0.025
-//                top: timeObj.bottom
-//                rightMargin: parent.width*0.02
-//                left: timeObj.left
-//            }
-//            Timer{
-//                id: dateTimer
-//                interval: 100
-//                repeat: true
-//                running: true
-//                triggeredOnStart: true
-//                onTriggered: dateObj.text=new Date().toLocaleString(Qt.locale(),"dd.MM.yyyy")
-//            }
-//        }
         Image { //connectButton
              id: connectionSlider
              source: "qrc:/assetsMenu/START BUTTON.png"
@@ -107,6 +83,10 @@ Item {
             property bool menu
             property bool notify: false
             property var menuObj: undefined
+            onNotifyChanged: {
+                NotifyMenu.deleteMenu();
+            }
+
             anchors {
                 right: parent.right
                 rightMargin: parent.width*0.1
@@ -126,28 +106,12 @@ Item {
                         NotifyMenu.deleteMenu();
                         parent.menu=false;
                         parent.menuObj=undefined;
-                        console.log("MenuDelete")
                     }
                 }
 
             }
         }
 
-//        SliderSwitch {
-
-//            size: parent.height*0.4
-//            offstatecolor: "#424D5C"
-//            onstatecolor: "#009688"
-//            anchors {
-//                right: parent.right
-//                rightMargin: parent.width*0.05
-//                verticalCenter: parent.verticalCenter
-//            }
-//            onStateChanged: {
-//                if(connectionSlider.state == "on"){connectionChanged(true)}
-//                else {connectionChanged(false)}
-//            }
-//        }
 
         Image {
             source: "qrc:/assetsMenu/AGHSOLARLOGO.png"

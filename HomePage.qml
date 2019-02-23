@@ -11,7 +11,7 @@ Item {
     property real distanceToNextPoint: DistanceCalculator.distanceCalculate(); //get from JS function
     property real longitude : planePosition.longitude //get from backend
     property real latitude: planePosition.latitude  //get from backend
-    property string serverAdress : "LOCALHOST" //get from settings (database)
+    property string serverAdress : "LOCALHOST" //get from settings (database) or RequestDialog
     property bool connected: false
     property real transmitterDistance : 2.2515 //get from backend
     property real groundSpeed : Math.sqrt((adapter.Vx)^2+(adapter.Vy)^2) //get from backend
@@ -29,6 +29,10 @@ Item {
     property var jsonWarning: []
     property int errorIterator: 1
     property int informationIterator: 1
+    property var errors: []
+    property var informations: []
+
+
 
     onNumberOfErrorChanged: {
         if(!(numberOfError||numberOfWarning)){
@@ -41,6 +45,15 @@ Item {
         }
 
     }
+    Connections {
+        target: request
+        onSetAdress:{
+            serverAdress = adressS
+            realPortS = portS
+        }
+
+    }
+
     Component.onCompleted: {
         if(!(numberOfError||numberOfWarning)){
             errorIcon.source="qrc:/assetsMenu/okIcon.png"
@@ -76,6 +89,10 @@ Item {
             ShowErrors.showErrors();
         }
     }
+    RequestDialog{
+        id:request
+    }
+
     Timer {
         interval: 3000; running: true; repeat: true
         onTriggered: {
@@ -155,7 +172,6 @@ Item {
                  transmitterTXT.text = "---"
             }
 
-    //console.log(connected)
     }
     Rectangle {
         id: mainPage
@@ -489,6 +505,25 @@ Item {
                 anchors.fill:parent
                 source: "qrc:/assetsMenu/REQUEST STATUS.png"
             }
+            MouseArea{
+                anchors{
+                    top: parent.top
+                    topMargin: parent.height*0.1
+                    right: parent.right
+                    rightMargin: parent.width*0.1
+                }
+                enabled: true
+                hoverEnabled: true
+                width: parent.width*0.1
+                height: parent.height*0.2
+                cursorShape: Qt.PointingHandCursor
+                onClicked: {
+                    request.visible = true;
+
+                }
+
+            }
+
             Text {
                 id: portTXT
                 font.family: fontFamily
@@ -626,7 +661,6 @@ Item {
                        horizontalCenterOffset: -parent.width*0.052
                       }
                       font.pointSize: (parent.height*0.11).toFixed(0)
-                      text: connectionPower.toFixed(0).toString() + "%"
                   }
               }
               Rectangle { //Distance
@@ -694,7 +728,6 @@ Item {
 
 
     onStateChanged: {
-        console.log("Map State Changed")
         if(mapWidget.state === "fullPage") {
             anim1.velocity = 1450
             anim2.velocity = 750
@@ -793,11 +826,8 @@ Item {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        console.log("Mouse area here")
-                        console.log(mapWidget.state)
                          if(mapWidget.state == "windowed"||mapWidget.state =="started") {mapWidget.state = "fullPage"}
                          else {mapWidget.state = "windowed"}
-                         console.log(mapWidget.state)
                     }
                 }
                 }
@@ -839,7 +869,6 @@ Item {
                 color: parent.color
                 width: parent.width
                 height: parent.parent.parent.height*0.2*0.5
-                //radius: parent.height*0.02
                 opacity: 0.85
                 anchors {
                     top: parent.top

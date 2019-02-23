@@ -11,7 +11,7 @@ Window {
     height: 900
     title: qsTr("GPS Location Software")
     property bool connected: false
-
+//
     Connections {
         target: mainMenu
         onConnectionChanged: {
@@ -46,6 +46,7 @@ Window {
                 right: parent.right
                 bottom: parent.bottom
             }
+
             border {
                 width: 1
                 color: "#333644"
@@ -57,7 +58,6 @@ Window {
                 asynchronous: true
                 visible: status == Loader.Ready
                 onLoaded: {
-                    console.log("Loaded")
                     pageLoader.item.connected = root.connected
 
                 }
@@ -68,7 +68,6 @@ Window {
 
             onStateChanged:
             {
-                console.log("state changed")
                 if(mainMenu.state === "home") {
                   pageLoader.sourceComponent = undefined
                   pageLoader.source = "HomePage.qml"

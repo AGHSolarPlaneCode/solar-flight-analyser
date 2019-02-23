@@ -30,6 +30,7 @@ Image {
             parent.parent.notify=false
             menuImage.source="qrc:/assetsMenu/NOTIFY DIALOG OFF.png"
             menuImage.parent.source ="qrc:/assetsMenu/NOTIFY BELL.png"
+
         }
     }
     MouseArea {

@@ -44,5 +44,10 @@
         <file>assetsMenu/warningIcon.png</file>
         <file>assetsMenu/okIcon.png</file>
         <file>ShowErrors.js</file>
+        <file>RequestDialog.qml</file>
+        <file>assetsMenu/closeIcon.png</file>
+        <file>assetsMenu/addressBox.png</file>
+        <file>assetsMenu/acceptButton.png</file>
+        <file>assetsMenu/cancelButton.png</file>
     </qresource>
 </RCC>

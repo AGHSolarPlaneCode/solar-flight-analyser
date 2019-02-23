@@ -12,7 +12,6 @@ var component
         if (component.status === Component.Ready) {
             notifyBell.menuObj = component.createObject(notifyBell);
             notifyBell.menuObj.currentState = notifyBell.notify;
-            console.log("Object Created ");
 
             //sprite = component.createObject(appWindow);
             if (notifyBell.menuObj === null) {
