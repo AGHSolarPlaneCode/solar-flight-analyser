@@ -19,7 +19,6 @@ SOURCES += \
     flightdataworker.cpp \
     servermanager.cpp \
     jsonmanager.cpp \
-    errorhandler.cpp \
     errorhandler.cpp
 
 RESOURCES += qml.qrc
@@ -42,5 +41,5 @@ HEADERS += \
     flightdatastruct.h \
     servermanager.h \
     jsonmanager.h \
-    errorhandler.h \
     errorhandler.h
+
