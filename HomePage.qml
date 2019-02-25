@@ -8,14 +8,14 @@ import "ShowErrors.js" as ShowErrors
 Item {
     id: root
     property int numberOfPoint : 0  //get from JS function
-    property real distanceToNextPoint: DistanceCalculator.distanceCalculate(); //get from JS function
+    property real distanceToNextPoint: DistanceCalculator.distanceCalculate();
     property real longitude : planePosition.longitude //get from backend
     property real latitude: planePosition.latitude  //get from backend
     property string serverAdress : "LOCALHOST" //get from settings (database) or RequestDialog
     property bool connected: false
     property real transmitterDistance : 2.2515 //get from backend
     property real groundSpeed : Math.sqrt((adapter.Vx)^2+(adapter.Vy)^2) //get from backend
-    property real altitude : 254.5465 //get from backend
+    property real altitude : adapter.Alt
     property var planePosition: QtPositioning.coordinate(adapter.Lat,adapter.Lon)
     property bool mapFollow: followSwitch.status
     property real xVelocity: adapter.Vx
@@ -204,8 +204,9 @@ Item {
 
     Item {
         id: weatherWidget
-        width: 0.35*parent.width
+        width: 0.28*parent.width
         height: 0.28*parent.height
+        property bool menuState: false
         anchors {
             top: parent.top
             topMargin: parent.height*0.35
@@ -213,17 +214,161 @@ Item {
             rightMargin: parent.width*0.05
         }
 
-        Rectangle {
+        Image {
             id: weatherBackground
-            anchors.fill:parent
-            color: "#2F3243"
+            height: parent.height*1.2
+            width: parent.width*1.1
+            anchors.centerIn: parent
+            source: "qrc:/assetsMenu/weatherBackGround.png"
+        }
+            Rectangle {
+                id: weatherSideMenuBackground
+                width: parent.width*0.15
+                height: parent.height
+                color: "transparent"
+                SequentialAnimation {
+                        id: weatherMenuRollBackAnim
+                    NumberAnimation {
+                        target: weatherRefreshButton
+                        alwaysRunToEnd: true
+                        property: "height"
+                        duration: 330
+                        easing.type: Easing.Linear
+                        to: 0
+                    }
+                    NumberAnimation {
+                        target: weatherLocationButton
+                        alwaysRunToEnd: true
+                        property: "height"
+                        duration: 330
+                        easing.type: Easing.Linear
+                        to: 0
+                    }
+                    NumberAnimation {
+                        target: weatherSettingsButton
+                        alwaysRunToEnd: true
+                        property: "height"
+                        duration: 330
+                        easing.type: Easing.Linear
+                        to: 0
+                    }
+                }
+                    SequentialAnimation {
+                            id: weatherMenuRollOutAnim
+                        NumberAnimation {
+                            target: weatherSettingsButton
+                            alwaysRunToEnd: true
+                            property: "height"
+                            duration: 330
+                            easing.type: Easing.Linear
+                            to: weatherSideMenuBackground.height*0.25
+                        }
+                        NumberAnimation {
+                            target: weatherLocationButton
+                            alwaysRunToEnd: true
+                            property: "height"
+                            duration: 330
+                            easing.type: Easing.Linear
+                            to: weatherSideMenuBackground.height*0.25
+                        }
+                        NumberAnimation {
+                            target: weatherRefreshButton
+                            alwaysRunToEnd: true
+                            property: "height"
+                            duration: 330
+                            easing.type: Easing.Linear
+                            to: weatherSideMenuBackground.height*0.25
+                        }
+                    }
+
+                Rectangle {
+                    id: weatherMainButton
+                    width: parent.width
+                    height: parent.height*0.25
+                    color: "transparent"
+                    anchors{
+                        top: parent.top
+                        horizontalCenter: parent.horizontalCenter
+                    }
+                    Image {
+                        id: weatherMainButtonImage
+                        source: "qrc:/assetsMenu/WeatherMenuButton.png"
+                        width: parent.width
+                        height: parent.height
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                if(weatherWidget.menuState){
+                                    weatherMainButtonImage.source = "qrc:/assetsMenu/WeatherMenuButton.png"
+                                    pageRollBackAnim.start();
+                                    weatherMenuRollBackAnim.start();
+                                    weatherWidget.menuState = false;
+                                }
+                                else {
+                                    weatherMainButtonImage.source = "qrc:/assetsMenu/WeatherMenuButtonClicked.png"
+                                    pageRollOutAnim.start();
+                                    weatherMenuRollOutAnim.start();
+                                    weatherWidget.menuState = true;
+
+                                }
+                            }
+                        }
+                    }
+                }
+                Image {
+                    id: weatherRefreshButton
+                    width: parent.width
+                    anchors.top: weatherMainButton.bottom
+                    anchors.horizontalCenter: weatherMainButton.horizontalCenter
+                    source: "qrc:/assetsMenu/WeatherRefreshButton.png"
+                    height: 0
+                }
+                Image {
+                    id:weatherLocationButton
+                    width: parent.width
+                    anchors.top:  weatherRefreshButton.bottom
+                    anchors.horizontalCenter: weatherMainButton.horizontalCenter
+                    source: "qrc:/assetsMenu/WeatherLocationButton.png"
+                    height: 0
+                }
+                Image {
+                    id:weatherSettingsButton
+                    width: parent.width
+                    anchors.top:  weatherLocationButton.bottom
+                    anchors.horizontalCenter: weatherMainButton.horizontalCenter
+                    source: "qrc:/assetsMenu/WeatherSettingsButton.png"
+                    height: 0
+                }
+            }
+            Rectangle {
+                id:weatherPageBackground
+                height: parent.height
+                width: parent.width - weatherSideMenuBackground.width
+                color: "white"
+                opacity: 0
+                anchors{
+                    right: parent.right
+                }
+                NumberAnimation on width{
+                    id: pageRollOutAnim
+                    alwaysRunToEnd: true
+                    from: parent.width - weatherSideMenuBackground.width
+                    to: (parent.width - weatherSideMenuBackground.width)*0.9
+                }
+                NumberAnimation on width{
+                    id: pageRollBackAnim
+                    alwaysRunToEnd: true
+                    from: (parent.width - weatherSideMenuBackground.width)*0.9
+                    to: parent.width - weatherSideMenuBackground.width
+                }
+            }
 
         }
 
-    }
+
     Item {
         id: transmitterWidget
-        width: 0.16*parent.width
+        width: 0.13*parent.width
         height: 0.3*parent.height
         anchors {
             bottom: parent.bottom
@@ -259,7 +404,7 @@ Item {
     }
     Item {
         id: alertsWidget
-        width: 0.35*parent.width
+        width: 0.28*parent.width
         height: 0.28*parent.height
         anchors {
             top: parent.top
@@ -330,7 +475,7 @@ Item {
                                 anchors{
                                     verticalCenter: parent.verticalCenter
                                     left: parent.right
-                                    leftMargin: 0.2*parent.width
+                                    leftMargin: 0.16*parent.width
                                 }
                             }
                             Image {
@@ -340,7 +485,7 @@ Item {
                                 anchors{
                                     left: parent.right
                                     verticalCenter: parent.verticalCenter
-                                    leftMargin: 1.2*parent.width
+                                    leftMargin: 1*parent.width
                                 }
                                 Text {
                                     text: numberOfWarning
@@ -360,7 +505,7 @@ Item {
                                 anchors{
                                     left: parent.right
                                     verticalCenter: parent.verticalCenter
-                                    leftMargin: 3.6*parent.width
+                                    leftMargin: 3.2*parent.width
                                 }
                                 Text {
                                     text: numberOfInformation
@@ -468,7 +613,7 @@ Item {
     }
     Item {
         id: graphWidget
-        width: 0.3*parent.width
+        width: 0.4*parent.width
         height: 0.36*parent.height
         anchors {
             bottom: parent.bottom
@@ -490,8 +635,8 @@ Item {
 
     Item {
         id: portWidget
-        width: 0.16*parent.width
-        height: 0.3*parent.height
+        width: 0.13*parent.width
+        height: 0.30*parent.height
         anchors {
             bottom: parent.bottom
             bottomMargin: parent.height*0.05
@@ -576,7 +721,7 @@ Item {
             bottom: parent.bottom
             bottomMargin: parent.height*0.05
             left: parent.left
-            leftMargin: parent.width*0.37
+            leftMargin: parent.width*0.47
         }
         Rectangle
         {
@@ -696,7 +841,7 @@ Item {
     Item {
         id: mapWidget
         height: parent.height*0.5
-        width: parent.width*0.5
+        width: parent.width*0.6
         state: "started"
         anchors {
             top: parent.top
@@ -729,7 +874,7 @@ Item {
 
     onStateChanged: {
         if(mapWidget.state === "fullPage") {
-            anim1.velocity = 1450
+            anim1.velocity = 1200
             anim2.velocity = 750
             anim3.velocity = 70
             anim4.velocity = 120
@@ -741,7 +886,7 @@ Item {
         else if(mapWidget.state === "windowed") {
             mapWidget.anchors.topMargin = 0.05*parent.height
             mapWidget.anchors.leftMargin = 0.05*parent.width
-            mapWidget.width = parent.width*0.5
+            mapWidget.width = parent.width*0.6
             mapWidget.height = parent.height*0.5
 
         }

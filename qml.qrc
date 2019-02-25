@@ -49,5 +49,11 @@
         <file>assetsMenu/addressBox.png</file>
         <file>assetsMenu/acceptButton.png</file>
         <file>assetsMenu/cancelButton.png</file>
+        <file>assetsMenu/weatherBackGround.png</file>
+        <file>assetsMenu/WeatherMenuButton.png</file>
+        <file>assetsMenu/WeatherMenuButtonClicked.png</file>
+        <file>assetsMenu/WeatherLocationButton.png</file>
+        <file>assetsMenu/WeatherRefreshButton.png</file>
+        <file>assetsMenu/WeatherSettingsButton.png</file>
     </qresource>
 </RCC>
