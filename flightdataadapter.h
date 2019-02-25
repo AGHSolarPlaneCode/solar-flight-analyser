@@ -2,6 +2,7 @@
 #define FLIGHTDATAADAPTER_H
 
 #include <QObject>
+#include <QTimer>
 #include "flightdatastruct.h"
 class FlightDataAdapter : public QObject
 {
@@ -31,9 +32,12 @@ public:
 
 signals:
     void flightDataChanged();
+    void sendLocationToWeather(QPair<int, int> Location);
 public slots:
+    void weatherTimeout();
 private:
     FlightData data;
+    QTimer weatherTimer{this};
 };
 
 #endif // FLIGHTDATAADAPTER_H
