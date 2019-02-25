@@ -1,8 +1,10 @@
 #include "flightdataadapter.h"
+#include <QDebug>
 
 FlightDataAdapter::FlightDataAdapter(QObject *parent) : QObject(parent)
 {
-
+    QObject::connect(&weatherTimer, SIGNAL(timeout()), this, SLOT(weatherTimeout()));
+    weatherTimer.start(/*15*60*1000*/1000);
 }
 
 void FlightDataAdapter::SetFlightData(FlightData newData){
@@ -36,4 +38,10 @@ int FlightDataAdapter::Vz () const{
 }
 int FlightDataAdapter::Hdg () const{
     return static_cast<int>(data.Hdg);
+}
+
+void FlightDataAdapter::weatherTimeout()
+{
+    emit sendLocationToWeather(qMakePair<int, int>(data.Lat, data.Lon));
+    qDebug() << "Location Sent";
 }
