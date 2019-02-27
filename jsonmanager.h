@@ -17,13 +17,13 @@ public:
     enum class JSON_STATE{PARSED = 1, UNPARSED = 0};
     enum class GET_STATE{DOWNLOADED = 1, WAITING = 0};
     explicit JSONManager(QObject *parent = nullptr);
-    void getJSON(const QByteArray& json);
+    void setJSON(const QByteArray& json);
     void parseJSON();
     void moveToStruct();
     void setFlightData(const QJsonObject& obj);
     FlightData getReadyFlightData();
 signals:
-
+    void errorSender(const ErrorManager::JSONErrors& t, const QJsonParseError& e = QJsonParseError());
 public slots:
     void ifDownload(bool state);
 private:
@@ -32,7 +32,6 @@ private:
     void resetFrame(){frame.clear();}
     FlightData data;
     QByteArray frame;
-    JsonError err;
 };
 
 #endif // JSONMANAGER_H
