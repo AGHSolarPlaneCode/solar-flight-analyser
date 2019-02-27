@@ -19,7 +19,7 @@
 */
 
 
-JSONManager::JSONManager(QObject *parent) : QObject(parent), err(),get(GET_STATE::WAITING)
+JSONManager::JSONManager(QObject *parent) : QObject(parent),get(GET_STATE::WAITING)
   ,json_state(JSON_STATE::UNPARSED)
 {
 
@@ -50,12 +50,12 @@ void JSONManager::setFlightData(const QJsonObject& object){
     qDebug()<<object.value("Hdg");
 
 }
-void JSONManager::getJSON(const QByteArray& json){
-    if(!json.isEmpty() && json != frame)
+void JSONManager::setJSON(const QByteArray& json){
+    if(!json.isEmpty())
         frame = json;
     else{
-        err = std::move(JsonError(JsonError::Errors::EMPTY));
-        throw(err);
+       emit errorSender(ErrorManager::JSONErrors::EMPTY);
+        // emit signal with error
     }
 }
 
@@ -75,8 +75,8 @@ void JSONManager::parseJSON(){
     }
     else{
         json_state = JSON_STATE::UNPARSED;
-        err = std::move(JsonError(JsonError::Errors::JSON,jerr));
-        throw(err);
+        emit errorSender(ErrorManager::JSONErrors::JSON, jerr);
+        // emit signal with error
     }
 
 

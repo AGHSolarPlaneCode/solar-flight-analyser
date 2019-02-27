@@ -18,8 +18,14 @@ void ServerManager::setConnections(){
     QObject::connect(network, SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError> &)),
     this, SLOT(handleErrors(QNetworkReply*, const QList<QSslError>&)));
 
+    QObject::connect(frame, &JSONManager::errorSender, this, &ServerManager::getJSONErrors);
+
     // - send a signal to JSONManager about recived JSON
     QObject::connect(this,SIGNAL(JSONState(bool)), frame, SLOT(ifDownload(bool)));
+}
+
+void ServerManager::getJSONErrors(const ErrorManager::JSONErrors& type, const QJsonParseError& e){
+    errors.errorJSONValidator(type, e);
 }
 
 void ServerManager::setUrl(const QUrl &url)
@@ -37,35 +43,27 @@ void ServerManager::Update(){
     // QThread::msleep(30); test
     HttpGETRequest();
 }
-
+ErrorManager* ServerManager::getErrorManager(){
+    return &errors;
+}
 void ServerManager::getRequestData(QNetworkReply* reply){
-    try{
-        if(QNetworkReply::NetworkError::NoError == reply->error()){
-            auto json(reply->readAll());
+    if(QNetworkReply::NetworkError::NoError == reply->error()){
+        auto json(reply->readAll());
 
-            frame->getJSON(json);
-            frame->parseJSON();      // - parsing data
-        }else{
-            // - request throw
-        }
-    }
-    catch(const JsonError& e){
-        e.errorValidator();
+        frame->setJSON(json);
+        frame->parseJSON();                                                           // - parsing data
+    }else{
+        errors.errorRequestValidator(ErrorManager::RequestErrors::REPLY, reply);
     }
     reply->deleteLater();
 }
 
-void ServerManager::handleErrors(QNetworkReply* reply, const QList<QSslError>& errors){
-    qDebug()<<"MORE THAN ONE ERROR";
-    /*
-
-        // ... errors analysis (more than one)  -> class
-
-    */
+void ServerManager::handleErrors(QNetworkReply* reply, const QList<QSslError>& err){
+    errors.errorRequestValidator(ErrorManager::RequestErrors::SSL, reply, err);       // - sending all errors to qml and waiting for reply
 }
 
 FlightData ServerManager::getData(){
-    emit JSONState(true); // data recived
+    emit JSONState(true);                                                             // - data recived
     return frame->getReadyFlightData();
 }
 

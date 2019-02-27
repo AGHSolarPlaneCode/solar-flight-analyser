@@ -1,39 +1,54 @@
-#ifndef JSONERROR_H
-#define JSONERROR_H
+#ifndef ErrorManager_H
+#define ErrorManager_H
 
 #include <QObject>
 #include <QJsonParseError>
 #include <QDebug>
+#include <QSslError>
+#include <QNetworkReply>
 
 class ErrorHandler{
-private:
-    static int errorCtr;
 public:
+    static int errorCtr;
     virtual void showErrorMessage() const = 0;                              // - qDebug error message | method of abstract class
     virtual void showErrorMessage(const QString& message) const = 0;
     virtual QString getErrorMessage() const = 0;                            // - return error message | method of abstract class
     virtual ~ErrorHandler(){}
 };
 
-class JsonError : public QObject, public ErrorHandler
+
+class ErrorManager : public QObject, public ErrorHandler
 {
     Q_OBJECT
-    //Q_DISABLE_COPY(JsonError)
 public:
-    enum class Errors {EMPTY = 1, JSON, DEFAULT };                          // - default - no error occured
+    enum class JSONErrors {EMPTY = 1, JSON, DEFAULT };                      // - default - no error occured
+    enum class RequestErrors {REPLY = 1, SSL, DEFAULT};                     // - default - no error occured
 public:
-    explicit JsonError(Errors state = Errors::DEFAULT, const QJsonParseError& err = QJsonParseError(), QObject *parent = nullptr);
-    JsonError(const JsonError& err);
-    JsonError& operator=(JsonError&& err);
+    explicit ErrorManager(JSONErrors state = JSONErrors::DEFAULT,RequestErrors req = RequestErrors::DEFAULT,
+                          const QJsonParseError& err = QJsonParseError(),QNetworkReply* reply = nullptr,
+                          QObject *parent = nullptr);
+
+
     void showErrorMessage() const override;
     void showErrorMessage(const QString& message) const override;           // - overload method
     QString getErrorMessage() const override;
-    void errorValidator() const;
+    void errorJSONValidator(const ErrorManager::JSONErrors& type, const QJsonParseError& e);
+    void errorRequestValidator(RequestErrors type, QNetworkReply* reply, const QList<QSslError>& list = QList<QSslError>());
+    void setJsonParseError(const QJsonParseError& e);
+    QVector<QString> listConverter();
+    Q_INVOKABLE void ignoreRequestErrors();                                 // - ignore button action
 signals:
-    void sendToFrontend(const QString& err) const;                          // - signal with error information to show in alerts box (send to frontend)
+    /* QML service not require */ void sendJSONErrors(const QString& err);
+    /* QML service require     */ void sendRequestError(const QString& err);                          // - signal with error information to show in alerts box (send to frontend)
+    /* QML service require     */ void sendSslVector(const QVector<QString>& data);                   // - signal with pack of ssl errors
+
+
 private:
     QJsonParseError error;
-    Errors type;
+    JSONErrors JStype;
+    RequestErrors reType;
+    QNetworkReply* rpl;
+    QList<QSslError> sslList;
 };
 
-#endif // JSONERROR_H
+#endif // ErrorManager_H

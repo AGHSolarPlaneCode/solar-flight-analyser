@@ -10,6 +10,8 @@
 #include <QNetworkReply>
 #include <QDebug>
 #include <QSsl>
+#include <QJsonParseError>
+#include "errorhandler.h"
 
 class ServerManager : public QObject
 {
@@ -23,15 +25,18 @@ public:
     FlightData getData();
     void setConnections();
     void setUrl(const QUrl& url);
+    ErrorManager* getErrorManager();
     //void flightDataReset();
 signals:
     void JSONState(bool state);
 public slots:
     void handleErrors(QNetworkReply* reply, const QList<QSslError>& errors);
     void getRequestData(QNetworkReply* reply);
+    void getJSONErrors(const ErrorManager::JSONErrors& type, const QJsonParseError& e = QJsonParseError());
 private:
     State mode;
     JSONManager* frame;
+    ErrorManager errors;
     QNetworkAccessManager* network;
     QUrl endpoint;
     QNetworkRequest request;

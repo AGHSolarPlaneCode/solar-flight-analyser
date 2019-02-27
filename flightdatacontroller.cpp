@@ -6,7 +6,7 @@ FlightDataController::FlightDataController(QObject *parent) : QObject(parent)
     QObject::connect(&timer, SIGNAL(timeout()), this, SLOT(StartWorkerIfFree()));
     QObject::connect(&worker, SIGNAL(finished(FlightData)), this, SLOT(workerHasFinished(FlightData)));
     QObject::connect(this, SIGNAL(StartWorker()), &worker, SLOT(start()));
-    QObject::connect(this, SIGNAL(SetWorkerURL(const QUrl&)), &worker, SLOT(setUrl(const QUrl &)));
+    QObject::connect(this, &FlightDataController::SetWorkerUrl, &worker, &FlightDataWorker::setUrl);
 
     QObject::connect(this, SIGNAL(StartClock(int)), &timer, SLOT(start(int)));
     QObject::connect(this, SIGNAL(StopClock()),&timer,SLOT(stop()));
