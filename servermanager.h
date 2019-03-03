@@ -34,12 +34,12 @@ public slots:
     void getRequestData(QNetworkReply* reply);
     void getJSONErrors(const ErrorManager::JSONErrors& type, const QJsonParseError& e = QJsonParseError());
 private:
-    State mode;
-    JSONManager* frame;
-    ErrorManager errors;
-    QNetworkAccessManager* network;
-    QUrl endpoint;
-    QNetworkRequest request;
+    State                   mode;
+    JSONManager*            frame;
+    ErrorManager            errors;
+    QNetworkAccessManager*  network;
+    QUrl                    endpoint;
+    QNetworkRequest         request;
 };
 
 #endif // SERVERMANAGER_H
