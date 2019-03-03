@@ -23,3 +23,7 @@ void FlightDataWorker::start(){
     }
     emit finished(data);
 }
+
+ErrorManager* FlightDataWorker::passErrors(){
+    return servermanager.getErrorManager();
+}

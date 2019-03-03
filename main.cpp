@@ -12,9 +12,12 @@ int main(int argc, char *argv[])
     FlightDataController *controller = new FlightDataController();
 
 
+
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("controller",controller);
     engine.rootContext()->setContextProperty("adapter", controller->getAdapter());
+    engine.rootContext()->setContextProperty("error", controller->getError());
+
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;

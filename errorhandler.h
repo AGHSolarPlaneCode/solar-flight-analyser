@@ -38,7 +38,7 @@ public:
     QVector<QString> listConverter();
     Q_INVOKABLE void ignoreRequestErrors();                                 // - ignore button action
 signals:
-    /* QML service not require */ void sendJSONErrors(const QString& err);
+    /* QML service not require (only showing) */ void sendJSONErrors(const QString& err);
     /* QML service require     */ void sendRequestError(const QString& err);                          // - signal with error information to show in alerts box (send to frontend)
     /* QML service require     */ void sendSslVector(const QVector<QString>& data);                   // - signal with pack of ssl errors
 

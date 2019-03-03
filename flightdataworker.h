@@ -4,12 +4,14 @@
 #include <QObject>
 #include <servermanager.h>
 #include <flightdatastruct.h>
+#include "errorhandler.h"
 
 class FlightDataWorker : public QObject
 {
     Q_OBJECT
 public:
     explicit FlightDataWorker(QObject *parent = nullptr);
+    ErrorManager* passErrors();
 signals:
     void finished(FlightData);
 public slots:

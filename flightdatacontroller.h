@@ -23,6 +23,7 @@ class FlightDataController : public QObject
 public:
     explicit FlightDataController(QObject *parent = nullptr);
     FlightDataAdapter * getAdapter();
+    ErrorManager* getError();
 signals:
     void StartWorker();
     void StartClock(int ms);

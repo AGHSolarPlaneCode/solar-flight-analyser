@@ -45,3 +45,7 @@ void FlightDataController::setUrl(QString url)
 FlightDataAdapter * FlightDataController::getAdapter(){
     return &adapter;
 }
+
+ErrorManager* FlightDataController::getError(){
+    return worker.passErrors();
+}
