@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QGeoCoordinate>
 #include "flightdatastruct.h"
 class FlightDataAdapter : public QObject
 {
@@ -32,7 +33,7 @@ public:
 
 signals:
     void flightDataChanged();
-    void sendLocationToWeather(QPair<int, int> Location);
+    void sendLocationToWeather(QGeoCoordinate);
 public slots:
     void weatherTimeout();
 private:
