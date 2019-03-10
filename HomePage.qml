@@ -23,28 +23,19 @@ Item {
     property string fontFamily: standardFont.name
     property bool notify: false
     property string realPortS: "8080"
-    property int numberOfError: 2 //get from backend
-    property int numberOfWarning: 3 //get from backend
-    property int numberOfInformation: 6 //get from backend
-    property var jsonWarning: []
-    property int errorIterator: 1
+    property int numberOfInformation: 0 //get from backend
+    property int numberOfWarning: 0
+    property int errorIterator: 0
+    property var jsonError: "jsonError"
+    property int numberOfError: 0
     property int informationIterator: 1
-    property var errors: []
+    property var requestError: "Error"
     property var informations: []
+    property var sslerror: []
 
 
 
-    onNumberOfErrorChanged: {
-        if(!(numberOfError||numberOfWarning)){
-            errorIcon.source="qrc:/assetsMenu/okIcon.png"
-            errorTXT.text = "Everything works correctly"
-            errorTXT.color = "#38865B"
-        }
-        else {
-            ShowErrors.showErrors();
-        }
 
-    }
     Connections {
         target: request
         onSetAdress:{
@@ -54,15 +45,25 @@ Item {
 
     }
 
+
+//    Connections {
+//        //target: //get target from context
+//        onSendJSONErrors:{
+//            jsonError = err
+//        }
+//        onSendRequestError:{
+//            requestError = err
+//        }
+//        onSendSslVector:{
+//            sslerror = data
+//        }
+//    }
+
+
     Component.onCompleted: {
-        if(!(numberOfError||numberOfWarning)){
-            errorIcon.source="qrc:/assetsMenu/okIcon.png"
-            errorTXT.text = "Everything works correctly"
-            errorTXT.color = "#38865B"
-        }
-        else {
-            ShowErrors.showErrors();
-        }
+        sslerror = 0;
+        informations = 0;
+        ShowErrors.showErrors();
         if(!numberOfInformation){
             informationTXT.text = "Nothing to say"
         }
@@ -79,39 +80,32 @@ Item {
         }
     }
 
-    onNumberOfWarningChanged: {
-        if(!(numberOfError||numberOfWarning)){
-            errorIcon.source="qrc:/assetsMenu/okIcon.png"
-            errorTXT.text = "Everything works correctly"
-            errorTXT.color = "#38865B"
-        }
-        else {
-            ShowErrors.showErrors();
-        }
-    }
+
     RequestDialog{
         id:request
     }
 
-    Timer {
+//    Timer { //errorExpire Timer
+//        property int
+//        id: errorExpireTimer
+//        interval: 10000; running: false; repeat: false;
+//        onTriggered: {
+
+//        }
+//    }
+
+    Timer { //information Timer
         interval: 3000; running: true; repeat: true
         onTriggered: {
-                if(errorIterator<(numberOfError+numberOfWarning)){
-                errorIterator++;
+                if((requestError!==0)||(jsonError!==0)||(sslerror!==0)){
+                    ShowErrors.showErrors();
                 }
-                else {errorIterator = 1;}
+
                 if(informationIterator<numberOfInformation){
                 informationIterator++;
                 }
                 else {informationIterator = 1;}
-            if(!(numberOfError||numberOfWarning)){
-                errorIcon.source="qrc:/assetsMenu/okIcon.png"
-                errorTXT.text = "Everything works correctly"
-                errorTXT.color = "#38865B"
-            }
-            else {
-               ShowErrors.showErrors();
-            }
+
             if(!numberOfInformation){
                 informationTXT.text = "Nothing to say"
             }
@@ -543,6 +537,7 @@ Item {
                             bottom: parent.bottom
                             bottomMargin: parent.height*0.1
                         }
+
                             Text {
                                 id: informationTXT
                                 font.family: fontFamily
@@ -578,6 +573,92 @@ Item {
                     horizontalCenter: parent.horizontalCenter
 
                 }
+                Image {
+                    id: ignoreButton
+                    height: parent.height*0.45
+                    width: parent.height*0.45
+                    anchors{
+                        verticalCenter: parent.verticalCenter
+                        right: parent.right
+                        rightMargin: parent.width*0.03
+                    }
+                    source: "qrc:/assetsMenu/okIcon.png"
+                    visible: false
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked:{
+                            if(requestError!==0){
+                               requestError = 0;
+                                ignoreButton.visible = false;
+                                stopConnectionButton.visible = false;
+                                //call ignore function
+                            }
+
+                            else if(jsonError!=0){
+                                jsonError = 0;
+                                ignoreButton.visible = false;
+                                stopConnectionButton.visible = false;
+                            }
+                            else if(sslerror !== 0){
+                                sslerror = 0;
+                                ignoreButton.visible = false;
+                                stopConnectionButton.visible = false;
+                                //call ignore function
+                            }
+
+                            else {
+                                errorIcon.source="qrc:/assetsMenu/okIcon.png"
+                                errorTXT.text = "Everything works correctly"
+                                errorTXT.color = "#38865B"
+                            }
+                            ShowErrors.showErrors();
+                        }
+                    }
+                }
+                Image {
+                    id: stopConnectionButton
+                    height: parent.height*0.45
+                    width: parent.height*0.45
+                    anchors{
+                        verticalCenter: parent.verticalCenter
+                        right: ignoreButton.left
+                        rightMargin: parent.width*0.015
+                    }
+                    source: "qrc:/assetsMenu/exampleAlertIcon2.png"
+                    visible: false
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked:{
+                            if(requestError!==0){
+                               requestError = 0;
+                                ignoreButton.visible = false;
+                                stopConnectionButton.visible = false;
+                                //call stop function
+                            }
+
+                            else if(jsonError!=0){
+                                jsonError = 0;
+                                ignoreButton.visible = false;
+                                stopConnectionButton.visible = false;
+                            }
+                            else if(sslerror !== 0){
+                                sslerror = 0;
+                                ignoreButton.visible = false;
+                                stopConnectionButton.visible = false;
+                                //call stop function
+                            }
+
+                            else {
+                                errorIcon.source="qrc:/assetsMenu/okIcon.png"
+                                errorTXT.text = "Everything works correctly"
+                                errorTXT.color = "#38865B"
+                            }
+                            ShowErrors.showErrors();
+                        }
+                    }
+                }
+
+
                 Image {
                     id: errorIcon
                     height: parent.height*0.45
