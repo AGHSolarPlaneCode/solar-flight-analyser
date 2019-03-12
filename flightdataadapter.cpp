@@ -2,14 +2,16 @@
 #include <QDebug>
 
 FlightDataAdapter::FlightDataAdapter(QObject *parent) : QObject(parent)
-{
-    QObject::connect(&weatherTimer, SIGNAL(timeout()), this, SLOT(weatherTimeout()));
-    weatherTimer.start(15*60*1000);
-}
+{}
+
 
 void FlightDataAdapter::SetFlightData(FlightData newData){
     data = newData;
     emit flightDataChanged();
+}
+
+void FlightDataAdapter::reciveReq(){
+    emit sendLocationToWeather(QGeoCoordinate(data.Lat, data.Lon));
 }
 
 int FlightDataAdapter::TimeBootMs() const{
@@ -38,9 +40,4 @@ int FlightDataAdapter::Vz () const{
 }
 int FlightDataAdapter::Hdg () const{
     return static_cast<int>(data.Hdg);
-}
-
-void FlightDataAdapter::weatherTimeout()
-{
-    emit sendLocationToWeather(QGeoCoordinate(data.Lat/10000000.0, data.Lon/10000000.0));
 }
