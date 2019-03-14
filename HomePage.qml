@@ -4,6 +4,7 @@ import QtPositioning 5.8
 import "MarkerGenerator.js" as MarkerGenerator
 import "distanceCalculator.js" as DistanceCalculator
 import "ShowErrors.js" as ShowErrors
+import QtCharts 2.0
 
 Item {
     id: root
@@ -699,18 +700,224 @@ Item {
         anchors {
             bottom: parent.bottom
             bottomMargin: parent.height*0.05
-            left: parent.left
-            leftMargin: parent.width*0.05
+            left: mapWidget.left
         }
         Rectangle {
             id: graphBackground
-            anchors.fill:parent
-            color: "#2F3243"
-            Image { //static chart just for now
-                anchors.fill:parent
-                source: "qrc:/assetsMenu/CHARTS.png"
+            anchors.fill: parent
+            color: "#292B38"
+            Rectangle {
+                id: chartBar
+                anchors {
+                    top: parent.top
+                    bottom: chartRect.top
+                    left: parent.left
+                    right: parent.right
+                }
+                color: "#313646"
+                radius: parent.width * 0.02
+                Image {
+                    id: speedHeightBar
+                    source: "qrc:/assetsMenu/speed_height_bar.png"
+                    anchors.fill: parent
+                    width: parent.width
+                    height: parent.height
+                }
+//                Rectangle {
+//                    id: chartsIcon
+//                    anchors {
+//                        left: parent.left
+//                        top: parent.top
+//                        leftMargin: 10
+//                        topMargin: 5
+//                    }
+//                    Image {
+//                        id: chartsIconImage
+//                        source: "qrc:/assetsMenu/chartsIcon.png"
+////                        width: parent.width
+////                        height: parent.height
+//                    }
+//                }
+                Image {
+                    id: chartsIcon
+                    source: "qrc:/assetsMenu/chartsIcon.png"
+                    anchors {
+                        left: parent.left
+                        top: parent.top
+                        leftMargin: parent.width * 0.02
+                        topMargin: parent.height * 0.1
+                    }
+                    width: parent.width * 0.08
+                    height: parent.height * 0.7
+                }
+//                Rectangle {
+//                    id: chartsTextRect
+//                    anchors {
+//                        left: chartsIcon.right
+//                        top: parent.top
+//                        leftMargin: 40
+//                        bottom: chartsIcon.bottom
+//                    }
+//                    Text {
+//                        id: chartsText
+//                        text: qsTr("Speed/Height chart")
+//                        color: "#999AA3"
+//                        font {
+//                            pointSize: parent.height * 4.5
+//                            family: fontFamily
+//                        }
+//                    }
+//                }
+                Text {
+                    id: chartText
+                    text: qsTr("Speed/Height chart")
+                    color: "#999AA3"
+                    font {
+                        pointSize: parent.width * 0.045
+                        family: fontFamily
+                    }
+                    anchors {
+                        left: chartsIcon.right
+                        leftMargin: parent.width * 0.02
+//                        top: parent.top
+//                        topMargin: parent.height * 0.04
+                        bottom: parent.bottom
+//                        bottomMargin: parent.height * 0.01
+                    }
+                    width: parent.width * 0.6
+                    height: parent.height * 0.8
+                }
             }
+            Rectangle {
+                id: chartRect
+//                anchors.fill: parent
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    bottom: parent.bottom
+                }
+                height: parent.height * 0.8
+//                color: parent.color
+                color: "#25263B"
+                ChartView {
+                    anchors.fill: parent
+                    margins.bottom: 0
+                    margins.top: 0
+                    margins.left: 0
+                    margins.right: 0
+                    antialiasing: true
+                    backgroundColor: "#25263B"
+                    legend.visible: false
+                    // Define x-axis to be used with the series instead of default one
+//                    ValueAxis {
+//                        min: 20
+//                        max: 31
+//                        tickCount: 12
+//                        labelFormat: "%.0f"
+//                        gridVisible: false
+//                        color: "#2F3243"
+//                    }
+                    DateTimeAxis {
+                        id: xAxis
+                        gridVisible: false
+                        color: "#2F3243"
+                        format: "hh:mm:ss"
+                        tickCount: 5
+                    }
 
+                    ValueAxis {
+                        id: yAxis1
+                        min: 0
+                        max: 1.5
+                        tickCount: 1
+                        gridVisible: true
+                        gridLineColor: "#2F3243"
+                        color: "#2F3243"
+                        titleText: "Velocity [kph]"
+                    }
+                    ValueAxis {
+                        id: yAxis2
+                        min: 0
+                        max: 1.5
+                        tickCount: 1
+                        gridVisible: true
+                        gridLineColor: "#2F3243"
+                        color: "#2F3243"
+                        titleText: "Altitude [masl]"
+                    }
+
+                    AreaSeries {
+                        axisX: xAxis
+                        axisY: yAxis1
+                        color: "#4dfef5"
+                        opacity: 0.25
+                        //pointLabelsVisible: false
+                        borderColor: "#4bddf7"
+                        borderWidth: 5.0
+                        upperSeries: LineSeries {
+                            id: y1
+//                            XYPoint { x: 20; y: 4 }
+//                            XYPoint { x: 21; y: 5 }
+//                            XYPoint { x: 22; y: 6 }
+//                            XYPoint { x: 23; y: 8 }
+//                            XYPoint { x: 24; y: 7 }
+//                            XYPoint { x: 25; y: 6 }
+//                            XYPoint { x: 26; y: 4 }
+//                            XYPoint { x: 27; y: 6 }
+//                            XYPoint { x: 28; y: 4 }
+//                            XYPoint { x: 29; y: 5 }
+//                            XYPoint { x: 30; y: 6 }
+//                            XYPoint { x: 31; y: 7 }
+                        }
+                    }
+                    AreaSeries {
+                        axisX: xAxis
+                        axisYRight: yAxis2
+                        color: "#9b5ed4"
+                        opacity: 0.3
+                        //pointLabelsVisible: false
+                        borderColor: "#bd78f2"
+                        borderWidth: 5.0
+                        upperSeries: LineSeries {
+                            id: y2
+//                            XYPoint { x: 20; y: 2 }
+//                            XYPoint { x: 21; y: 3 }
+//                            XYPoint { x: 22; y: 2 }
+//                            XYPoint { x: 23; y: 2 }
+//                            XYPoint { x: 24; y: 3 }
+//                            XYPoint { x: 25; y: 3 }
+//                            XYPoint { x: 26; y: 2 }
+//                            XYPoint { x: 27; y: 3 }
+//                            XYPoint { x: 28; y: 2 }
+//                            XYPoint { x: 29; y: 2 }
+//                            XYPoint { x: 30; y: 3 }
+//                            XYPoint { x: 31; y: 1 }
+                        }
+                    }
+                    Timer {
+                        interval: 100
+                        running: true
+                        triggeredOnStart: true
+                        repeat: true
+                        onTriggered: {
+                            xAxis.min = new Date(Date.now() - 100);
+                            xAxis.max = new Date(Date.now() + 10);
+                        }
+                    }
+                    Timer {
+                        interval: 100
+                        running: true
+                        triggeredOnStart: true
+                        repeat: true
+                        onTriggered: {
+//                            y1.remove(0);
+//                            y2.remove(0);
+                            y1.append(new Date(Date.now()), Math.random());
+                            y2.append(new Date(Date.now()), Math.random());
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -810,83 +1017,180 @@ Item {
             anchors.fill:parent
             color: "#292B38"
               Rectangle { //Ground speed
-                  width: parent.width*0.5
-                  height: parent.height*0.5
+                  width: parent.width*0.65
+                  height: parent.height*0.65
                   anchors.top: parent.top
-                  anchors.left:parent.left
-                  anchors.leftMargin: 0.08*width
+                  anchors.left: parent.left
+                  anchors.leftMargin: -0.08*width
                   color: "transparent"
-                  Image {
-                      width: parent.width*0.98
-                      height: parent.height*0.98
+                  anchors.topMargin: -parent.height*0.12
+                  ChartView{
                       anchors.centerIn: parent
-                      source: "qrc:/assetsMenu/SpeedParametr.png"
-
+                      anchors.fill: parent
+                      antialiasing: true
+                      backgroundColor: "transparent"
+                      theme: ChartView.ChartThemeBlueIcy
+                      margins {
+                          left: 0
+                          right: 0
+                          top: 0
+                          bottom: 0
+                      }
+//                      transform: Rotation{angle: 45}
+                      legend.visible: false
+                      PieSeries {
+                          id: speedSeries
+                          PieSlice{
+                              id: speedSlice
+                              value: 70
+                              color: "#292BFF"
+                          }
+                          PieSlice{
+                              value: 100-speedSlice.value
+                              color: "#292BAA"
+                          }
+                          holeSize: 0.5
+                      }
+                      Timer{
+                          id: pieTimer
+                          interval: 500
+                          running: true
+                          repeat: true
+                          triggeredOnStart: true
+                          onTriggered: {
+                              speedSlice.value= 70 + Math.random()*(5-2)+2
+                              heightSlice.value= 60 + Math.random()*(5-2)+2
+                              connectionSlice.value= 30 + Math.random()*(5-2)+2
+                          }
+                      }
                   }
+//                  Image {
+//                      width: parent.width*0.98
+//                      height: parent.height*0.98
+//                      anchors.centerIn: parent
+//                      source: "qrc:/assetsMenu/SpeedParametr.png"
+
+//                  }
                   Text {
                       color: "#F5F0F0"
                       font.family: fontFamily
                       anchors {
                        verticalCenter: parent.verticalCenter
-                       verticalCenterOffset: -parent.height*0.06
+                       verticalCenterOffset: -parent.height*0.02
                        horizontalCenter: parent.horizontalCenter
-                       horizontalCenterOffset: -parent.width*0.052
+                       horizontalCenterOffset: parent.width*0.01
                       }
                       font.pointSize: (parent.height*0.11).toFixed(0)
                       text: groundSpeed.toFixed(0).toString() + "km/h"
                   }
               }
               Rectangle { //Heigth
-                  width: parent.width*0.5
-                  height: parent.height*0.5
+                  width: parent.width*0.65
+                  height: parent.height*0.65
                   anchors.top: parent.top
                   anchors.right: parent.right
                   anchors.rightMargin: -0.1*width
+                  anchors.topMargin: -0.18*height
                   color: "transparent"
-                  Image {
-                      width: parent.width
-                      height: parent.height
-                      anchors.centerIn: parent
-                      source: "qrc:/assetsMenu/Height.png"
+//                  Image {
+//                      width: parent.width
+//                      height: parent.height
+//                      anchors.centerIn: parent
+//                      source: "qrc:/assetsMenu/Height.png"
 
+//                  }
+                  ChartView{
+                      anchors.centerIn: parent
+                      anchors.fill: parent
+                      antialiasing: true
+                      backgroundColor: "transparent"
+                      theme: ChartView.ChartThemeDark
+                      margins {
+                          left: 0
+                          right: 0
+                          top: 0
+                          bottom: 0
+                      }
+                      legend.visible: false
+                      PieSeries {
+                          id: heightSeries
+                          PieSlice{
+                              id: heightSlice
+                              value: 60
+//                              color: "#292BFF"
+                          }
+                          PieSlice{
+                              value: 100-heightSlice.value
+//                              color: "#292BAA"
+                          }
+                          holeSize: 0.5
+                      }
                   }
                   Text {
                       color: "#F5F0F0"
                       font.family: fontFamily
                       anchors {
                        verticalCenter: parent.verticalCenter
-                       verticalCenterOffset: -parent.height*0.06
+                       verticalCenterOffset: -parent.height*0.02
                        horizontalCenter: parent.horizontalCenter
-                       horizontalCenterOffset: -parent.width*0.052
+                       horizontalCenterOffset: parent.width*0.01
                       }
                       font.pointSize: (parent.height*0.12).toFixed(0)
                       text: altitude.toFixed(0).toString() + "m"
                   }
               }
               Rectangle { //connectionPower
-                  width: parent.width*0.5
-                  height: parent.height*0.5
+                  width: parent.width*0.65
+                  height: parent.height*0.65
                   anchors.bottom: parent.bottom
                   anchors.left:parent.left
-                  anchors.leftMargin: 0.08*width
+                  anchors.leftMargin: -0.06*width
                   color: "transparent"
-                  Image {
-                      width: parent.width*0.98
-                      height: parent.height*0.98
-                      anchors.centerIn: parent
-                      source: "qrc:/assetsMenu/connectionPower.png"
+//                  Image {
+//                      width: parent.width*0.98
+//                      height: parent.height*0.98
+//                      anchors.centerIn: parent
+//                      source: "qrc:/assetsMenu/connectionPower.png"
 
+//                  }
+                  ChartView{
+                      anchors.centerIn: parent
+                      anchors.fill: parent
+                      antialiasing: true
+                      backgroundColor: "transparent"
+                      theme: ChartView.ChartThemeBlueIcy
+                      margins {
+                          left: 0
+                          right: 0
+                          top: 0
+                          bottom: 0
+                      }
+                      legend.visible: false
+                      PieSeries {
+                          id: connectionSeries
+                          PieSlice{
+                              id: connectionSlice
+                              value: 30
+//                              color: "#292BFF"
+                          }
+                          PieSlice{
+                              value: 100-connectionSlice.value
+//                              color: "#292BAA"
+                          }
+                          holeSize: 0.5
+                      }
                   }
                   Text {
                       color: "#F5F0F0"
                       font.family: fontFamily
                       anchors {
                        verticalCenter: parent.verticalCenter
-                       verticalCenterOffset: -parent.height*0.06
+                       verticalCenterOffset: -parent.height*0.01
                        horizontalCenter: parent.horizontalCenter
-                       horizontalCenterOffset: -parent.width*0.052
+                       horizontalCenterOffset: -parent.width*0.02
                       }
                       font.pointSize: (parent.height*0.11).toFixed(0)
+                      text: "30%"
                   }
               }
               Rectangle { //Distance

@@ -55,5 +55,7 @@
         <file>assetsMenu/WeatherLocationButton.png</file>
         <file>assetsMenu/WeatherRefreshButton.png</file>
         <file>assetsMenu/WeatherSettingsButton.png</file>
+        <file>assetsMenu/chartsIcon.png</file>
+        <file>assetsMenu/speed_height_bar.png</file>
     </qresource>
 </RCC>

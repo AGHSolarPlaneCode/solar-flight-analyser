@@ -47,7 +47,7 @@ Item {
                 repeat: true
                 running: true
                 triggeredOnStart: true
-                onTriggered: timeObj.text=new Date().toLocaleString(Qt.locale(),"hh:mm:ss")
+                onTriggered: timeObj.text = new Date().toLocaleString(Qt.locale(),"hh:mm:ss")
             }
         }
 
