@@ -21,7 +21,8 @@ SOURCES += \
     servermanager.cpp \
     jsonmanager.cpp \
     errorhandler.cpp \
-    weatherapi.cpp
+    weatherapi.cpp \
+    weatherdata.cpp
 
 RESOURCES += qml.qrc
 
@@ -44,5 +45,6 @@ HEADERS += \
     servermanager.h \
     jsonmanager.h \
     errorhandler.h \
-    weatherapi.h
+    weatherapi.h \
+    weatherdata.h
 
