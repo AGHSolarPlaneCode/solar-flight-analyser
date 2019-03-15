@@ -66,7 +66,6 @@ public slots:
     void getWeatherData(QNetworkReply* reply);                     // slot for get data
 private:
     void setQueryProperties();
-    void onClickedButton();
     bool qmlState, gpsObtained;                                    // state which comes from QML (true = PLANE weather, false = USER)
     bool connectionError;
     bool firstReq;

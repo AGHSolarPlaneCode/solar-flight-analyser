@@ -1,9 +1,7 @@
 #include "weatherdata.h"
 
-WeatherData::WeatherData(QObject *parent) : QObject(parent)
-{
-
-}
+WeatherData::WeatherData(): temp("-"),description("---"),
+    coordinate(qMakePair(QStringLiteral("-"),QStringLiteral("-"))), iconID("--"),humidity(0.0), windSpeed(0.0) {}
 
 WeatherData::WeatherData(const WeatherData& data){
     temp = data.temp;

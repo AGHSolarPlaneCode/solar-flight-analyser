@@ -3,22 +3,17 @@
 
 #define ZERO_KELVIN 273.15
 
-#include <QObject>
+#include <QString>
 #include <QPair>
 
-class WeatherData : public QObject
+class WeatherData
 {
-    Q_OBJECT
 public:
     friend class WeatherAPI;
-    explicit WeatherData(QObject *parent = nullptr);
+    explicit WeatherData();
     WeatherData(const WeatherData& data);
     WeatherData& operator=(const WeatherData& data);
     QString getCelciusTemp();
-signals:
-
-public slots:
-
 private:
     QString temp;
     QString description;
