@@ -11,7 +11,7 @@ void FlightDataAdapter::SetFlightData(FlightData newData){
 }
 
 void FlightDataAdapter::reciveReq(){
-    emit sendLocationToWeather(QGeoCoordinate(data.Lat, data.Lon));
+    emit sendLocationToWeather(QGeoCoordinate(data.Lat/10000000.0, data.Lon/10000000.0));
 }
 
 int FlightDataAdapter::TimeBootMs() const{
