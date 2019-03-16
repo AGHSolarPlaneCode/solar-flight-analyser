@@ -1017,11 +1017,12 @@ Item {
             anchors.fill:parent
             color: "#292B38"
               Rectangle { //Ground speed
-                  width: parent.width*0.65
-                  height: parent.height*0.65
+                  id: groundSpeedRect
+                  width: parent.width*0.75
+                  height: parent.height*0.75
                   anchors.top: parent.top
                   anchors.left: parent.left
-                  anchors.leftMargin: -0.08*width
+                  anchors.leftMargin: -0.18*width
                   color: "transparent"
                   anchors.topMargin: -parent.height*0.12
                   ChartView{
@@ -1044,10 +1045,14 @@ Item {
                               id: speedSlice
                               value: 70
                               color: "#292BFF"
+                              borderWidth: 0
+                              borderColor: "transparent"
                           }
                           PieSlice{
                               value: 100-speedSlice.value
                               color: "#292BAA"
+                              borderWidth: 0
+                              borderColor: "transparent"
                           }
                           holeSize: 0.5
                       }
@@ -1061,6 +1066,7 @@ Item {
                               speedSlice.value= 70 + Math.random()*(5-2)+2
                               heightSlice.value= 60 + Math.random()*(5-2)+2
                               connectionSlice.value= 30 + Math.random()*(5-2)+2
+                              distanceSlice.value= 50 + Math.random()*(5-2)+2
                           }
                       }
                   }
@@ -1085,12 +1091,14 @@ Item {
                   }
               }
               Rectangle { //Heigth
-                  width: parent.width*0.65
-                  height: parent.height*0.65
-                  anchors.top: parent.top
+                  id: heightRect
+                  width: parent.width*0.75
+                  height: parent.height*0.75
+//                  anchors.top: parent.top
                   anchors.right: parent.right
-                  anchors.rightMargin: -0.1*width
-                  anchors.topMargin: -0.18*height
+                  anchors.rightMargin: -0.2*width
+//                  anchors.topMargin: -0.18*height
+                  anchors.bottom: groundSpeedRect.bottom
                   color: "transparent"
 //                  Image {
 //                      width: parent.width
@@ -1118,10 +1126,14 @@ Item {
                               id: heightSlice
                               value: 60
 //                              color: "#292BFF"
+                              borderWidth: 0
+                              borderColor: "transparent"
                           }
                           PieSlice{
                               value: 100-heightSlice.value
 //                              color: "#292BAA"
+                              borderWidth: 0
+                              borderColor: "transparent"
                           }
                           holeSize: 0.5
                       }
@@ -1140,12 +1152,14 @@ Item {
                   }
               }
               Rectangle { //connectionPower
-                  width: parent.width*0.65
-                  height: parent.height*0.65
+                  id: connectionPowerRect
+                  width: parent.width*0.75
+                  height: parent.height*0.75
                   anchors.bottom: parent.bottom
-                  anchors.left:parent.left
-                  anchors.leftMargin: -0.06*width
+                  anchors.left: groundSpeedRect.left
+//                  anchors.leftMargin: -0.1*width
                   color: "transparent"
+                  anchors.bottomMargin: -0.18*width
 //                  Image {
 //                      width: parent.width*0.98
 //                      height: parent.height*0.98
@@ -1172,10 +1186,14 @@ Item {
                               id: connectionSlice
                               value: 30
 //                              color: "#292BFF"
+                              borderWidth: 0
+                              borderColor: "transparent"
                           }
                           PieSlice{
                               value: 100-connectionSlice.value
 //                              color: "#292BAA"
+                              borderWidth: 0
+                              borderColor: "transparent"
                           }
                           holeSize: 0.5
                       }
@@ -1194,30 +1212,62 @@ Item {
                   }
               }
               Rectangle { //Distance
-                  width: parent.width*0.5
-                  height: parent.height*0.5
-                  anchors.bottom: parent.bottom
-                  anchors.right: parent.right
-                  anchors.rightMargin: -0.1*width
+                  width: parent.width*0.75
+                  height: parent.height*0.75
+                  anchors.bottom: connectionPowerRect.bottom
+//                  anchors.right: parent.right
+//                  anchors.rightMargin: -0.1*width
+                  anchors.left: heightRect.left
                   color: "transparent"
-                  Image {
-                      width: parent.width
-                      height: parent.height
-                      anchors.centerIn: parent
-                      source: "qrc:/assetsMenu/Distance.png"
+//                  Image {
+//                      width: parent.width
+//                      height: parent.height
+//                      anchors.centerIn: parent
+//                      source: "qrc:/assetsMenu/Distance.png"
 
+//                  }
+                  ChartView{
+                      anchors.centerIn: parent
+                      anchors.fill: parent
+                      antialiasing: true
+                      backgroundColor: "transparent"
+                      theme: ChartView.ChartThemeBlueCerulean
+                      margins {
+                          left: 0
+                          right: 0
+                          top: 0
+                          bottom: 0
+                      }
+                      legend.visible: false
+                      PieSeries {
+                          id: distanceSeries
+                          PieSlice{
+                              id: distanceSlice
+                              value: 50
+//                              color: "#292BFF"
+                              borderWidth: 0
+                              borderColor: "transparent"
+                          }
+                          PieSlice{
+                              value: 100-distanceSlice.value
+//                              color: "#292BAA"
+                              borderWidth: 0
+                              borderColor: "transparent"
+                          }
+                          holeSize: 0.5
+                      }
                   }
                   Text {
                       color: "#F5F0F0"
                       font.family: fontFamily
                       anchors {
                        verticalCenter: parent.verticalCenter
-                       verticalCenterOffset: -parent.height*0.06
+//                       verticalCenterOffset: -parent.height*0.01
                        horizontalCenter: parent.horizontalCenter
-                       horizontalCenterOffset: -parent.width*0.052
+//                       horizontalCenterOffset: parent.width*0.01
                       }
                       font.pointSize: (parent.height*0.12).toFixed(0)
-                      text: distanceToNextPoint.toFixed(2).toString() + "km"
+                      text: distanceToNextPoint.toFixed(1).toString() + "km"
                   }
               }
 
