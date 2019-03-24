@@ -43,9 +43,11 @@ void ServerManager::Update(){
     // QThread::msleep(30); test
     HttpGETRequest();
 }
+
 ErrorManager* ServerManager::getErrorManager(){
     return &errors;
 }
+
 void ServerManager::getRequestData(QNetworkReply* reply){
     if(QNetworkReply::NetworkError::NoError == reply->error()){
         auto json(reply->readAll());

@@ -27,3 +27,11 @@ WeatherData& WeatherData::operator=(const WeatherData& data){
 QString WeatherData::getCelciusTemp(){
     return QString::number(qRound(temp.toInt() - ZERO_KELVIN)) + QChar(0xB0);
 }
+
+void WeatherData::showWeather(){
+    qDebug()<<temp;
+    qDebug()<<description;
+    qDebug()<<iconID;
+    qDebug()<<humidity;
+    qDebug()<<windSpeed;
+}
