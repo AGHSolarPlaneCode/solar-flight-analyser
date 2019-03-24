@@ -1,7 +1,10 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include "flightdatacontroller.h"
+#include "weatherapi.h"
 #include <QtQuick>
+
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);

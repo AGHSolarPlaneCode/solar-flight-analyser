@@ -52,9 +52,9 @@ public:
     bool isPlaneLocation();
     bool useGpsDevice();
     QGeoCoordinate getCoordinate();
-    void establishConnection();
     void obtainUserLocation();                                     // only when user hasn't made yet
     void manageConnections();
+    Q_INVOKABLE void establishConnection();
     Q_INVOKABLE void refreshWeather();
     ~WeatherAPI();
 signals:

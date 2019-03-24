@@ -5,6 +5,9 @@
 
 #include <QString>
 #include <QPair>
+#include <QDebug>
+
+// - QML site -> refresh Data (timer)
 
 class WeatherData
 {
@@ -14,6 +17,7 @@ public:
     WeatherData(const WeatherData& data);
     WeatherData& operator=(const WeatherData& data);
     QString getCelciusTemp();
+    void showWeather();
 private:
     QString temp;
     QString description;

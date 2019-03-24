@@ -1,10 +1,10 @@
 #include "weatherapi.h"
 
-WeatherAPI::WeatherAPI(QObject *parent) : QObject(parent), src(nullptr),
+WeatherAPI::WeatherAPI(QObject *parent) : QObject(parent), src(nullptr), data(),
     qmlState(true), gpsObtained(false), connectionError(false),
     type(Connection::PLANE), firstReq(false)
 {
-    establishConnection();
+    establishConnection(); // only when server connection is enable
 }
 
 // - JSON EXAMPLE
@@ -97,6 +97,7 @@ QGeoCoordinate WeatherAPI::getCoordinate(){
 }
 
 void WeatherAPI::obtainUserLocation(){
+    src = QGeoPositionInfoSource::createDefaultSource(this);
 
     auto positionUpdate([this](QGeoPositionInfo pos){
        coord = pos.coordinate();
@@ -186,6 +187,9 @@ void WeatherAPI::getWeatherData(QNetworkReply* reply){
     if(QNetworkReply::NoError == reply->error()){
         // parsing json
         QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
+
+        data.coordinate.first = QString::number(coord.latitude());
+        data.coordinate.second = QString::number(coord.longitude());
 
         if(doc.isObject()){
             QJsonObject obj = doc.object();
