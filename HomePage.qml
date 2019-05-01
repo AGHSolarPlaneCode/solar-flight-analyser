@@ -5,7 +5,7 @@ import "MarkerGenerator.js" as MarkerGenerator
 import "distanceCalculator.js" as DistanceCalculator
 import "ShowErrors.js" as ShowErrors
 import QtCharts 2.0
-
+import "WeatherPageGenerator.js" as WeatherPageGenerator
 Item {
     id: root
     property int numberOfPoint : 0  //get from JS function
@@ -72,6 +72,16 @@ Item {
             ShowErrors.showInformation();
         }
     }
+    Timer {
+        repeat: false
+        interval: 50
+        running: true
+        onTriggered: {
+            weatherPageBackground.width = weatherBackground.width - weatherSideMenuBackground.width
+
+        }
+    }
+
     onNumberOfInformationChanged: {
         if(!numberOfInformation){
             informationTXT.text = "Nothing to say"
@@ -86,14 +96,7 @@ Item {
         id:request
     }
 
-//    Timer { //errorExpire Timer
-//        property int
-//        id: errorExpireTimer
-//        interval: 10000; running: false; repeat: false;
-//        onTriggered: {
 
-//        }
-//    }
 
     Timer { //information Timer
         interval: 3000; running: true; repeat: true
@@ -195,10 +198,14 @@ Item {
         }
 
 
-                }//for tests
+                }
 
     Item {
         id: weatherWidget
+        ListModel {
+            id: pageList
+        }
+
         width: 0.28*parent.width
         height: 0.28*parent.height
         property bool menuState: false
@@ -208,6 +215,9 @@ Item {
             right: parent.right
             rightMargin: parent.width*0.05
         }
+        Component.onCompleted: {
+            WeatherPageGenerator.showPage(pageList, 1)
+            }
 
         Image {
             id: weatherBackground
@@ -223,6 +233,8 @@ Item {
                 color: "transparent"
                 SequentialAnimation {
                         id: weatherMenuRollBackAnim
+                        alwaysRunToEnd: true
+                        running: false
                     NumberAnimation {
                         target: weatherRefreshButton
                         alwaysRunToEnd: true
@@ -250,6 +262,8 @@ Item {
                 }
                     SequentialAnimation {
                             id: weatherMenuRollOutAnim
+                            alwaysRunToEnd: true
+                            running: false
                         NumberAnimation {
                             target: weatherSettingsButton
                             alwaysRunToEnd: true
@@ -293,6 +307,8 @@ Item {
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
+                                WeatherPageGenerator.showPage(pageList, 1)
+                                if(!(pageRollBackAnim.running||weatherMenuRollOutAnim.running)){
                                 if(weatherWidget.menuState){
                                     weatherMainButtonImage.source = "qrc:/assetsMenu/WeatherMenuButton.png"
                                     pageRollBackAnim.start();
@@ -305,6 +321,7 @@ Item {
                                     weatherMenuRollOutAnim.start();
                                     weatherWidget.menuState = true;
 
+                                }
                                 }
                             }
                         }
@@ -325,6 +342,12 @@ Item {
                     anchors.horizontalCenter: weatherMainButton.horizontalCenter
                     source: "qrc:/assetsMenu/WeatherLocationButton.png"
                     height: 0
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            WeatherPageGenerator.showPage(pageList, 2)
+                        }
+                    }
                 }
                 Image {
                     id:weatherSettingsButton
@@ -333,28 +356,39 @@ Item {
                     anchors.horizontalCenter: weatherMainButton.horizontalCenter
                     source: "qrc:/assetsMenu/WeatherSettingsButton.png"
                     height: 0
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            WeatherPageGenerator.showPage(pageList, 3)
+                        }
+                    }
                 }
             }
             Rectangle {
                 id:weatherPageBackground
                 height: parent.height
-                width: parent.width - weatherSideMenuBackground.width
-                color: "white"
-                opacity: 0
+                width: weatherBackground.width*0.85
+                color: "transparent"
                 anchors{
                     right: parent.right
+                    verticalCenter: parent.verticalCenter
                 }
                 NumberAnimation on width{
                     id: pageRollOutAnim
-                    alwaysRunToEnd: true
-                    from: parent.width - weatherSideMenuBackground.width
-                    to: (parent.width - weatherSideMenuBackground.width)*0.9
+                    running: false
+                    //alwaysRunToEnd: true
+                    from: weatherBackground.width - weatherSideMenuBackground.width
+                    to: (weatherBackground.width - weatherSideMenuBackground.width)*0.9
+                    //duration: 1000
+
                 }
                 NumberAnimation on width{
                     id: pageRollBackAnim
-                    alwaysRunToEnd: true
-                    from: (parent.width - weatherSideMenuBackground.width)*0.9
-                    to: parent.width - weatherSideMenuBackground.width
+                    running: false
+                    //alwaysRunToEnd: true
+                    from: (weatherBackground.width - weatherSideMenuBackground.width)*0.9
+                    to: weatherBackground.width - weatherSideMenuBackground.width
+                    //duration: 1000
                 }
             }
 
@@ -595,7 +629,7 @@ Item {
                                 //call ignore function
                             }
 
-                            else if(jsonError!=0){
+                            else if(jsonError!==0){
                                 jsonError = 0;
                                 ignoreButton.visible = false;
                                 stopConnectionButton.visible = false;
@@ -637,7 +671,7 @@ Item {
                                 //call stop function
                             }
 
-                            else if(jsonError!=0){
+                            else if(jsonError!==0){
                                 jsonError = 0;
                                 ignoreButton.visible = false;
                                 stopConnectionButton.visible = false;
@@ -694,6 +728,7 @@ Item {
         }
     }
     Item {
+
         id: graphWidget
         width: 0.4*parent.width
         height: 0.36*parent.height

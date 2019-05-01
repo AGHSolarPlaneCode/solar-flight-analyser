@@ -57,5 +57,15 @@
         <file>assetsMenu/WeatherSettingsButton.png</file>
         <file>assetsMenu/chartsIcon.png</file>
         <file>assetsMenu/speed_height_bar.png</file>
+        <file>WeatherPageGenerator.js</file>
+        <file>WeatherMainPage.qml</file>
+        <file>assetsMenu/windIcon.png</file>
+        <file>assetsMenu/rainIcon.png</file>
+        <file>assetsMenu/sunLevel.png</file>
+        <file>WeatherSettingsPage.qml</file>
+        <file>WeatherLocationPage.qml</file>
+        <file>WeatherSettingsRadioButton.qml</file>
+        <file>assetsMenu/BlankRadioButton.png</file>
+        <file>assetsMenu/CheckedRadioButton.png</file>
     </qresource>
 </RCC>
