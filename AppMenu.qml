@@ -2,6 +2,7 @@ import QtQuick 2.0
 import "NotifyMenu.js" as NotifyMenu
 
 Item {
+    id: root
     property string standardcolor
     property string switchedcolor
     property string mousecontainscolor
@@ -11,12 +12,20 @@ Item {
     signal buttonClicked(var buttonState)
     signal connectionChanged(var connectionState)  //send this to backend
     signal notifyChange(var notifyState)
+    signal buttonStop()
 
 
     FontLoader { //load Agency FB from assets
         id: standardFont
         source: "qrc:/assetsMenu/agency_fb.ttf"
     }
+    Connections {
+        target: root
+        onButtonStop:{
+            connectionSlider.source="qrc:/assetsMenu/START BUTTON.png";
+        }
+    }
+
     Rectangle {
         id: topBar
         width: parent.width*0.92

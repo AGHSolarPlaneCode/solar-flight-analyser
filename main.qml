@@ -12,6 +12,7 @@ Window {
     title: qsTr("GPS Location Software")
     property bool connected: false
 
+
     Connections {
         target: mainMenu
         onConnectionChanged: {
@@ -20,6 +21,14 @@ Window {
         }
         onNotifyChange:{
             pageLoader.item.notify = notifyState
+        }
+    }
+    Connections {
+        target: pageLoader.item
+        onConnectionChanged: {
+        root.connected = connectionState
+        pageLoader.item.connected = connectionState
+        mainMenu.buttonStop();
         }
     }
     Connections {
