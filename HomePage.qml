@@ -8,6 +8,7 @@ import QtCharts 2.0
 import "WeatherPageGenerator.js" as WeatherPageGenerator
 Item {
     id: root
+    signal connectionChanged(var connectionState)
     property int numberOfPoint : 0  //get from JS function
     property real distanceToNextPoint: DistanceCalculator.distanceCalculate();
     property real longitude : planePosition.longitude //get from backend
@@ -626,7 +627,7 @@ Item {
                                requestError = 0;
                                 ignoreButton.visible = false;
                                 stopConnectionButton.visible = false;
-                                //call ignore function
+                                error.ignoreRequestErrors();
                             }
 
                             else if(jsonError!==0){
@@ -638,7 +639,7 @@ Item {
                                 sslerror = 0;
                                 ignoreButton.visible = false;
                                 stopConnectionButton.visible = false;
-                                //call ignore function
+                                error.ignoreRequestErrors();
                             }
 
                             else {
@@ -668,7 +669,7 @@ Item {
                                requestError = 0;
                                 ignoreButton.visible = false;
                                 stopConnectionButton.visible = false;
-                                //call stop function
+                                connectionChanged(false);
                             }
 
                             else if(jsonError!==0){
@@ -680,7 +681,7 @@ Item {
                                 sslerror = 0;
                                 ignoreButton.visible = false;
                                 stopConnectionButton.visible = false;
-                                //call stop function
+                                connectionChanged(false);
                             }
 
                             else {
