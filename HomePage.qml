@@ -15,7 +15,7 @@ Item {
     property real latitude: planePosition.latitude  //get from backend
     property string serverAdress : "LOCALHOST" //get from settings (database) or RequestDialog
     property bool connected: false
-    property real transmitterDistance : 2.2515 //get from backend
+    property real transmitterDistance : 0 //get from backend
     property real groundSpeed : Math.sqrt((adapter.Vx)^2+(adapter.Vy)^2) //get from backend
     property real altitude : adapter.Alt
     property var planePosition: QtPositioning.coordinate(adapter.Lat,adapter.Lon)
@@ -515,7 +515,7 @@ Item {
                                 anchors{
                                     left: parent.right
                                     verticalCenter: parent.verticalCenter
-                                    leftMargin: 1*parent.width
+                                    leftMargin: 0.85*parent.width
                                 }
                                 Text {
                                     text: numberOfWarning
@@ -535,7 +535,7 @@ Item {
                                 anchors{
                                     left: parent.right
                                     verticalCenter: parent.verticalCenter
-                                    leftMargin: 3.2*parent.width
+                                    leftMargin: 2.8*parent.width
                                 }
                                 Text {
                                     text: numberOfInformation

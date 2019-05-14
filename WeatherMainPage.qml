@@ -3,11 +3,113 @@ import QtQuick 2.0
 Item {
     id: root
     anchors.fill: parent
-    property string mainTemerature: (54.2).toFixed(0).toString();
+    property string mainTemerature: (15).toString()//weatherAPIAdapter.temp
+    property int windValue: 0//weatherAPIAdapter.windSpeed
+    property int rainValue: 0 //weatherAPIAdapter -- getter
+    property int sunLevel: 50 //get from backend -- don't know which class field
     antialiasing: true
     FontLoader{
         id: standardFont
         source: "qrc:/assetsMenu/agency_fb.ttf"
+    }
+    onWindValueChanged: {
+        var maxwind = 100
+        var minwind = 0
+        if(windValue < (maxwind/5)-10){
+            windDot1.color = "#F8E2A8"
+            windDot2.color = "#F8E2A8"
+            windDot3.color = "#F8E2A8"
+            windDot4.color = "#F8E2A8"
+            windDot5.color = "#F8E2A8"
+        }
+        else if(windValue <((maxwind/5))){
+            windDot1.color = "#F6C648"
+            windDot2.color = "#F8E2A8"
+            windDot3.color = "#F8E2A8"
+            windDot4.color = "#F8E2A8"
+            windDot5.color = "#F8E2A8"
+        }
+        else if(windValue <(2*(maxwind/5))){
+            windDot1.color = "#F6C648"
+            windDot2.color = "#F6C648"
+            windDot3.color = "#F8E2A8"
+            windDot4.color = "#F8E2A8"
+            windDot5.color = "#F8E2A8"
+        }
+        else if(windValue <(3*(maxwind/5))){
+            windDot1.color = "#F6C648"
+            windDot2.color = "#F6C648"
+            windDot3.color = "#F6C648"
+            windDot4.color = "#F8E2A8"
+            windDot5.color = "#F8E2A8"
+        }
+        else if(windValue <(4*(maxwind/5))){
+            windDot1.color = "#F6C648"
+            windDot2.color = "#F6C648"
+            windDot3.color = "#F6C648"
+            windDot4.color = "#F6C648"
+            windDot5.color = "#F8E2A8"
+        }
+        else {
+            windDot1.color = "#F6C648"
+            windDot2.color = "#F6C648"
+            windDot3.color = "#F6C648"
+            windDot4.color = "#F6C648"
+            windDot5.color = "#F6C648"
+        }
+    }
+    onRainValueChanged: {
+        var maxrain = 100
+        var minrain = 0
+        if(rainValue < (maxrain/5)-10){
+            rainDot1.color = "#CDE7EF"
+            rainDot2.color = "#CDE7EF"
+            rainDot3.color = "#CDE7EF"
+            rainDot4.color = "#CDE7EF"
+            rainDot5.color = "#CDE7EF"
+        }
+        else if(rainValue <((maxrain/5))){
+            rainDot1.color = "#8FD2E7"
+            rainDot2.color = "#CDE7EF"
+            rainDot3.color = "#CDE7EF"
+            rainDot4.color = "#CDE7EF"
+            rainDot5.color = "#CDE7EF"
+        }
+        else if(rainValue <(2*(maxrain/5))){
+            rainDot1.color = "#8FD2E7"
+            rainDot2.color = "#8FD2E7"
+            rainDot3.color = "#CDE7EF"
+            rainDot4.color = "#CDE7EF"
+            rainDot5.color = "#CDE7EF"
+        }
+        else if(rainValue <(3*(maxrain/5))){
+            rainDot1.color = "#8FD2E7"
+            rainDot2.color = "#8FD2E7"
+            rainDot3.color = "#8FD2E7"
+            rainDot4.color = "#CDE7EF"
+            rainDot5.color = "#CDE7EF"
+        }
+        else if(rainValue <(4*(maxrain/5))){
+            rainDot1.color = "#8FD2E7"
+            rainDot2.color = "#8FD2E7"
+            rainDot3.color = "#8FD2E7"
+            rainDot4.color = "#8FD2E7"
+            rainDot5.color = "#CDE7EF"
+        }
+        else {
+            rainDot1.color = "#8FD2E7"
+            rainDot2.color = "#8FD2E7"
+            rainDot3.color = "#8FD2E7"
+            rainDot4.color = "#8FD2E7"
+            rainDot5.color = "#8FD2E7"
+        }
+    }
+    MouseArea { //just for test before established backed connection
+        anchors.fill:parent
+        onClicked: {
+            windValue = 43
+            rainValue = 54
+        }
     }
 
 
@@ -15,19 +117,16 @@ Item {
         id: weatherMainIcon
         height: parent.height*0.35
         width: parent.width*0.2
+        source: ("qrc:/assetsMenu/weatherIcons/0" + "1" + "d.png")
         anchors {
             top: parent.top
             topMargin: parent.height*0.08
             right: parent.right
             rightMargin: parent.height*0.16
         }
+       }
 
-        Rectangle {
-            anchors.fill: parent
-            color: "red"
-        }
 
-    }
     Text {
         id: weatherMainTemerature
         font.pixelSize: parent.height*0.12
@@ -64,42 +163,72 @@ Item {
         }
         Rectangle {
             id: weatherinfo1
-            color: "blue"
+            color: "transparent"
             height: parent.height
             width: parent.width*0.184
             anchors.left: parent.left
+            Image{
+                source: ("qrc:/assetsMenu/weatherIcons/0" + "1" + "d.png")
+                height: parent.height*0.8
+                width: parent.width
+                anchors.centerIn: parent
+            }
         }
         Rectangle {
             id: weatherinfo2
-            color: "blue"
+            color: "transparent"
             height: parent.height
             width: parent.width*0.184
             anchors.left: weatherinfo1.right
             anchors.leftMargin: parent.width*0.02
+            Image{
+                source: ("qrc:/assetsMenu/weatherIcons/0" + "1" + "d.png")
+                height: parent.height*0.8
+                width: parent.width
+                anchors.centerIn: parent
+            }
         }
         Rectangle {
             id: weatherinfo3
-            color: "blue"
+            color: "transparent"
             height: parent.height
             width: parent.width*0.184
             anchors.left: weatherinfo2.right
             anchors.leftMargin: parent.width*0.02
+            Image{
+                source: ("qrc:/assetsMenu/weatherIcons/0" + "1" + "d.png")
+                height: parent.height*0.8
+                width: parent.width
+                anchors.centerIn: parent
+            }
         }
         Rectangle {
             id: weatherinfo4
-            color: "blue"
+            color: "transparent"
             height: parent.height
             width: parent.width*0.184
             anchors.left: weatherinfo3.right
             anchors.leftMargin: parent.width*0.02
+            Image{
+                source: ("qrc:/assetsMenu/weatherIcons/0" + "1" + "d.png")
+                height: parent.height*0.8
+                width: parent.width
+                anchors.centerIn: parent
+            }
         }
         Rectangle {
             id: weatherinfo5
-            color: "blue"
+            color: "transparent"
             height: parent.height
             width: parent.width*0.184
             anchors.left: weatherinfo4.right
             anchors.leftMargin: parent.width*0.02
+            Image{
+                source: ("qrc:/assetsMenu/weatherIcons/0" + "1" + "d.png")
+                height: parent.height*0.8
+                width: parent.width
+                anchors.centerIn: parent
+            }
         }
     }
     Rectangle {
@@ -119,13 +248,14 @@ Item {
             anchors.leftMargin: parent.height*0.1
             anchors.verticalCenter: parent.verticalCenter
             source: "qrc:/assetsMenu/windIcon.png"
+
         }
         Rectangle {
             id: windDot1
             height: parent.height*0.4
             width: parent.height*0.4
             radius: parent.height*0.4
-            color: "yellow"
+            color: "#F8E2A8"
             anchors {
                 left: windIcon.right
                 leftMargin: parent.height*0.15
@@ -137,7 +267,7 @@ Item {
             height: parent.height*0.4
             width: parent.height*0.4
             radius: parent.height*0.4
-            color: "yellow"
+            color: "#F8E2A8"
             anchors {
                 left: windDot1.right
                 leftMargin: parent.height*0.15
@@ -149,7 +279,7 @@ Item {
             height: parent.height*0.4
             width: parent.height*0.4
             radius: parent.height*0.4
-            color: "yellow"
+            color: "#F8E2A8"
             anchors {
                 left: windDot2.right
                 leftMargin: parent.height*0.15
@@ -161,7 +291,7 @@ Item {
             height: parent.height*0.4
             width: parent.height*0.4
             radius: parent.height*0.4
-            color: "yellow"
+            color: "#F8E2A8"
             anchors {
                 left: windDot3.right
                 leftMargin: parent.height*0.15
@@ -173,13 +303,14 @@ Item {
             height: parent.height*0.4
             width: parent.height*0.4
             radius: parent.height*0.4
-            color: "yellow"
+            color: "#F8E2A8"
             anchors {
                 left: windDot4.right
                 leftMargin: parent.height*0.15
                 verticalCenter: parent.verticalCenter
             }
         }
+
 
         //-----------------------------
         Image {
@@ -196,7 +327,7 @@ Item {
             height: parent.height*0.4
             width: parent.height*0.4
             radius: parent.height*0.4
-            color: "yellow"
+            color: "#CDE7EF"
             anchors {
                 left: rainIcon.right
                 leftMargin: parent.height*0.15
@@ -208,7 +339,7 @@ Item {
             height: parent.height*0.4
             width: parent.height*0.4
             radius: parent.height*0.4
-            color: "yellow"
+            color: "#CDE7EF"
             anchors {
                 left: rainDot1.right
                 leftMargin: parent.height*0.15
@@ -220,7 +351,7 @@ Item {
             height: parent.height*0.4
             width: parent.height*0.4
             radius: parent.height*0.4
-            color: "yellow"
+            color: "#CDE7EF"
             anchors {
                 left: rainDot2.right
                 leftMargin: parent.height*0.15
@@ -232,7 +363,7 @@ Item {
             height: parent.height*0.4
             width: parent.height*0.4
             radius: parent.height*0.4
-            color: "yellow"
+            color: "#CDE7EF"
             anchors {
                 left: rainDot3.right
                 leftMargin: parent.height*0.15
@@ -244,7 +375,7 @@ Item {
             height: parent.height*0.4
             width: parent.height*0.4
             radius: parent.height*0.4
-            color: "yellow"
+            color: "#CDE7EF"
             anchors {
                 left: rainDot4.right
                 leftMargin: parent.height*0.15
@@ -254,7 +385,7 @@ Item {
         Text{
             id: sunText
             font.pixelSize: parent.height*0.8
-            text: "5"
+            text: sunLevel.toString();
             color: "white"
             font.family: standardFont.name
             anchors.right: parent.right
