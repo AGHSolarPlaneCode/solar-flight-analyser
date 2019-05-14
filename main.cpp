@@ -15,11 +15,12 @@ int main(int argc, char *argv[])
     FlightDataController *controller = new FlightDataController();
 
 
-
+    WeatherAPI *weather = new WeatherAPI(); //instance of weatherAPI - for test
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("controller",controller);
     engine.rootContext()->setContextProperty("adapter", controller->getAdapter());
     engine.rootContext()->setContextProperty("error", controller->getError());
+    engine.rootContext()->setContextProperty("weatherAPIAdapter", weather); //context for QPROPERTY
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
