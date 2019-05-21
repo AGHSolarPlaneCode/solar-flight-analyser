@@ -62,10 +62,9 @@ void WeatherAPI::setLocStatus(bool state){
 }
 
 bool WeatherAPI::useGpsDevice(){
-    auto cond([this]()-> bool {return type == Connection::USER &&
-    gpsObtained == true && qmlState == false;});
 
-    return cond();
+    return type == Connection::USER &&
+    gpsObtained == true && qmlState == false;
 }
 
 void WeatherAPI::manageConnections(){          // - main method to manage connections

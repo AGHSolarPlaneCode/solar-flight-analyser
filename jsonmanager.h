@@ -17,9 +17,8 @@ public:
     enum class JSON_STATE{PARSED = 1, UNPARSED = 0};
     enum class GET_STATE{DOWNLOADED = 1, WAITING = 0};
     explicit JSONManager(QObject *parent = nullptr);
-    void setJSON(const QByteArray& json);
-    void parseJSON();
-    void moveToStruct();
+    QByteArray getRawFrame();
+    void parseJSON(const QByteArray& data);
     void setFlightData(const QJsonObject& obj);
     FlightData getReadyFlightData();
 signals:

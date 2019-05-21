@@ -13,20 +13,21 @@
 #include <QJsonParseError>
 #include "errorhandler.h"
 
+
+
 class ServerManager : public QObject
 {
     Q_OBJECT
 public:
-    enum class State {STOP = 0, RUN, ERROR};
+    enum class State {STOP = 0, RUNNING};
     explicit ServerManager(const QUrl& url, QObject *parent = nullptr);
-    void Update();
-    void HttpGETRequest();
+    void update();
     inline QUrl getUrl() { return endpoint; }
     FlightData getData();
-    void setConnections();
     void setUrl(const QUrl& url);
     ErrorManager* getErrorManager();
     //void flightDataReset();
+
 signals:
     void JSONState(bool state);
 public slots:
@@ -34,6 +35,7 @@ public slots:
     void getRequestData(QNetworkReply* reply);
     void getJSONErrors(const ErrorManager::JSONErrors& type, const QJsonParseError& e = QJsonParseError());
 private:
+    void setConnections();
     State                   mode;
     JSONManager*            frame;
     ErrorManager            errors;
