@@ -7,6 +7,7 @@
 #include "flightdataworker.h"
 #include "flightdataadapter.h"
 
+// MAIN PROGRAM CLASS
 
 /*This class:
  * Makes a worker
@@ -24,6 +25,7 @@ public:
     explicit FlightDataController(QObject *parent = nullptr);
     FlightDataAdapter * getAdapter();
     ErrorManager* getError();
+    bool initializeQMLObjects(); // definition
 signals:
     void StartWorker();
     void StartClock(int ms);

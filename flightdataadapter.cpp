@@ -14,30 +14,30 @@ void FlightDataAdapter::reciveReq(){
     emit sendLocationToWeather(QGeoCoordinate(data.Lat/10000000.0, data.Lon/10000000.0));
 }
 
-int FlightDataAdapter::TimeBootMs() const{
+double FlightDataAdapter::TimeBootMs() const{
     return static_cast<int>(data.TimeBootMs);
 }
-int FlightDataAdapter::Lat () const{
-return data.Lat;
+double FlightDataAdapter::Lat () const{
+    return data.Lat;
 }
-int FlightDataAdapter::Lon () const{
+double FlightDataAdapter::Lon () const{
     return data.Lon;
 }
-int FlightDataAdapter::Alt () const{
+double FlightDataAdapter::Alt () const{
     return data.Alt;
 }
-int FlightDataAdapter::RelativeAlt () const{
+double FlightDataAdapter::RelativeAlt () const{
     return data.RelativeAlt;
 }
-int FlightDataAdapter::Vx () const{
+double FlightDataAdapter::Vx () const{
     return data.Vx;
 }
-int FlightDataAdapter::Vy () const{
+double FlightDataAdapter::Vy () const{
     return data.Vy;
 }
-int FlightDataAdapter::Vz () const{
+double FlightDataAdapter::Vz () const{
     return data.Vz;
 }
-int FlightDataAdapter::Hdg () const{
+double FlightDataAdapter::Hdg () const{
     return static_cast<int>(data.Hdg);
 }

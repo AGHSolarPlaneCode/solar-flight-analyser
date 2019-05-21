@@ -18,7 +18,7 @@ public slots:
     void start();
     void setUrl(const QUrl& qUrl);
 private:
-    ServerManager servermanager{QString("localhost:8080/gps"),this};
+    ServerManager servermanager{QString("localhost:8080/gps"), this};  // example ->  localhost:8080/gpshttps://json-ld.org/contexts/person
     FlightData data;
 };
 

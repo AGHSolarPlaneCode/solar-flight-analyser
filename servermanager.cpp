@@ -2,13 +2,15 @@
 #include <QThread> //For testing only, remove on implementation
 
 ServerManager::ServerManager(const QUrl& url,QObject *parent) : QObject(parent),
-    network(new QNetworkAccessManager(this)), endpoint(url), request(), frame(new JSONManager(this)) {
+    network(new QNetworkAccessManager(this)), frame(new JSONManager(this)) {
     //- set endpoint request
-    request.setUrl(endpoint);
+    setUrl(url);
     setConnections();
-    mode = State::STOP;
 }
 
+// 1. setConnections - such as now
+// 2. Error of JSON
+// Update State- > true -> isRunning() ?
 void ServerManager::setConnections(){
 
     // - connect request with JSONManager method
@@ -30,18 +32,20 @@ void ServerManager::getJSONErrors(const ErrorManager::JSONErrors& type, const QJ
 
 void ServerManager::setUrl(const QUrl &url)
 {
-    endpoint = url;
+    if(url.isValid()){
+        endpoint = url;
+        request.setUrl(endpoint);
+    }
+    else{
+        qDebug()<<"Invalid URL address!";
+        return;
+    }
 }
 
-void ServerManager::HttpGETRequest(){
-    network->get(request); // use ERROR
-}
-
-void ServerManager::Update(){
-    if(State::STOP == mode)
-        mode = State::RUN;
-    // QThread::msleep(30); test
-    HttpGETRequest();
+void ServerManager::update(){
+    // main public method to get request
+    if(network)
+        network->get(request);
 }
 
 ErrorManager* ServerManager::getErrorManager(){
@@ -52,8 +56,8 @@ void ServerManager::getRequestData(QNetworkReply* reply){
     if(QNetworkReply::NetworkError::NoError == reply->error()){
         auto json(reply->readAll());
 
-        frame->setJSON(json);
-        frame->parseJSON();                                                           // - parsing data
+        frame->parseJSON(json);                                                           // - parsing data
+
     }else{
         errors.errorRequestValidator(ErrorManager::RequestErrors::REPLY, reply);
     }

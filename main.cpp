@@ -14,8 +14,8 @@ int main(int argc, char *argv[])
     qRegisterMetaType<FlightData>("FlightData");
     FlightDataController *controller = new FlightDataController();
 
-
     WeatherAPI *weather = new WeatherAPI(); //instance of weatherAPI - for test
+
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("controller",controller);
     engine.rootContext()->setContextProperty("adapter", controller->getAdapter());
