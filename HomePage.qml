@@ -6,9 +6,9 @@ import QtPositioning 5.8
 Item {
     id: root
     property int numberOfPoint : 5  //get from JS function
-    property real distanceToNextPoint: 2.52545 //get from JS function
-    property real longitude : 59.91325434 //get from backend
-    property real latitude: 10.7534543  //get from backend
+    property real distanceToNextPoint: firstRoute.vel //get from JS function
+    property real longitude : firstRoute.lon //get from backend
+    property real latitude: firstRoute.lat  //get from backend
     property string porttxt : "COM8" //get from settings (database)
     property bool connected: false //get from backend
     property real transmitterDistance : 2.2515 //get from backend
