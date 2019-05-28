@@ -864,9 +864,9 @@ Item {
                     ValueAxis {
                         id: yAxis1
                         min: 0
-                        max: 1.5
-                        tickCount: 1
-                        gridVisible: true
+                        max: 50
+                        tickCount: 5
+                        gridVisible: false
                         gridLineColor: "#2F3243"
                         color: "#2F3243"
                         titleText: "Velocity [kph]"
@@ -874,9 +874,9 @@ Item {
                     ValueAxis {
                         id: yAxis2
                         min: 0
-                        max: 1.5
-                        tickCount: 1
-                        gridVisible: true
+                        max: 200
+                        tickCount: 4
+                        gridVisible: false
                         gridLineColor: "#2F3243"
                         color: "#2F3243"
                         titleText: "Altitude [masl]"
@@ -936,8 +936,8 @@ Item {
                         triggeredOnStart: true
                         repeat: true
                         onTriggered: {
-                            xAxis.min = new Date(Date.now() - 100);
-                            xAxis.max = new Date(Date.now() + 10);
+                            xAxis.min = new Date(Date.now() - 100000);
+                            xAxis.max = new Date(Date.now() + 1000);
                         }
                     }
                     Timer {
@@ -948,8 +948,10 @@ Item {
                         onTriggered: {
 //                            y1.remove(0);
 //                            y2.remove(0);
-                            y1.append(new Date(Date.now()), Math.random());
-                            y2.append(new Date(Date.now()), Math.random());
+                            y1.append(new Date(Date.now()), 25 + 3 * Math.random());
+                            y2.append(new Date(Date.now()), 160 + 5 * Math.random());
+//                            y1.append(new Date(Date.now()), groundSpeed);
+//                            y2.append(new Date(Date.now()), altitude);
                         }
                     }
                 }
@@ -1114,6 +1116,7 @@ Item {
 
 //                  }
                   Text {
+                      id:speedText
                       color: "#F5F0F0"
                       font.family: fontFamily
                       anchors {
@@ -1175,6 +1178,7 @@ Item {
                       }
                   }
                   Text {
+                      id: heightText
                       color: "#F5F0F0"
                       font.family: fontFamily
                       anchors {
@@ -1235,6 +1239,7 @@ Item {
                       }
                   }
                   Text {
+                      id: connectionText
                       color: "#F5F0F0"
                       font.family: fontFamily
                       anchors {
@@ -1279,7 +1284,8 @@ Item {
                           id: distanceSeries
                           PieSlice{
                               id: distanceSlice
-                              value: 50
+//                              value: 50
+                              value: distanceToNextPoint.toFixed(1).toString() + "km"
 //                              color: "#292BFF"
                               borderWidth: 0
                               borderColor: "transparent"
@@ -1294,6 +1300,7 @@ Item {
                       }
                   }
                   Text {
+                      id:distanceText
                       color: "#F5F0F0"
                       font.family: fontFamily
                       anchors {
@@ -1304,6 +1311,19 @@ Item {
                       }
                       font.pointSize: (parent.height*0.12).toFixed(0)
                       text: distanceToNextPoint.toFixed(1).toString() + "km"
+                  }
+              }
+              Timer{
+                  id: textTimer
+                  interval: 200
+                  running: true
+                  repeat: true
+                  triggeredOnStart: true
+                  onTriggered: {
+                      speedText.text= (70 + Math.random()*(5-2)+2).toFixed().toString() + "km/h"
+                      heightText.text= (60 + Math.random()*(5-2)+2).toFixed(1).toString() + "m"
+                      connectionText.text= (30 + Math.random()*(5-2)+2).toFixed(1).toString() + "%"
+                      distanceText.text= (50 + Math.random()*(5-2)+2).toFixed(1).toString() + "m"
                   }
               }
 
@@ -1388,7 +1408,9 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
+//                        value: "pk.eyJ1Ijoia3ViYWt1YmIiLCJhIjoiY2p3OGE4bGM4MWt6NjQ0bXIzbG81aXVyeCJ9.aGGvgaK9biKfRh5psjaRcw"                                                            //add your own acces token
                         value: "***"                                                            //add your own acces token
+
                     }
                     PluginParameter{
                         name: "mapbox.mapping.map_id"
