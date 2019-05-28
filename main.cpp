@@ -13,26 +13,12 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
 
-//    qRegisterMetaType<FlightData>("FlightData");
+    QQmlApplicationEngine engine;
 
-    QPointer<FlightDataController> controller(new FlightDataController());
- //   std::unique_ptr<FlightDataController> controller(new FlightDataController());
-//    WeatherAPI *weather = new WeatherAPI(); //instance of weatherAPI - for test
-
-
-
-//    engine.rootContext()->setContextProperty("controller",controller);
-//    engine.rootContext()->setContextProperty("adapter", controller->getAdapter());
-//    engine.rootContext()->setContextProperty("error", controller->getError());
-//    engine.rootContext()->setContextProperty("weatherAPIAdapter", weather); //context for QPROPERTY
-
-//    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-//    if (engine.rootObjects().isEmpty())
-//        return -1;
-
-
-    if(!controller->initializeQMLObjects())
+    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    if (engine.rootObjects().isEmpty())
         return -1;
+
 
 
     return app.exec();
