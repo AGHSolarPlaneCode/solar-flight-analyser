@@ -26,14 +26,15 @@
 
 class WeatherAPI : public QObject
 {
+    //        ADD NOTIFY !   <<<< ------ <<<<
     Q_OBJECT
     Q_PROPERTY(bool locStatus READ getLocStatus WRITE setLocStatus NOTIFY locStatusChanged)
 
-    Q_PROPERTY(QString temp READ getTemp) // check
-    Q_PROPERTY(QString desc READ getDescription)
-    Q_PROPERTY(QString iconID READ getIconID)
-    Q_PROPERTY(double hum READ getHumidity)
-    Q_PROPERTY(double windSpeed READ getWindSpeed)
+    Q_PROPERTY(QString temp READ getTemp NOTIFY dataChanged) // check
+    Q_PROPERTY(QString desc READ getDescription NOTIFY dataChanged)
+    Q_PROPERTY(QString iconID READ getIconID NOTIFY dataChanged)
+    Q_PROPERTY(double hum READ getHumidity NOTIFY dataChanged)
+    Q_PROPERTY(double windSpeed READ getWindSpeed NOTIFY dataChanged)
 public:
 
     enum class Connection{USER = 1, PLANE, DEFAULT};               // USER - obtain user location of device   PLANE - get location of plane, from DataAdapter

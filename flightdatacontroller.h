@@ -4,9 +4,11 @@
 #include <QObject>
 #include <QThread>
 #include <QTimer>
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
 #include "flightdataworker.h"
 #include "flightdataadapter.h"
-
+#include "weatherapi.h"
 // MAIN PROGRAM CLASS
 
 /*This class:
@@ -38,6 +40,7 @@ public slots:
     void setUrl(QString url);
 private:
     bool workerIsFree = true;
+    QQmlApplicationEngine engine;
     FlightDataAdapter adapter;
     FlightDataWorker worker;
     QThread thread;

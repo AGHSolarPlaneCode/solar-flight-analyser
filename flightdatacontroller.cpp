@@ -14,6 +14,27 @@ FlightDataController::FlightDataController(QObject *parent) : QObject(parent)
     thread.start();
 }
 
+bool FlightDataController::initializeQMLObjects(){
+    qRegisterMetaType<FlightData>("FlightData");
+    //std::unique_ptr<FlightDataController> controller(std::make_unique<FlightDataController>());
+
+    //FlightDataController *controller = new FlightDataController();
+
+    WeatherAPI *weather = new WeatherAPI(); //instance of weatherAPI - for test
+
+
+    engine.rootContext()->setContextProperty("controller", this);
+    engine.rootContext()->setContextProperty("adapter", getAdapter());
+    engine.rootContext()->setContextProperty("error", getError());
+    engine.rootContext()->setContextProperty("weatherAPIAdapter", weather); //context for QPROPERTY
+
+    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    if (engine.rootObjects().isEmpty())
+        return false;
+    else
+        return true;
+}
+
 void FlightDataController::StartWorkerIfFree(){
     if(workerIsFree){
         emit StartWorker();
