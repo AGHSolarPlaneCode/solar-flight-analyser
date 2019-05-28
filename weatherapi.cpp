@@ -221,6 +221,7 @@ void WeatherAPI::getWeatherData(QNetworkReply* reply){
                 data.windSpeed = tmp.value(QStringLiteral("speed")).toDouble();
             }
         }
+        emit dataChanged();
     }
     else{
         qDebug()<<"Error service";
