@@ -1,7 +1,5 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
-#include "flightdatacontroller.h"
-#include "weatherapi.h"
 #include <QtQuick>
 #include <QPointer>
 #include <QDebug>

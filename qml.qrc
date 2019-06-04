@@ -78,23 +78,6 @@
         <file>assetsMenu/weatherIcons/09d.png</file>
         <file>assetsMenu/weatherIcons/09n.png</file>
         <file>assetsMenu/weatherIcons/11d.png</file>
-        <file>errorhandler.cpp</file>
-        <file>errorhandler.h</file>
-        <file>flightdataadapter.cpp</file>
-        <file>flightdataadapter.h</file>
-        <file>flightdatacontroller.cpp</file>
-        <file>flightdatacontroller.h</file>
-        <file>flightdatastruct.h</file>
-        <file>flightdataworker.cpp</file>
-        <file>flightdataworker.h</file>
-        <file>jsonmanager.cpp</file>
-        <file>jsonmanager.h</file>
         <file>main.cpp</file>
-        <file>servermanager.cpp</file>
-        <file>servermanager.h</file>
-        <file>weatherapi.cpp</file>
-        <file>weatherapi.h</file>
-        <file>weatherdata.cpp</file>
-        <file>weatherdata.h</file>
     </qresource>
 </RCC>
