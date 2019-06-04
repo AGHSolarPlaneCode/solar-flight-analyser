@@ -79,5 +79,6 @@
         <file>assetsMenu/weatherIcons/09n.png</file>
         <file>assetsMenu/weatherIcons/11d.png</file>
         <file>main.cpp</file>
+        <file>Marker.qml</file>
     </qresource>
 </RCC>
