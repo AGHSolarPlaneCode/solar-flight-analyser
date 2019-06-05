@@ -1431,7 +1431,7 @@ Item {
                         //- Second Animation - move plane
                         CoordinateAnimation{
                             id: planeMoveAnimation
-                            duration: 15*60*1000
+                            duration: 3*60*1000
                             target: generate
                             property: "lastPoint"
                             easing.type: Easing.InOutQuad
@@ -1442,7 +1442,6 @@ Item {
                     MouseArea{
                         anchors.fill: parent
                             onClicked: {
-                                console.log("Clicked")
                                 if (planeAnimation.running) {
                                     console.log("Plane is flying.");
                                     return;

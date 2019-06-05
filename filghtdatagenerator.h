@@ -3,6 +3,7 @@
 #include <QGeoCoordinate>
 #include <QObject>
 #include <QtDebug>
+#include <algorithm>
 
 namespace FlightData{
 
