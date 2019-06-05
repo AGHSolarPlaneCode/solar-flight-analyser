@@ -10,15 +10,21 @@ Item {
     id: root
     signal connectionChanged(var connectionState)
     property int numberOfPoint : 0  //get from JS function
-    property real distanceToNextPoint: DistanceCalculator.distanceCalculate();
+    property real distanceToNextPoint: generate.distance                                                      //DistanceCalculator.distanceCalculate();
     property real longitude : planePosition.longitude //get from backend
     property real latitude: planePosition.latitude  //get from backend
     property string serverAdress : "LOCALHOST" //get from settings (database) or RequestDialog
     property bool connected: false
     property real transmitterDistance : 0 //get from backend
+
+    // ------------------------------------------- \\
     property real groundSpeed : Math.sqrt((adapter.Vx)^2+(adapter.Vy)^2) //get from backend
+    // ------------------------------------------- \\
     property real altitude : adapter.Alt
-    property var planePosition: QtPositioning.coordinate(adapter.Lat,adapter.Lon)
+    // ------------------------------------------- \\
+     property var planePosition: generate.lastPoint
+    // ------------------------------------------- \\
+
     property bool mapFollow: followSwitch.status
     property real xVelocity: adapter.Vx
     property real yVelocity: adapter.Vy
@@ -197,8 +203,6 @@ Item {
                 mapWidget.width = parent.width
             }
         }
-
-
                 }
 
     Item {
@@ -1363,13 +1367,12 @@ Item {
         }
     }
 
-
-
-
         Rectangle {
             anchors.fill: parent
             color : "#2F3243"
             //radius: parent.height*0.02
+
+// START MAIN ANIMATION CODE |||| -------------------------------------------------------------------------------------------------------------- ||||
 
             Map { //map
                id: map
@@ -1388,13 +1391,14 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
-                        value: "***"                                                            //add your own acces token
+                        value: "pk.eyJ1Ijoia3J6eXNpZWttYXJvc3plazEiLCJhIjoiY2p3amV6dWx1MDBqdjQzbWc3djNxNGRraCJ9.oWqMUlFWr-VXOXxadvCZlg"
                     }
                     PluginParameter{
                         name: "mapbox.mapping.map_id"
                         value: "mapbox.dark"
                     }
                 }
+
                 DropArea {
                     anchors.fill: parent
                     onDropped: {
@@ -1404,13 +1408,70 @@ Item {
 
                     }
                 }
-                PlaneMarker {
-                    id: planePositionMarker
-                    coordinate: planePosition
-                    planeAzimut: Math.atan2(xVelocity,yVelocity)*180/Math.PI //The azimuth = arctan((x2 –x1)/(y2 –y1))
-                }
+                Marker{
 
-            }
+                    id: plane
+                    coordinate: generate.lastPoint //  to change for class object
+
+                    SequentialAnimation{
+                        id: planeAnimation
+                        property real direction: -9
+
+                        //- First Animation - rotate the plane to correct direction
+
+                        NumberAnimation{
+                            id: rotateAnimation
+                            target: plane
+                            property: "rotate" // type of rotation 0 - 360 degrees
+                            duration: 1500
+                            easing.type: Easing.InOutQuad
+                            to: planeAnimation.direction  // set direction before running animation
+                        }
+
+                        //- Second Animation - move plane
+                        CoordinateAnimation{
+                            id: planeMoveAnimation
+                            duration: 15*60*1000
+                            target: generate
+                            property: "lastPoint"
+                            easing.type: Easing.InOutQuad
+                        }
+
+                    }
+
+                    MouseArea{
+                        anchors.fill: parent
+                            onClicked: {
+                                console.log("Clicked")
+                                if (planeAnimation.running) {
+                                    console.log("Plane is flying.");
+                                    return;
+                                }
+
+                                if (generate.lastPoint === generate.endPoint) {
+                                    planeMoveAnimation.from = generate.endPoint;
+                                    planeMoveAnimation.to = generate.startPoint;
+                                } else if (generate.lastPoint === generate.startPoint) {
+                                    planeMoveAnimation.from = generate.startPoint;
+                                    planeMoveAnimation.to = generate.endPoint;
+                                }
+
+                                if(counter != 1){
+                                    planeAnimation.direction = generate.lastPoint.azimuthTo(planeMoveAnimation.to);
+                                    planeAnimation.start();
+                                }else{
+                                    planeAnimation.start();
+
+                                }
+                               counter = counter+1;
+                            }
+                    } // MouseArea end
+
+                } // marker end
+
+            } // map end
+
+// END MAIN ANIMATION CODE |||| -------------------------------------------------------------------------------------------------------------- ||||
 
             Rectangle { //bottomBar
                 id: bottomBar
