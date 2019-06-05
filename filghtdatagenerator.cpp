@@ -31,7 +31,11 @@ FlightData::Generator::FlightDataGenerator::FlightDataGenerator(const QGeoCoordi
 void FlightData::Generator::FlightDataGenerator::setPoint(const QGeoCoordinate& point){
     if(flyData.lastPosition == point)
         return;
+
     flyData.lastPosition = point;
+
+    if(flyData.lastPosition == flyData.endPoint)
+        std::swap(flyData.startPoint, flyData.endPoint);
 
     setDistanceToPoint(flyData.lastPosition);
 
@@ -44,8 +48,7 @@ void FlightData::Generator::FlightDataGenerator::setDistanceToPoint(const QGeoCo
     if(!point.isValid())
         return;
 
-    flyData.distanceToGoal = static_cast<double>(flyData.endPoint.distanceTo(point)) / Data::Param::KM;
-    qDebug()<<flyData.distanceToGoal;
+    flyData.distanceToGoal = static_cast<double>(flyData.lastPosition.distanceTo(flyData.endPoint)) / Data::Param::KM;
 }
 
 void FlightData::Generator::FlightDataGenerator::generateData(){
