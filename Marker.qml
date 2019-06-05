@@ -11,7 +11,7 @@ MapQuickItem {
     anchorPoint.x: image.width/2
     anchorPoint.y: image.height/2
 
-    sourceItem:Grid{
+    sourceItem: Grid{
 
         horizontalItemAlignment: Grid.AlignHCenter // to rotate whole own axis
         Image {  // add plane marker

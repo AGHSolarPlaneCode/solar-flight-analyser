@@ -47,7 +47,7 @@ namespace FlightData{
 
             double getLat() const { return flyData.lastPosition.latitude();  }
             double getLon() const { return flyData.lastPosition.longitude(); }
-            double getAlt() const { return flyData.alt;   }
+            double getAlt() const { return flyData.alt; }
             double getSpeed() const { return flyData.speed; }
             double getDistanceToEnd() const { return flyData.distanceToGoal; }
 
