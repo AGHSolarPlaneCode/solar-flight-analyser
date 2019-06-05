@@ -5,7 +5,7 @@
 // default data
 FlightData::Generator::FlightDataGenerator::FlightDataGenerator(const QGeoCoordinate& firstPos,
     const QGeoCoordinate& lastPos, QObject* parent): QObject(parent),
-    flyData{firstPos,firstPos,lastPos,0.0,0.0,0.0},
+    flyData{firstPos,firstPos,lastPos,0.0,0.0, firstPos.distanceTo(lastPos)/Data::Param::KM},
     weatherData{1,0.0} {
     //qDebug() << flyData.startPoint.distanceTo(flyData.endPoint) /1000;
 }
@@ -21,6 +21,7 @@ FlightData::Generator::FlightDataGenerator::FlightDataGenerator(const QGeoCoordi
 //    QGeoCoordinate startPoint, endPoint  < - start and end point(Cracow/Gdansk)
 //    double alt
 //    double speed
+//    double distanceToGoal
 //        }
 
 // WeatherData{
@@ -48,7 +49,7 @@ void FlightData::Generator::FlightDataGenerator::setDistanceToPoint(const QGeoCo
     if(!point.isValid())
         return;
 
-    flyData.distanceToGoal = static_cast<double>(flyData.lastPosition.distanceTo(flyData.endPoint)) / Data::Param::KM;
+    flyData.distanceToGoal = static_cast<double>(point.distanceTo(flyData.endPoint)) / Data::Param::KM;
 }
 
 void FlightData::Generator::FlightDataGenerator::generateData(){

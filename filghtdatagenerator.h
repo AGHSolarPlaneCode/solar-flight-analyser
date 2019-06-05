@@ -59,7 +59,6 @@ namespace FlightData{
             inline QGeoCoordinate getPoint()    { return flyData.lastPosition; }
             inline QGeoCoordinate getStartPos() { return flyData.startPoint;   }
             inline QGeoCoordinate getLastPos()  { return flyData.endPoint;     }
-
         signals:
             void movePosition();
         public slots:
