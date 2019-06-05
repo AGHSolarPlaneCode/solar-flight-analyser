@@ -1,8 +1,8 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QtQuick>
-#include <QPointer>
 #include <QDebug>
+#include "filghtdatagenerator.h"
 
 int main(int argc, char *argv[])
 {
@@ -10,8 +10,14 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
 
+    using namespace FlightData::Generator;
 
     QQmlApplicationEngine engine;
+
+
+    FlightDataGenerator generator;
+
+    engine.rootContext()->setContextProperty("generate",&generator);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
