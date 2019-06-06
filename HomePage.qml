@@ -950,8 +950,8 @@ Item {
                         triggeredOnStart: true
                         repeat: true
                         onTriggered: {
-                            y1.append(new Date(Date.now()), 23 + 5*(1 - 1/Math.sqrt(1) * Math.exp(0* timeElapsed/3000) * Math.sin( Math.sqrt(1)/3000 * timeElapsed)));
-                            y2.append(new Date(Date.now()), 120 + 10*(1 - 1/Math.sqrt(1) * Math.exp(0* timeElapsed/4000) * Math.sin( Math.sqrt(1)/4000 * timeElapsed)));
+                            y1.append(new Date(Date.now()), 23 * (1 - Math.exp(-timeElapsed/3000)) + 5*(1 - 1/Math.sqrt(1) * Math.exp(0* timeElapsed/3000) * Math.sin( Math.sqrt(1)/3000 * timeElapsed)));
+                            y2.append(new Date(Date.now()), 120 * (1 - Math.exp(-timeElapsed/4000)) + 10*(1 - 1/Math.sqrt(1) * Math.exp(0* timeElapsed/4000) * Math.sin( Math.sqrt(1)/4000 * timeElapsed)));
 
                         }
                     }
