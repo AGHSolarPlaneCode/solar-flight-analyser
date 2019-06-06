@@ -40,7 +40,7 @@ Item {
     property var requestError: "Error"
     property var informations: []
     property var sslerror: []
-
+    property int timeElapsed: 0
 
 
 
@@ -868,7 +868,7 @@ Item {
                     ValueAxis {
                         id: yAxis1
                         min: 0
-                        max: 1.5
+                        max: 50
                         tickCount: 1
                         gridVisible: true
                         gridLineColor: "#2F3243"
@@ -878,7 +878,7 @@ Item {
                     ValueAxis {
                         id: yAxis2
                         min: 0
-                        max: 1.5
+                        max: 200
                         tickCount: 1
                         gridVisible: true
                         gridLineColor: "#2F3243"
@@ -940,8 +940,8 @@ Item {
                         triggeredOnStart: true
                         repeat: true
                         onTriggered: {
-                            xAxis.min = new Date(Date.now() - 100);
-                            xAxis.max = new Date(Date.now() + 10);
+                            xAxis.min = new Date(Date.now() - 10000);
+                            xAxis.max = new Date(Date.now() + 1000);
                         }
                     }
                     Timer {
@@ -950,11 +950,21 @@ Item {
                         triggeredOnStart: true
                         repeat: true
                         onTriggered: {
-//                            y1.remove(0);
-//                            y2.remove(0);
-                            y1.append(new Date(Date.now()), Math.random());
-                            y2.append(new Date(Date.now()), Math.random());
+                            y1.append(new Date(Date.now()), 25 - 25 * Math.exp(-timeElapsed/10000));
+                            y2.append(new Date(Date.now()), 160 -  160 * Math.exp(-timeElapsed/10000));
+
                         }
+                    }
+                    Timer {
+                        id: valueTimer
+                        interval: 100
+                        running: true
+                        triggeredOnStart: true
+                        repeat: true
+                        onTriggered: {
+                            timeElapsed = timeElapsed + 100
+                        }
+
                     }
                 }
             }
