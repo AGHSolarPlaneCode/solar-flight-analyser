@@ -34,6 +34,7 @@ Item {
     property var requestError: "Error"
     property var informations: []
     property var sslerror: []
+    property real timeElapsed:0
 
 
 
@@ -936,7 +937,7 @@ Item {
                         triggeredOnStart: true
                         repeat: true
                         onTriggered: {
-                            xAxis.min = new Date(Date.now() - 100000);
+                            xAxis.min = new Date(Date.now() - 10000);
                             xAxis.max = new Date(Date.now() + 1000);
                         }
                     }
@@ -946,13 +947,21 @@ Item {
                         triggeredOnStart: true
                         repeat: true
                         onTriggered: {
-//                            y1.remove(0);
-//                            y2.remove(0);
-                            y1.append(new Date(Date.now()), 25 + 3 * Math.random());
-                            y2.append(new Date(Date.now()), 160 + 5 * Math.random());
-//                            y1.append(new Date(Date.now()), groundSpeed);
-//                            y2.append(new Date(Date.now()), altitude);
+                            y1.append(new Date(Date.now()), 25 - 25 * Math.exp(-timeElapsed/10000));
+                            y2.append(new Date(Date.now()), 160 -  160 * Math.exp(-timeElapsed/10000));
+
                         }
+                    }                    
+                    Timer {
+                        id: valueTimer
+                        interval: 100
+                        running: true
+                        triggeredOnStart: true
+                        repeat: true
+                        onTriggered: {
+                            timeElapsed = timeElapsed + 100
+                        }
+
                     }
                 }
             }
