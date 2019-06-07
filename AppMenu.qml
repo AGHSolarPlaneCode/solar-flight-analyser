@@ -82,7 +82,7 @@ Item {
                     else {
                        parent.source="qrc:/assetsMenu/START BUTTON.png";
                         startButtonState = false;
-                       connectionChanged(false);
+                      connectionChanged(false);
                     }
                  }
              }

@@ -14,6 +14,7 @@ Window {
     property int counter: 1
     property bool startButtonState: false
 
+
     Connections {
         target: mainMenu
         onConnectionChanged: {
