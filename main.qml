@@ -12,6 +12,7 @@ Window {
     title: qsTr("GPS Location Software")
     property bool connected: false
     property int counter: 1
+    property bool startButtonState: false
 
     Connections {
         target: mainMenu

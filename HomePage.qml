@@ -11,6 +11,7 @@ Item {
     signal connectionChanged(var connectionState)
     property int numberOfPoint : 0  //get from JS function
     property real distanceToNextPoint: generate.distance                                                      //DistanceCalculator.distanceCalculate();
+    property real constDist: generate.constDistance
     property real longitude : planePosition.longitude //get from backend
     property real latitude: planePosition.latitude  //get from backend
     property string serverAdress : "LOCALHOST" //get from settings (database) or RequestDialog
@@ -1116,7 +1117,7 @@ Item {
                               speedSlice.value= 70 + Math.random()*(5-2)+2
                               heightSlice.value= 60 + Math.random()*(5-2)+2
                               connectionSlice.value= 30 + Math.random()*(5-2)+2
-                              distanceSlice.value= 50 + Math.random()*(5-2)+2
+                              //distanceSlice.value = 30 + Math.random()*(5-2)+2
                           }
                       }
                   }
@@ -1293,13 +1294,13 @@ Item {
                           id: distanceSeries
                           PieSlice{
                               id: distanceSlice
-                              value: 50
+                              value: constDist - generate.distance
 //                              color: "#292BFF"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
                           PieSlice{
-                              value: 100-distanceSlice.value
+                              value: generate.distance
 //                              color: "#292BAA"
                               borderWidth: 0
                               borderColor: "transparent"
@@ -1441,7 +1442,7 @@ Item {
                         //- Second Animation - move plane
                         CoordinateAnimation{
                             id: planeMoveAnimation
-                            duration: 10*60*1000
+                            duration: 1*60*1000
                             target: generate
                             property: "lastPoint"
                             easing.type: Easing.InOutQuad
@@ -1466,13 +1467,17 @@ Item {
                                 }
 
                                 if(counter != 1){
-                                    planeAnimation.direction = generate.lastPoint.azimuthTo(planeMoveAnimation.to);
-                                    planeAnimation.start();
+                                    if(startButtonState === true){
+                                        planeAnimation.direction = generate.lastPoint.azimuthTo(planeMoveAnimation.to);
+                                        planeAnimation.start();
+                                    }
                                 }else{
-                                    planeAnimation.start();
-
+                                    if(startButtonState === true){
+                                        planeAnimation.start();
+                                        counter = counter+1;
+                                    }
                                 }
-                               counter = counter+1;
+
                             }
                     } // MouseArea end
 

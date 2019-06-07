@@ -40,7 +40,7 @@ namespace FlightData{
             Q_PROPERTY(double lon READ getLon NOTIFY movePosition)
             Q_PROPERTY(double speed READ getSpeed NOTIFY movePosition)
             Q_PROPERTY(double distance READ getDistanceToEnd NOTIFY movePosition)
-
+            Q_PROPERTY(double constDistance READ getDistanceToEnd)
         public:
             // default constructor with 'Cracow' -> 'Gdansk' coordinates
             FlightDataGenerator(const QGeoCoordinate& firstPosition = QGeoCoordinate(50.0619474,19.9368564),

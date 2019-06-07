@@ -76,10 +76,12 @@ Item {
                  onClicked: {
                     if(parent.source=="qrc:/assetsMenu/START BUTTON.png"){
                         connectionChanged(true);
+                        startButtonState = true;
                         parent.source="qrc:/assetsMenu/STOP BUTTON.png"
                     }
                     else {
                        parent.source="qrc:/assetsMenu/START BUTTON.png";
+                        startButtonState = false;
                        connectionChanged(false);
                     }
                  }
