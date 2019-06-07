@@ -42,6 +42,11 @@ Item {
     property var informations: []
     property var sslerror: []
     property int timeElapsed: 0
+    property real simVelocity: 23 * (1 - Math.exp(-timeElapsed/3000)) + 5*(1 - 1/Math.sqrt(1) * Math.exp(0* timeElapsed/3000) * Math.sin( Math.sqrt(1)/3000 * timeElapsed))
+    property real simVelocityMax: 50
+    property real simHeight: 120 * (1 - Math.exp(-timeElapsed/4000)) + 10*(1 - 1/Math.sqrt(1) * Math.exp(0* timeElapsed/4000) * Math.sin( Math.sqrt(1)/4000 * timeElapsed))
+    property real simHeightMax: 200
+    property real batteryPercentage: 110 - 10*(1 - 1/Math.sqrt(1) * Math.exp(0* timeElapsed/4000) * Math.sin( Math.sqrt(1)/4000 * timeElapsed))
 
 
 
@@ -869,7 +874,7 @@ Item {
                     ValueAxis {
                         id: yAxis1
                         min: 0
-                        max: 50
+                        max: simVelocityMax
                         tickCount: 1
                         gridVisible: true
                         gridLineColor: "#2F3243"
@@ -879,7 +884,7 @@ Item {
                     ValueAxis {
                         id: yAxis2
                         min: 0
-                        max: 200
+                        max: simHeightMax
                         tickCount: 1
                         gridVisible: true
                         gridLineColor: "#2F3243"
@@ -951,8 +956,8 @@ Item {
                         triggeredOnStart: true
                         repeat: true
                         onTriggered: {
-                            y1.append(new Date(Date.now()), 23 * (1 - Math.exp(-timeElapsed/3000)) + 5*(1 - 1/Math.sqrt(1) * Math.exp(0* timeElapsed/3000) * Math.sin( Math.sqrt(1)/3000 * timeElapsed)));
-                            y2.append(new Date(Date.now()), 120 * (1 - Math.exp(-timeElapsed/4000)) + 10*(1 - 1/Math.sqrt(1) * Math.exp(0* timeElapsed/4000) * Math.sin( Math.sqrt(1)/4000 * timeElapsed)));
+                            y1.append(new Date(Date.now()), simVelocity);
+                            y2.append(new Date(Date.now()), simHeight);
 
 
                         }
@@ -1095,32 +1100,32 @@ Item {
                           id: speedSeries
                           PieSlice{
                               id: speedSlice
-                              value: 70
+                              value: simVelocity
                               color: "#292BFF"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
                           PieSlice{
-                              value: 100-speedSlice.value
+                              value: simVelocityMax - simVelocity
                               color: "#292BAA"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
                           holeSize: 0.5
                       }
-                      Timer{
-                          id: pieTimer
-                          interval: 500
-                          running: true
-                          repeat: true
-                          triggeredOnStart: true
-                          onTriggered: {
-                              speedSlice.value= 70 + Math.random()*(5-2)+2
-                              heightSlice.value= 60 + Math.random()*(5-2)+2
-                              connectionSlice.value= 30 + Math.random()*(5-2)+2
-                              //distanceSlice.value = 30 + Math.random()*(5-2)+2
-                          }
-                      }
+//                      Timer{
+//                          id: pieTimer
+//                          interval: 500
+//                          running: true
+//                          repeat: true
+//                          triggeredOnStart: true
+//                          onTriggered: {
+////                              speedSlice.value= simVelocity
+////                              heightSlice.value= simHeight
+////                              connectionSlice.value= 30 + Math.random()*(5-2)+2
+//                              //distanceSlice.value = 30 + Math.random()*(5-2)+2
+//                          }
+//                      }
                   }
 //                  Image {
 //                      width: parent.width*0.98
@@ -1139,7 +1144,8 @@ Item {
                        horizontalCenterOffset: parent.width*0.01
                       }
                       font.pointSize: (parent.height*0.11).toFixed(0)
-                      text: groundSpeed.toFixed(0).toString() + "km/h"
+//                      text: groundSpeed.toFixed(0).toString() + "km/h"
+                        text: simVelocity.toFixed(0).toString() + "km/h"
                   }
               }
               Rectangle { //Heigth
@@ -1176,13 +1182,13 @@ Item {
                           id: heightSeries
                           PieSlice{
                               id: heightSlice
-                              value: 60
+                              value: simHeight
 //                              color: "#292BFF"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
                           PieSlice{
-                              value: 100-heightSlice.value
+                              value: simHeightMax - simHeight
 //                              color: "#292BAA"
                               borderWidth: 0
                               borderColor: "transparent"
@@ -1200,7 +1206,8 @@ Item {
                        horizontalCenterOffset: parent.width*0.01
                       }
                       font.pointSize: (parent.height*0.12).toFixed(0)
-                      text: altitude.toFixed(0).toString() + "m"
+//                      text: altitude.toFixed(0).toString() + "m"
+                        text: simHeight.toFixed(0).toString() + "m"
                   }
               }
               Rectangle { //connectionPower
@@ -1236,13 +1243,13 @@ Item {
                           id: connectionSeries
                           PieSlice{
                               id: connectionSlice
-                              value: 30
+                              value: batteryPercentage
 //                              color: "#292BFF"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
                           PieSlice{
-                              value: 100-connectionSlice.value
+                              value: 100 - batteryPercentage
 //                              color: "#292BAA"
                               borderWidth: 0
                               borderColor: "transparent"
@@ -1260,7 +1267,7 @@ Item {
                        horizontalCenterOffset: -parent.width*0.02
                       }
                       font.pointSize: (parent.height*0.11).toFixed(0)
-                      text: "30%"
+                      text: batteryPercentage.toFixed(1).toString() + "%"
                   }
               }
               Rectangle { //Distance
