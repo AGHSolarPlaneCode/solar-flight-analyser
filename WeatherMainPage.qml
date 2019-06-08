@@ -3,8 +3,8 @@ import QtQuick 2.0
 Item {
     id: root
     anchors.fill: parent
-    property string mainTemerature: (15).toString()//weatherAPIAdapter.temp
-    property int windValue: 0//weatherAPIAdapter.windSpeed
+    property string mainTemerature: (generate.temp).toString()//weatherAPIAdapter.temp
+    property int windValue: generate.wspeed  //weatherAPIAdapter.windSpeed
     property int rainValue: 0 //weatherAPIAdapter -- getter
     property int sunLevel: 50 //get from backend -- don't know which class field
     antialiasing: true

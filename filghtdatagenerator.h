@@ -20,9 +20,9 @@ namespace FlightData{
         };
 
         struct WeatherData{
-            int iconID;
-            double temp;
-            double humidity;
+            QString iconID;
+            int temp;
+            int humidity;
             double windSpeed;
             QString description;
         };
@@ -51,9 +51,9 @@ namespace FlightData{
             Q_PROPERTY(double constDistance READ getDistanceToEnd)
 
             // property for weather
-            Q_PROPERTY(int id READ getIconID NOTIFY weatherSignal)
-            Q_PROPERTY(double temp READ getTemp NOTIFY weatherSignal)
-            Q_PROPERTY(double hum READ getHumidity NOTIFY weatherSignal)
+            Q_PROPERTY(QString id READ getIconID NOTIFY weatherSignal)
+            Q_PROPERTY(int temp READ getTemp NOTIFY weatherSignal)
+            Q_PROPERTY(int hum READ getHumidity NOTIFY weatherSignal)
             Q_PROPERTY(QString desc READ getDescript NOTIFY weatherSignal)
             Q_PROPERTY(double wspeed READ getWindSpeed NOTIFY weatherSignal)
 
@@ -68,9 +68,9 @@ namespace FlightData{
             double getSpeed() const { return flyData.speed; }
             double getDistanceToEnd() const { return flyData.distanceToGoal; }
             // weather getters
-            int getIconID() const { return weatherData.iconID; }
-            double getTemp() const { return weatherData.temp; }
-            double getHumidity() const { return weatherData.humidity; }
+            QString getIconID() const { return weatherData.iconID; }
+            int getTemp() const { return weatherData.temp; }
+            int getHumidity() const { return weatherData.humidity; }
             QString getDescript() const { return weatherData.description; }
             double getWindSpeed() const { return weatherData.windSpeed; }
             // main setters
@@ -80,6 +80,9 @@ namespace FlightData{
             inline QGeoCoordinate getPoint()    { return flyData.lastPosition; }
             inline QGeoCoordinate getStartPos() { return flyData.startPoint;   }
             inline QGeoCoordinate getLastPos()  { return flyData.endPoint;     }
+
+            template<typename T>
+            friend T numberGenerator(T a, T b);
         signals:
             void movePosition();
             void weatherSignal();

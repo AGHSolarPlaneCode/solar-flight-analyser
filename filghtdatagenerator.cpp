@@ -2,14 +2,16 @@
 
 
 
+
+
 // default data
 FlightData::Generator::FlightDataGenerator::FlightDataGenerator(const QGeoCoordinate& firstPos,
     const QGeoCoordinate& lastPos, QObject* parent): QObject(parent), weatherTimer(new QTimer(this)),
     flyData{firstPos,firstPos,lastPos,0.0,0.0, firstPos.distanceTo(lastPos)/Data::Param::KM},
-    weatherData{1,0.0} {
+    weatherData{"02d",20,30,6.5,""} {
     connect(weatherTimer, &QTimer::timeout, this,&FlightDataGenerator::weatherDataGenerator);
 
-    weatherTimer->setInterval(10000);
+    weatherTimer->setInterval(4000);
     weatherTimer->start();
 
     //qDebug() << flyData.startPoint.distanceTo(flyData.endPoint) /1000;
@@ -37,6 +39,20 @@ FlightData::Generator::FlightDataGenerator::FlightDataGenerator(const QGeoCoordi
 //    QString description
 // }
 
+template<typename T>
+T FlightData::Generator::numberGenerator(T a, T b){
+    if(typeid(T) == typeid(int)){
+        std::uniform_int_distribution<int> intDist(a,b);
+        return intDist(*QRandomGenerator::global());
+    }
+    else if(typeid(T) == typeid(double)){
+        std::uniform_real_distribution<double> doubleDist(a,b);
+        return doubleDist(*QRandomGenerator::global());
+    }
+    else
+        throw(QString("Undefinied type of template."));
+}
+
 void FlightData::Generator::FlightDataGenerator::setPoint(const QGeoCoordinate& point){
     if(flyData.lastPosition == point)
         return;
@@ -61,22 +77,31 @@ void FlightData::Generator::FlightDataGenerator::setDistanceToPoint(const QGeoCo
 void FlightData::Generator::FlightDataGenerator::weatherDataGenerator(){
     auto render([](auto a, auto b){ return std::uniform_int_distribution<int>(a,b); });
 
+    try{
+        weatherData.temp = numberGenerator(21,24);      // Celcius
+        qDebug()<<"Temperature: "<<weatherData.temp;
 
-    weatherData.temp = render(20,24)(*QRandomGenerator::global());      // Celcius
-    qDebug()<<"Temperature: "<<weatherData.temp;
+        auto h(QTime::currentTime().hour());
 
-    if(QTime::currentTime().hour() > 20)
-        weatherData.iconID = 3;        // evening
-    else
-        weatherData.iconID = 1;        // day
+        if(h >= 20 || (h >= 1 && h <= 5))
+            weatherData.iconID = "02n";            // evening/night
+        else{
+            if(h > 5 && h <= 14)
+                weatherData.iconID = "02d";        // day
+            else
+                weatherData.iconID = "01d";
+        }
+        qDebug()<<"IconID: "<<weatherData.iconID;
 
-    qDebug()<<"IconID: "<<weatherData.iconID;
+        weatherData.humidity = numberGenerator(30,33);  // %
+        qDebug()<<"Humidity: "<<weatherData.humidity;
 
-    weatherData.humidity = render(30,33)(*QRandomGenerator::global());  // %
-    qDebug()<<"Humidity: "<<weatherData.humidity;
+        weatherData.windSpeed = numberGenerator(4.0,10.0);  // m/s
+        qDebug()<<"WindSpeed: "<< round(weatherData.windSpeed*10)/10;
 
-    weatherData.windSpeed = render(4,10)(*QRandomGenerator::global());  // m/s
-    qDebug()<<"WindSpeed: "<<weatherData.windSpeed;
-
-    emit weatherSignal();
+        emit weatherSignal();
+    }
+    catch(const QString& e){
+        qDebug() << e;
+    }
 }
