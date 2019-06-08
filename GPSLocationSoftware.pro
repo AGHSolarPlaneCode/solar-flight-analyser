@@ -1,4 +1,4 @@
-QT += quick network positioning charts widgets
+QT += core quick network positioning charts widgets
 
 CONFIG += c++11
 

@@ -46,7 +46,7 @@ Item {
     property real simVelocityMax: 50
     property real simHeight: 120 * (1 - Math.exp(-timeElapsed/4000)) + 10*(1 - 1/Math.sqrt(1) * Math.exp(0* timeElapsed/4000) * Math.sin( Math.sqrt(1)/4000 * timeElapsed))
     property real simHeightMax: 200
-    property real batteryPercentage: 110 - 10*(1 - 1/Math.sqrt(1) * Math.exp(0* timeElapsed/4000) * Math.sin( Math.sqrt(1)/4000 * timeElapsed))
+    property real batteryPercentage: 100 - 10*(1 - 1/Math.sqrt(1) * Math.exp(0* timeElapsed/4000) * Math.sin( Math.sqrt(1)/4000 * timeElapsed))
 
 
 
