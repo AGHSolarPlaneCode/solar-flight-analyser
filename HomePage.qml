@@ -46,7 +46,7 @@ Item {
     property real simVelocityMax: 50
     property real simHeight: 120 * (1 - Math.exp(-timeElapsed/4000)) + 10*(1 - 1/Math.sqrt(1) * Math.exp(0* timeElapsed/4000) * Math.sin( Math.sqrt(1)/4000 * timeElapsed))
     property real simHeightMax: 200
-    property real batteryPercentage: 100 - 10*(1 - 1/Math.sqrt(1) * Math.exp(0* timeElapsed/4000) * Math.sin( Math.sqrt(1)/4000 * timeElapsed))
+    property real batteryPercentage: 100 - 70 * Math.abs(Math.sin(timeElapsed/1000000))
 
 
 
@@ -60,8 +60,8 @@ Item {
     }
     onBatteryPercentageChanged: {
         if(connected == true){
-            transmitterTXT.text = transmitterDistance.toFixed(1).toString() + "%"
-            if(transmitterDistance.toFixed(1)<=20){
+            transmitterTXT.text = transmitterDistance.toFixed(0).toString() + "%"
+            if(transmitterDistance.toFixed(0)<=20){
                 transmitterTXT.color = "#ff5900"
 
             }
@@ -1327,7 +1327,7 @@ Item {
                        horizontalCenterOffset: -parent.width*0.02
                       }
                       font.pointSize: (parent.height*0.11).toFixed(0)
-                      text: batteryPercentage.toFixed(1).toString() + "%"
+                      text: batteryPercentage.toFixed(0).toString() + "%"
                   }
               }
               Rectangle { //Distance
@@ -1350,7 +1350,7 @@ Item {
                       anchors.fill: parent
                       antialiasing: true
                       backgroundColor: "transparent"
-                      theme: ChartView.ChartThemeBlueCerulean
+//                      theme: ChartView.ChartThemeBlueCerulean
                       margins {
                           left: 0
                           right: 0
@@ -1363,13 +1363,15 @@ Item {
                           PieSlice{
                               id: distanceSlice
                               value: constDist - generate.distance
-//                              color: "#292BFF"
+                              color: "#D2A40B"
+//                              color: "#20AE2E"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
                           PieSlice{
                               value: generate.distance
-//                              color: "#292BAA"
+//                              color: "#14641C"
+                              color: "#EECA56"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
