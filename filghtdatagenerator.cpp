@@ -11,7 +11,7 @@ FlightData::Generator::FlightDataGenerator::FlightDataGenerator(const QGeoCoordi
     weatherData{"02d",20,30,6.5,""} {
     connect(weatherTimer, &QTimer::timeout, this,&FlightDataGenerator::weatherDataGenerator);
 
-    weatherTimer->setInterval(4000);
+    weatherTimer->setInterval(2*60*1000);
     weatherTimer->start();
 
     //qDebug() << flyData.startPoint.distanceTo(flyData.endPoint) /1000;

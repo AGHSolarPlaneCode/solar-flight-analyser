@@ -1472,7 +1472,7 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
-                        value: "pk.eyJ1IjoiYndpZWN6b3JlayIsImEiOiJjanE4bnkxY2sydHR0M3hwcGYxb2J5d2VrIn0.E9Cu5PR1ZMskWa6e8-JnXA"
+                        value: "****"
                     }
                     PluginParameter{
                         name: "mapbox.mapping.map_id"
@@ -1512,7 +1512,7 @@ Item {
                         //- Second Animation - move plane
                         CoordinateAnimation{
                             id: planeMoveAnimation
-                            duration: 1*60*1000
+                            duration: 5*60*1000           // five minutes in one way
                             target: generate
                             property: "lastPoint"
                             easing.type: Easing.InOutQuad
