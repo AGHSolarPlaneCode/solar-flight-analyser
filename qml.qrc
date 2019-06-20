@@ -80,5 +80,7 @@
         <file>assetsMenu/weatherIcons/11d.png</file>
         <file>main.cpp</file>
         <file>Marker.qml</file>
+        <file>assetsMenu/clock.png</file>
+        <file>assetsMenu/BatteryStatus.png</file>
     </qresource>
 </RCC>

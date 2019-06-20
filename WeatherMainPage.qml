@@ -7,6 +7,7 @@ Item {
     property int windValue: generate.wspeed  //weatherAPIAdapter.windSpeed
     property int rainValue: 0 //weatherAPIAdapter -- getter
     property int sunLevel: 50 //get from backend -- don't know which class field
+    property string icon: generate.id
     antialiasing: true
     FontLoader{
         id: standardFont
@@ -115,21 +116,22 @@ Item {
 
     Image {
         id: weatherMainIcon
-        height: parent.height*0.35
-        width: parent.width*0.2
-        source: ("qrc:/assetsMenu/weatherIcons/0" + "1" + "d.png")
+        height: parent.height*0.4
+        width: parent.width*0.25
+        antialiasing: true
+        source: ("qrc:/assetsMenu/weatherIcons/" + icon + ".png")
         anchors {
-            top: parent.top
-            topMargin: parent.height*0.08
+            verticalCenter: parent.verticalCenter
+            verticalCenterOffset: -parent.height*0.1
             right: parent.right
-            rightMargin: parent.height*0.16
+            rightMargin: parent.height*0.25
         }
        }
 
 
     Text {
         id: weatherMainTemerature
-        font.pixelSize: parent.height*0.12
+        font.pixelSize: parent.height*0.15
         color: "white"
         font.family: standardFont.name
         anchors{
@@ -144,93 +146,119 @@ Item {
         color: "white"
         text: "Cracow"
         font.family: standardFont.name
-        font.pixelSize: parent.height*0.12
-        anchors{
-            top: weatherMainIcon.top
-            left: root.left
-            leftMargin:  root.height*0.15
-        }
-    }
-    Rectangle {
-        id: forcastRectangle
-        width: parent.width*0.8
-        color: "transparent"
-        height: parent.height*0.35
+        font.pixelSize: parent.height*0.16
+        font.bold: true
         anchors{
             verticalCenter: parent.verticalCenter
-            horizontalCenter: parent.horizontalCenter
-            verticalCenterOffset: parent.height*0.15
-        }
-        Rectangle {
-            id: weatherinfo1
-            color: "transparent"
-            height: parent.height
-            width: parent.width*0.184
-            anchors.left: parent.left
-            Image{
-                source: ("qrc:/assetsMenu/weatherIcons/0" + "1" + "d.png")
-                height: parent.height*0.8
-                width: parent.width
-                anchors.centerIn: parent
-            }
-        }
-        Rectangle {
-            id: weatherinfo2
-            color: "transparent"
-            height: parent.height
-            width: parent.width*0.184
-            anchors.left: weatherinfo1.right
-            anchors.leftMargin: parent.width*0.02
-            Image{
-                source: ("qrc:/assetsMenu/weatherIcons/0" + "1" + "d.png")
-                height: parent.height*0.8
-                width: parent.width
-                anchors.centerIn: parent
-            }
-        }
-        Rectangle {
-            id: weatherinfo3
-            color: "transparent"
-            height: parent.height
-            width: parent.width*0.184
-            anchors.left: weatherinfo2.right
-            anchors.leftMargin: parent.width*0.02
-            Image{
-                source: ("qrc:/assetsMenu/weatherIcons/0" + "1" + "d.png")
-                height: parent.height*0.8
-                width: parent.width
-                anchors.centerIn: parent
-            }
-        }
-        Rectangle {
-            id: weatherinfo4
-            color: "transparent"
-            height: parent.height
-            width: parent.width*0.184
-            anchors.left: weatherinfo3.right
-            anchors.leftMargin: parent.width*0.02
-            Image{
-                source: ("qrc:/assetsMenu/weatherIcons/0" + "1" + "d.png")
-                height: parent.height*0.8
-                width: parent.width
-                anchors.centerIn: parent
-            }
-        }
-        Rectangle {
-            id: weatherinfo5
-            color: "transparent"
-            height: parent.height
-            width: parent.width*0.184
-            anchors.left: weatherinfo4.right
-            anchors.leftMargin: parent.width*0.02
-            Image{
-                source: ("qrc:/assetsMenu/weatherIcons/0" + "1" + "d.png")
-                height: parent.height*0.8
-                width: parent.width
-                anchors.centerIn: parent
-            }
+            verticalCenterOffset: -parent.height*0.2
+            left: root.left
+            leftMargin:  root.height*0.1
         }
     }
+    Text{
+        id: timeObj
+        font.family: fontFamily
+        color: "#F1F1F1"
+        font {
+            pointSize: (parent.height*0.1).toFixed(0)
+            bold: true
+        }
+
+        anchors {
+            verticalCenter: parent.verticalCenter
+            verticalCenterOffset: parent.height*0.1
+            horizontalCenter: parent.horizontalCenter
+            horizontalCenterOffset: -parent.width*0.2
+        }
+        Timer{
+            id: timeTimer
+            interval: 100
+            repeat: true
+            running: true
+            triggeredOnStart: true
+            onTriggered: timeObj.text = new Date().toLocaleString(Qt.locale(),"hh:mm:ss")
+        }
+    }
+//    Rectangle {
+//        id: forcastRectangle
+//        width: parent.width*0.8
+//        color: "transparent"
+//        height: parent.height*0.35
+//        anchors{
+//            verticalCenter: parent.verticalCenter
+//            horizontalCenter: parent.horizontalCenter
+//            verticalCenterOffset: parent.height*0.15
+//        }
+//        Rectangle {
+//            id: weatherinfo1
+//            color: "transparent"
+//            height: parent.height
+//            width: parent.width*0.184
+//            anchors.left: parent.left
+//            Image{
+//                source: ("qrc:/assetsMenu/weatherIcons/0" + "1" + "d.png")
+//                height: parent.height*0.8
+//                width: parent.width
+//                anchors.centerIn: parent
+//            }
+//        }
+//        Rectangle {
+//            id: weatherinfo2
+//            color: "transparent"
+//            height: parent.height
+//            width: parent.width*0.184
+//            anchors.left: weatherinfo1.right
+//            anchors.leftMargin: parent.width*0.02
+//            Image{
+//                source: ("qrc:/assetsMenu/weatherIcons/0" + "1" + "d.png")
+//                height: parent.height*0.8
+//                width: parent.width
+//                anchors.centerIn: parent
+//            }
+//        }
+//        Rectangle {
+//            id: weatherinfo3
+//            color: "transparent"
+//            height: parent.height
+//            width: parent.width*0.184
+//            anchors.left: weatherinfo2.right
+//            anchors.leftMargin: parent.width*0.02
+//            Image{
+//                source: ("qrc:/assetsMenu/weatherIcons/0" + "1" + "d.png")
+//                height: parent.height*0.8
+//                width: parent.width
+//                anchors.centerIn: parent
+//            }
+//        }
+//        Rectangle {
+//            id: weatherinfo4
+//            color: "transparent"
+//            height: parent.height
+//            width: parent.width*0.184
+//            anchors.left: weatherinfo3.right
+//            anchors.leftMargin: parent.width*0.02
+//            Image{
+//                source: ("qrc:/assetsMenu/weatherIcons/0" + "1" + "d.png")
+//                height: parent.height*0.8
+//                width: parent.width
+//                anchors.centerIn: parent
+//            }
+//        }
+//        Rectangle {
+//            id: weatherinfo5
+//            color: "transparent"
+//            height: parent.height
+//            width: parent.width*0.184
+//            anchors.left: weatherinfo4.right
+//            anchors.leftMargin: parent.width*0.02
+//            Image{
+//                source: ("qrc:/assetsMenu/weatherIcons/0" + "1" + "d.png")
+//                height: parent.height*0.8
+//                width: parent.width
+//                anchors.centerIn: parent
+//            }
+//        }
+//    }
     Rectangle {
         id: bottomRectangle
         color: "transparent"
@@ -239,6 +267,7 @@ Item {
         anchors {
             bottom: parent.bottom
             horizontalCenter: parent.horizontalCenter
+            bottomMargin: parent.height*0.1
         }
         Image {
             id: windIcon

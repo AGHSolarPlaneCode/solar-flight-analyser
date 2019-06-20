@@ -48,7 +48,7 @@ Item {
                 verticalCenter: parent.verticalCenter
                 verticalCenterOffset: -parent.height*0.025
                 left: notifyBell.left
-                leftMargin: -parent.width*0.075
+                leftMargin: -parent.width*0.08
             }
             Timer{
                 id: timeTimer
@@ -59,15 +59,26 @@ Item {
                 onTriggered: timeObj.text = new Date().toLocaleString(Qt.locale(),"hh:mm:ss")
             }
         }
+        Image {
+            id: clockIMG
+            width: timeObj.height
+            height: timeObj.height
+            anchors{
+                verticalCenter: parent.verticalCenter
+                right: timeObj.left
+                rightMargin: width*0.6
+            }
+            source: "qrc:/assetsMenu/clock.png"
+        }
 
         Image { //connectButton
              id: connectionSlider
              source: "qrc:/assetsMenu/START BUTTON.png"
              width: parent.width*0.1
-             height: parent.height*0.3
+             height: parent.height*0.33
              anchors {
-                 right: topBar.right
-                 rightMargin: parent.width*0.22
+                 right: clockIMG.left
+                 rightMargin: clockIMG.width*0.6
                  verticalCenter: parent.verticalCenter
              }
              MouseArea {
@@ -148,7 +159,7 @@ Item {
             Rectangle {
                 id: planeGroupRect
                 width: parent.width*0.944
-                height: parent.height*0.12
+                height: parent.height*0.135
                 color: standardcolor
                 radius: 5
                     border {

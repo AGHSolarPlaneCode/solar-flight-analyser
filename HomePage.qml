@@ -10,13 +10,13 @@ Item {
     id: root
     signal connectionChanged(var connectionState)
     property int numberOfPoint : 0  //get from JS function
-    property real distanceToNextPoint: generate.distance                                                      //DistanceCalculator.distanceCalculate();
+    property real distanceToNextPoint: DistanceCalculator.distanceCalculate();                                                      //DistanceCalculator.distanceCalculate();
     property real constDist: generate.constDistance
     property real longitude : planePosition.longitude //get from backend
     property real latitude: planePosition.latitude  //get from backend
     property string serverAdress : "LOCALHOST" //get from settings (database) or RequestDialog
-    property bool connected: false
-    property real transmitterDistance : 0 //get from backend
+    property bool connected: startButtonState
+    property real transmitterDistance : batteryPercentage //get from backend
 
     // ------------------------------------------- \\
     property real groundSpeed : Math.sqrt((adapter.Vx)^2+(adapter.Vy)^2) //get from backend
@@ -35,10 +35,10 @@ Item {
     property int numberOfInformation: 0 //get from backend
     property int numberOfWarning: 0
     property int errorIterator: 0
-    property var jsonError: "jsonError"
+    property var jsonError: ""
     property int numberOfError: 0
     property int informationIterator: 1
-    property var requestError: "Error"
+    property var requestError: ""
     property var informations: []
     property var sslerror: []
     property int timeElapsed: 0
@@ -57,6 +57,15 @@ Item {
             realPortS = portS
         }
 
+    }
+    onBatteryPercentageChanged: {
+        if(connected == true){
+            transmitterTXT.text = transmitterDistance.toFixed(1).toString() + "%"
+            if(transmitterDistance.toFixed(1)<=20){
+                transmitterTXT.color = "#ff5900"
+
+            }
+        }
     }
 
 
@@ -141,6 +150,7 @@ Item {
 
     anchors.fill: parent
     onPlanePositionChanged: {
+        distanceToNextPoint = DistanceCalculator.distanceCalculate()
         if(mapFollow==true){
             map.center = planePosition
         }
@@ -160,7 +170,7 @@ Item {
 
         if(connected == true )
         {
-                controller.doUpdates(true)
+                //controller.doUpdates(true)
                 transmitterTXT.color = "#38865B" //green
                 portTXT.color = "#38865B"
                 portTXT.text = "Correctly Connected"
@@ -168,11 +178,15 @@ Item {
                 realPort.color = "#38865B"
                 realPort.text = "Port: " + realPortS
                 port.text = serverAdress.toUpperCase()
-                transmitterTXT.text = transmitterDistance.toFixed(1).toString() + "m"
+                transmitterTXT.text = transmitterDistance.toFixed(1).toString() + "%"
+            if(transmitterDistance.toFixed(1)<=20){
+                transmitterTXT.color = "#ff5900"
+
+            }
         }
             else
             {
-                 controller.doUpdates(false)
+                 //controller.doUpdates(false)
                  transmitterTXT.color = "#DB3D40"
                  portTXT.color = "#DB3D40"//red
                  portTXT.text = "Not Connected"
@@ -236,6 +250,33 @@ Item {
             width: parent.width*1.1
             anchors.centerIn: parent
             source: "qrc:/assetsMenu/weatherBackGround.png"
+        }
+        Rectangle {
+            id:weatherPageBackground
+            height: parent.height
+            width: weatherBackground.width*0.85
+            color: "transparent"
+            anchors{
+                right: parent.right
+                verticalCenter: parent.verticalCenter
+            }
+            NumberAnimation on width{
+                id: pageRollOutAnim
+                running: false
+                //alwaysRunToEnd: true
+                from: weatherBackground.width - weatherSideMenuBackground.width
+                to: (weatherBackground.width - weatherSideMenuBackground.width)*0.9
+                //duration: 1000
+
+            }
+            NumberAnimation on width{
+                id: pageRollBackAnim
+                running: false
+                //alwaysRunToEnd: true
+                from: (weatherBackground.width - weatherSideMenuBackground.width)*0.9
+                to: weatherBackground.width - weatherSideMenuBackground.width
+                duration: 2000
+            }
         }
             Rectangle {
                 id: weatherSideMenuBackground
@@ -315,6 +356,7 @@ Item {
                         source: "qrc:/assetsMenu/WeatherMenuButton.png"
                         width: parent.width
                         height: parent.height
+
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
@@ -375,33 +417,6 @@ Item {
                     }
                 }
             }
-            Rectangle {
-                id:weatherPageBackground
-                height: parent.height
-                width: weatherBackground.width*0.85
-                color: "transparent"
-                anchors{
-                    right: parent.right
-                    verticalCenter: parent.verticalCenter
-                }
-                NumberAnimation on width{
-                    id: pageRollOutAnim
-                    running: false
-                    //alwaysRunToEnd: true
-                    from: weatherBackground.width - weatherSideMenuBackground.width
-                    to: (weatherBackground.width - weatherSideMenuBackground.width)*0.9
-                    //duration: 1000
-
-                }
-                NumberAnimation on width{
-                    id: pageRollBackAnim
-                    running: false
-                    //alwaysRunToEnd: true
-                    from: (weatherBackground.width - weatherSideMenuBackground.width)*0.9
-                    to: weatherBackground.width - weatherSideMenuBackground.width
-                    //duration: 1000
-                }
-            }
 
         }
 
@@ -421,13 +436,30 @@ Item {
             color: "#2F3243"
             Image {
                 anchors.fill:parent
-                source: "qrc:/assetsMenu/TRANSMITTER DISTANCE.png"
+                source: "qrc:/assetsMenu/BatteryStatus.png"
             }
+            Text{
+                text: "Battery\nStatus"
+                wrapMode: text.WordWrap
+                width: parent.width*0.5
+                font.family: standardFont.name
+                font.pixelSize: 0.12*parent.height.toFixed(0)
+                color: "#FFFFFF"
+                opacity: 0.55
+                anchors{
+                    top: parent.top
+                    left: parent.left
+                    topMargin: parent.height*0.04
+                    leftMargin: parent.width*0.15
+                }
+            }
+
             Text {
                 id: transmitterTXT
                 color: "#DB3D40"
-                font.pointSize: (parent.width*0.12).toFixed(0)
+                font.pointSize: (parent.width*0.13).toFixed(0)
                 font.family: fontFamily
+                font.bold: false
                 anchors {
                     verticalCenter: parent.verticalCenter
                     horizontalCenter: parent.horizontalCenter
@@ -480,7 +512,7 @@ Item {
                     }
                 }
                 Image { //alert icon
-                    height: parent.height*0.2
+                    height: parent.height*0.18
                     width: parent.width*0.08
                     source: "qrc:/assetsMenu/NotificationIcon.png"
                     anchors {
@@ -490,10 +522,11 @@ Item {
                         leftMargin: 0.03*parent.width
                     }
                     Text {
-                        font.pointSize: (parent.height*0.8).toFixed(0)
+                        font.pointSize: 0.8*parent.height.toFixed(0)
                         font.family: fontFamily
                         text: "Alerts"
                         color: "#999AA3"
+                        font.bold: true
                         anchors {
                             verticalCenter: parent.verticalCenter
                             horizontalCenter: parent.horizontalCenter
@@ -827,7 +860,7 @@ Item {
                         leftMargin: parent.width * 0.02
 //                        top: parent.top
 //                        topMargin: parent.height * 0.04
-                        bottom: parent.bottom
+                        verticalCenter: parent.verticalCenter
 //                        bottomMargin: parent.height * 0.01
                     }
                     width: parent.width * 0.6
@@ -995,6 +1028,33 @@ Item {
                 anchors.fill:parent
                 source: "qrc:/assetsMenu/REQUEST STATUS.png"
             }
+            Rectangle {
+                color: "#2F3243"
+                width: parent.width*0.5
+                height: parent.height*0.3
+                anchors{
+                    top: parent.top
+                    left:parent.left
+                    leftMargin: parent.width*0.12
+                    topMargin: parent.height*0.07
+                }
+            }
+            Text{
+                text: "Request\nAddress"
+                wrapMode: text.WordWrap
+                width: parent.width*0.5
+                font.family: standardFont.name
+                font.pixelSize: 0.12*parent.height.toFixed(0)
+                color: "#FFFFFF"
+                opacity: 0.55
+                anchors{
+                    top: parent.top
+                    left: parent.left
+                    topMargin: parent.height*0.04
+                    leftMargin: parent.width*0.15
+                }
+            }
+
             MouseArea{
                 anchors{
                     top: parent.top
@@ -1410,7 +1470,7 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
-                        value: "****"
+                        value: "pk.eyJ1IjoiYndpZWN6b3JlayIsImEiOiJjanE4bnkxY2sydHR0M3hwcGYxb2J5d2VrIn0.E9Cu5PR1ZMskWa6e8-JnXA"
                     }
                     PluginParameter{
                         name: "mapbox.mapping.map_id"
