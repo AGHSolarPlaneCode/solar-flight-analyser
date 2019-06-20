@@ -150,35 +150,12 @@ Item {
         font.bold: true
         anchors{
             verticalCenter: parent.verticalCenter
-            verticalCenterOffset: -parent.height*0.2
+            verticalCenterOffset: -parent.height*0.1
             left: root.left
-            leftMargin:  root.height*0.1
+            leftMargin:  root.height*0.25
         }
     }
-    Text{
-        id: timeObj
-        font.family: fontFamily
-        color: "#F1F1F1"
-        font {
-            pointSize: (parent.height*0.1).toFixed(0)
-            bold: true
-        }
 
-        anchors {
-            verticalCenter: parent.verticalCenter
-            verticalCenterOffset: parent.height*0.1
-            horizontalCenter: parent.horizontalCenter
-            horizontalCenterOffset: -parent.width*0.2
-        }
-        Timer{
-            id: timeTimer
-            interval: 100
-            repeat: true
-            running: true
-            triggeredOnStart: true
-            onTriggered: timeObj.text = new Date().toLocaleString(Qt.locale(),"hh:mm:ss")
-        }
-    }
 //    Rectangle {
 //        id: forcastRectangle
 //        width: parent.width*0.8
@@ -259,6 +236,7 @@ Item {
 //            }
 //        }
 //    }
+
     Rectangle {
         id: bottomRectangle
         color: "transparent"
@@ -268,6 +246,26 @@ Item {
             bottom: parent.bottom
             horizontalCenter: parent.horizontalCenter
             bottomMargin: parent.height*0.1
+        }
+        Text {
+            text: "HUMIDITY"
+            font.family: standardFont.name
+            font.pixelSize: 0.7*bottomRectangle.height.toFixed(0)
+            color: "#F5F0F0"
+            anchors{
+                bottom: bottomRectangle.top
+                horizontalCenter: rainDot3.horizontalCenter
+            }
+        }
+        Text {
+            text: "WIND SPEED"
+            font.family: standardFont.name
+            font.pixelSize: 0.7*bottomRectangle.height.toFixed(0)
+            color: "#F5F0F0"
+            anchors{
+                bottom: bottomRectangle.top
+                horizontalCenter: windDot3.horizontalCenter
+            }
         }
         Image {
             id: windIcon

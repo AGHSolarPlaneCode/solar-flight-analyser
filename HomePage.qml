@@ -275,7 +275,7 @@ Item {
                 //alwaysRunToEnd: true
                 from: (weatherBackground.width - weatherSideMenuBackground.width)*0.9
                 to: weatherBackground.width - weatherSideMenuBackground.width
-                duration: 2000
+                duration: 1000
             }
         }
             Rectangle {
@@ -1472,7 +1472,7 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
-                        value: "****"
+                        value: "pk.eyJ1IjoiYndpZWN6b3JlayIsImEiOiJjang0eWt5a3gwZGZyNDhydmNvNG5jN3NiIn0.itD8fF1I55d4NBM5CmMnwA"
                     }
                     PluginParameter{
                         name: "mapbox.mapping.map_id"

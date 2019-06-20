@@ -107,8 +107,9 @@ import QtQuick.Window 2.3
                 property string placeholderText: "Enter address:port ..."
 
                   Text {
-                      text: textInputTXT.placeholderText
+                      text: (textInputTXT.placeholderText).toUpperCase()
                       color: "#3C4151"
+                      font.family: standardFont.name
                       font.pixelSize: parent.font.pixelSize
                       anchors.verticalCenter: parent.verticalCenter
                       visible: !textInputTXT.text && !textInputTXT.activeFocus // <----------- ;-)

@@ -10,7 +10,7 @@ function  distanceCalculate(){
     for(index = 0; numberOfIterration>index; index++){
         if(map.mapItems[index].isPositionMarker === true){
         var distanceToPoint = checkDistance(map.mapItems[index])
-        if(distanceToPoint<=50){
+        if(distanceToPoint<=1000){
             map.removeMapItem(map.mapItems[index]);
             numberOfPoint--;
         }
