@@ -1,4 +1,5 @@
 function showErrors() {
+    if(notify == true){
     numberOfError = 0;
     if(requestError!==0){
         numberOfError++;
@@ -45,6 +46,16 @@ function showErrors() {
         ignoreButton.visible = false;
         stopConnectionButton.visible = false;
     }
+    }
+    else {
+        errorIcon.source="qrc:/assetsMenu/okIcon.png"
+        errorTXT.text = "Everything works correctly"
+        errorTXT.color = "#38865B"
+        ignoreButton.visible = false;
+        stopConnectionButton.visible = false;
+        numberOfError = 0;
+    }
+
 }
 function showInformation(){
     informationTXT.text = "Information no. " + informationIterator;

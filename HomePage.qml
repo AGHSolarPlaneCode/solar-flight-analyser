@@ -10,32 +10,110 @@ Item {
     id: root
     signal connectionChanged(var connectionState)
     property int numberOfPoint : 0  //get from JS function
-    property real distanceToNextPoint: DistanceCalculator.distanceCalculate();
-    property real longitude : planePosition.longitude //get from backend
-    property real latitude: planePosition.latitude  //get from backend
+    property double distanceToNextPoint: DistanceCalculator.distanceCalculate();
+    property double longitude: NaN
+    property double latitude: NaN
     property string serverAdress : "LOCALHOST" //get from settings (database) or RequestDialog
     property bool connected: false
-    property real transmitterDistance : 0 //get from backend
-    property real groundSpeed : Math.sqrt((adapter.Vx)^2+(adapter.Vy)^2) //get from backend
-    property real altitude : adapter.Alt
-    property var planePosition: QtPositioning.coordinate(adapter.Lat,adapter.Lon)
+    property double transmitterDistance : 2 //get from backend
+    property double groundSpeed : NaN //get from backend
+    property double altitude : NaN
+    property var planePosition: QtPositioning.coordinate(NaN,NaN)
     property bool mapFollow: followSwitch.status
-    property real xVelocity: adapter.Vx
-    property real yVelocity: adapter.Vy
+    property double xVelocity: NaN
+    property double yVelocity: NaN
     property string fontFamily: standardFont.name
     property bool notify: false
-    property string realPortS: "8080"
-    property int numberOfInformation: 0 //get from backend
+    property string realPortS: "3000"
+    property int numberOfInformation: 0
     property int numberOfWarning: 0
     property int errorIterator: 0
-    property var jsonError: "jsonError"
+    property var jsonError: 0
     property int numberOfError: 0
-    property int informationIterator: 1
-    property var requestError: "Error"
+    property int informationIterator: 0
+    property var requestError: 0
     property var informations: []
     property var sslerror: []
+    property double hdg: NaN
+    property real batteryPercentage: 99.5456
 
+    Connections{
+        target: adapter
+        onFlightDataChanged:{
+          hdg = adapter.Hdg
+          longitude = (adapter.Lon).toFixed(8).toString()
+          latitude = (adapter.Lon).toFixed(8).toString()
+          altitude = (adapter.Alt).toFixed(1).toString()
+          groundSpeed = (adapter.GroundSpeed).toFixed(1).toString()
+          xVelocity = adapter.Vx
+          yVelocity = adapter.Vy
+          planePosition = QtPositioning.coordinate(latitude, longitude)
+          transmitterTXT.color = "#38865B" //green
+          portTXT.color = "#38865B"
+          portTXT.text = "Correctly Connected"
+          port.color = "#38865B"
+          realPort.color = "#38865B"
+          realPort.text = "Port: " + realPortS
+          port.text = serverAdress.toUpperCase()
+          transmitterTXT.text = (batteryPercentage.toFixed(1)).toString() + "%"
+            distanceToNextPoint = DistanceCalculator.distanceCalculate()
 
+          if(mapFollow==true){
+              map.center = planePosition
+          }
+        }
+    }
+    onConnectedChanged: {
+
+        if(connected == true )
+        {
+                controller.doUpdates(true)
+
+        }
+            else
+            {
+                 controller.doUpdates(false)
+                 transmitterTXT.color = "#DB3D40"
+                 portTXT.color = "#DB3D40"//red
+                 portTXT.text = "Not Connected"
+                 port.color = "#DB3D40"
+                 port.text =  "---"
+                 realPort.text = "---"
+                 realPort.color = "#DB3D40"
+                 transmitterTXT.text = "---"
+                 latitude = NaN;
+                 longitude = NaN;
+                 groundSpeed = NaN;
+                 planePosition = QtPositioning.coordinate(latitude, longitude)
+                 hdg = NaN
+                 altitude = NaN
+
+            }
+
+    }
+
+    Connections{
+        target: error
+        onSendJSONErrors:{
+            jsonError = err
+        }
+        onSendRequestError:{
+            requestError = err
+        }
+        onSendSslVector:{
+            sslerror = data
+        }
+
+    }
+    onBatteryPercentageChanged: {
+        if(connected == true){
+            transmitterTXT.text = transmitterDistance.toFixed(0).toString() + "%"
+            if(transmitterDistance.toFixed(0)<=20){
+                transmitterTXT.color = "#ff5900"
+
+            }
+        }
+    }
 
 
     Connections {
@@ -65,6 +143,7 @@ Item {
     Component.onCompleted: {
         sslerror = 0;
         informations = 0;
+        requestError = 0;
         ShowErrors.showErrors();
         if(!numberOfInformation){
             informationTXT.text = "Nothing to say"
@@ -129,9 +208,6 @@ Item {
 
     anchors.fill: parent
     onPlanePositionChanged: {
-        if(mapFollow==true){
-            map.center = planePosition
-        }
     }
     onMapFollowChanged: {
         if(mapFollow==true){
@@ -144,34 +220,7 @@ Item {
        distanceToNextPoint = DistanceCalculator.distanceCalculate();
                       }
 
-    onConnectedChanged: {
 
-        if(connected == true )
-        {
-                controller.doUpdates(true)
-                transmitterTXT.color = "#38865B" //green
-                portTXT.color = "#38865B"
-                portTXT.text = "Correctly Connected"
-                port.color = "#38865B"
-                realPort.color = "#38865B"
-                realPort.text = "Port: " + realPortS
-                port.text = serverAdress.toUpperCase()
-                transmitterTXT.text = transmitterDistance.toFixed(1).toString() + "m"
-        }
-            else
-            {
-                 controller.doUpdates(false)
-                 transmitterTXT.color = "#DB3D40"
-                 portTXT.color = "#DB3D40"//red
-                 portTXT.text = "Not Connected"
-                 port.color = "#DB3D40"
-                 port.text =  "---"
-                 realPort.text = "---"
-                 realPort.color = "#DB3D40"
-                 transmitterTXT.text = "---"
-            }
-
-    }
     Rectangle {
         id: mainPage
         anchors.fill: parent
@@ -182,18 +231,18 @@ Item {
         }
 
         onHeightChanged: {
-            if(mapWidget.state == "windowed") {
+            if(mapWidget.state === "windowed") {
                 mapWidget.height = parent.height*0.5
             }
-            else if(mapWidget.state == "fullPage") {
+            else if(mapWidget.state === "fullPage") {
                 mapWidget.height = parent.height
             }
         }
         onWidthChanged: {
-            if(mapWidget.state == "windowed") {
+            if(mapWidget.state === "windowed") {
                 mapWidget.width = parent.width*0.5
             }
-            else if(mapWidget.state == "fullPage") {
+            else if(mapWidget.state === "fullPage") {
                 mapWidget.width = parent.width
             }
         }
@@ -226,6 +275,33 @@ Item {
             width: parent.width*1.1
             anchors.centerIn: parent
             source: "qrc:/assetsMenu/weatherBackGround.png"
+        }
+        Rectangle {
+            id:weatherPageBackground
+            height: parent.height
+            width: weatherBackground.width*0.85
+            color: "transparent"
+            anchors{
+                right: parent.right
+                verticalCenter: parent.verticalCenter
+            }
+            NumberAnimation on width{
+                id: pageRollOutAnim
+                running: false
+                //alwaysRunToEnd: true
+                from: weatherBackground.width - weatherSideMenuBackground.width
+                to: (weatherBackground.width - weatherSideMenuBackground.width)*0.9
+                //duration: 1000
+
+            }
+            NumberAnimation on width{
+                id: pageRollBackAnim
+                running: false
+                //alwaysRunToEnd: true
+                from: (weatherBackground.width - weatherSideMenuBackground.width)*0.9
+                to: weatherBackground.width - weatherSideMenuBackground.width
+                duration: 1000
+            }
         }
             Rectangle {
                 id: weatherSideMenuBackground
@@ -305,6 +381,7 @@ Item {
                         source: "qrc:/assetsMenu/WeatherMenuButton.png"
                         width: parent.width
                         height: parent.height
+
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
@@ -365,37 +442,8 @@ Item {
                     }
                 }
             }
-            Rectangle {
-                id:weatherPageBackground
-                height: parent.height
-                width: weatherBackground.width*0.85
-                color: "transparent"
-                anchors{
-                    right: parent.right
-                    verticalCenter: parent.verticalCenter
-                }
-                NumberAnimation on width{
-                    id: pageRollOutAnim
-                    running: false
-                    //alwaysRunToEnd: true
-                    from: weatherBackground.width - weatherSideMenuBackground.width
-                    to: (weatherBackground.width - weatherSideMenuBackground.width)*0.9
-                    //duration: 1000
-
-                }
-                NumberAnimation on width{
-                    id: pageRollBackAnim
-                    running: false
-                    //alwaysRunToEnd: true
-                    from: (weatherBackground.width - weatherSideMenuBackground.width)*0.9
-                    to: weatherBackground.width - weatherSideMenuBackground.width
-                    //duration: 1000
-                }
-            }
 
         }
-
-
     Item {
         id: transmitterWidget
         width: 0.13*parent.width
@@ -411,13 +459,30 @@ Item {
             color: "#2F3243"
             Image {
                 anchors.fill:parent
-                source: "qrc:/assetsMenu/TRANSMITTER DISTANCE.png"
+                source: "qrc:/assetsMenu/BatteryStatus.png"
             }
+            Text{
+                text: "Battery\nStatus"
+                wrapMode: text.WordWrap
+                width: parent.width*0.5
+                font.family: standardFont.name
+                font.pixelSize: 0.12*parent.height.toFixed(0)
+                color: "#FFFFFF"
+                opacity: 0.55
+                anchors{
+                    top: parent.top
+                    left: parent.left
+                    topMargin: parent.height*0.04
+                    leftMargin: parent.width*0.15
+                }
+            }
+
             Text {
                 id: transmitterTXT
                 color: "#DB3D40"
-                font.pointSize: (parent.width*0.12).toFixed(0)
+                font.pointSize: (parent.width*0.13).toFixed(0)
                 font.family: fontFamily
+                font.bold: false
                 anchors {
                     verticalCenter: parent.verticalCenter
                     horizontalCenter: parent.horizontalCenter
@@ -470,7 +535,7 @@ Item {
                     }
                 }
                 Image { //alert icon
-                    height: parent.height*0.2
+                    height: parent.height*0.18
                     width: parent.width*0.08
                     source: "qrc:/assetsMenu/NotificationIcon.png"
                     anchors {
@@ -480,10 +545,11 @@ Item {
                         leftMargin: 0.03*parent.width
                     }
                     Text {
-                        font.pointSize: (parent.height*0.8).toFixed(0)
+                        font.pointSize: 0.8*parent.height.toFixed(0)
                         font.family: fontFamily
                         text: "Alerts"
                         color: "#999AA3"
+                        font.bold: true
                         anchors {
                             verticalCenter: parent.verticalCenter
                             horizontalCenter: parent.horizontalCenter
@@ -974,6 +1040,33 @@ Item {
                 anchors.fill:parent
                 source: "qrc:/assetsMenu/REQUEST STATUS.png"
             }
+            Rectangle {
+                color: "#2F3243"
+                width: parent.width*0.5
+                height: parent.height*0.3
+                anchors{
+                    top: parent.top
+                    left:parent.left
+                    leftMargin: parent.width*0.12
+                    topMargin: parent.height*0.07
+                }
+            }
+            Text{
+                text: "Request\nAddress"
+                wrapMode: text.WordWrap
+                width: parent.width*0.5
+                font.family: standardFont.name
+                font.pixelSize: 0.12*parent.height.toFixed(0)
+                color: "#FFFFFF"
+                opacity: 0.55
+                anchors{
+                    top: parent.top
+                    left: parent.left
+                    topMargin: parent.height*0.04
+                    leftMargin: parent.width*0.15
+                }
+            }
+
             MouseArea{
                 anchors{
                     top: parent.top
@@ -1114,6 +1207,7 @@ Item {
 
 //                  }
                   Text {
+                      id:groundSpeedParamTXT
                       color: "#F5F0F0"
                       font.family: fontFamily
                       anchors {
@@ -1123,7 +1217,7 @@ Item {
                        horizontalCenterOffset: parent.width*0.01
                       }
                       font.pointSize: (parent.height*0.11).toFixed(0)
-                      text: groundSpeed.toFixed(0).toString() + "km/h"
+                      text: groundSpeed.toFixed(0).toString()
                   }
               }
               Rectangle { //Heigth
@@ -1175,6 +1269,7 @@ Item {
                       }
                   }
                   Text {
+                      id:altitudeParamTXT
                       color: "#F5F0F0"
                       font.family: fontFamily
                       anchors {
@@ -1184,8 +1279,9 @@ Item {
                        horizontalCenterOffset: parent.width*0.01
                       }
                       font.pointSize: (parent.height*0.12).toFixed(0)
-                      text: altitude.toFixed(0).toString() + "m"
-                  }
+                      text: altitude.toFixed(0).toString() + "m"}
+
+
               }
               Rectangle { //connectionPower
                   id: connectionPowerRect
@@ -1244,7 +1340,7 @@ Item {
                        horizontalCenterOffset: -parent.width*0.02
                       }
                       font.pointSize: (parent.height*0.11).toFixed(0)
-                      text: "30%"
+                      text: batteryPercentage.toFixed(0).toString()+"%"
                   }
               }
               Rectangle { //Distance
@@ -1388,7 +1484,7 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
-                        value: "***"                                                            //add your own acces token
+                        value: "pk.eyJ1IjoiYndpZWN6b3JlayIsImEiOiJjam95dnk5MzYwMXcwM3JwZnczanRzNWs3In0.WK_fuROIwIq0D1F2gfOpSg"                                                            //add your own acces token
                     }
                     PluginParameter{
                         name: "mapbox.mapping.map_id"
@@ -1407,7 +1503,7 @@ Item {
                 PlaneMarker {
                     id: planePositionMarker
                     coordinate: planePosition
-                    planeAzimut: Math.atan2(xVelocity,yVelocity)*180/Math.PI //The azimuth = arctan((x2 –x1)/(y2 –y1))
+                    planeAzimut: hdg
                 }
 
             }

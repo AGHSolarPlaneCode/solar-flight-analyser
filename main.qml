@@ -11,6 +11,10 @@ Window {
     height: 900
     title: qsTr("GPS Location Software")
     property bool connected: false
+    //
+
+
+    //
 
 
     Connections {

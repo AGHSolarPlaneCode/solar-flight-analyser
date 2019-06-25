@@ -96,5 +96,6 @@
         <file>weatherapi.h</file>
         <file>weatherdata.cpp</file>
         <file>weatherdata.h</file>
+        <file>assetsMenu/BatteryStatus.png</file>
     </qresource>
 </RCC>
