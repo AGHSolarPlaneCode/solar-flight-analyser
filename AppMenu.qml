@@ -94,6 +94,7 @@ Item {
             property var menuObj: undefined
             onNotifyChanged: {
                 NotifyMenu.deleteMenu();
+                notifyChange(notify)
             }
 
             anchors {
