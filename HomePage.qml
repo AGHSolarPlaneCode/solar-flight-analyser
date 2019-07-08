@@ -1208,7 +1208,7 @@ Item {
                           PieSlice{
                               id: heightSlice
                               value: simHeight
-                              color: "#5932C4"
+                              color: "#2e6dd1"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
@@ -1336,7 +1336,7 @@ Item {
                           PieSlice{
                               value: generate.distance
 //                              color: "#14641C"
-                              color: "#565F7A"
+                              color: "#678ac2"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
