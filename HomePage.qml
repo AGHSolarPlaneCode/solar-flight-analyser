@@ -1126,13 +1126,13 @@ Item {
                           PieSlice{
                               id: speedSlice
                               value: simVelocity
-                              color: "#292BFF"
+                              color: "#1F78B4"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
                           PieSlice{
                               value: simVelocityMax - simVelocity
-                              color: "#292BAA"
+                              color: "#A6CEE3"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
@@ -1208,13 +1208,13 @@ Item {
                           PieSlice{
                               id: heightSlice
                               value: simHeight
-//                              color: "#292BFF"
+                              color: "#5932C4"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
                           PieSlice{
                               value: simHeightMax - simHeight
-//                              color: "#292BAA"
+                             color: "#477CA0"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
@@ -1328,7 +1328,7 @@ Item {
                           PieSlice{
                               id: distanceSlice
                               value: constDist - generate.distance
-                              color: "#D2A40B"
+                              color: "#244860"
 //                              color: "#20AE2E"
                               borderWidth: 0
                               borderColor: "transparent"
@@ -1336,7 +1336,7 @@ Item {
                           PieSlice{
                               value: generate.distance
 //                              color: "#14641C"
-                              color: "#EECA56"
+                              color: "#565F7A"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
@@ -1435,7 +1435,7 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
-                        value: "***"
+                        value: "****"
                     }
                     PluginParameter{
                         name: "mapbox.mapping.map_id"

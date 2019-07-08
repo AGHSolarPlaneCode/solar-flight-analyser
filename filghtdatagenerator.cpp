@@ -75,7 +75,7 @@ void FlightData::Generator::FlightDataGenerator::setDistanceToPoint(const QGeoCo
 }
 
 void FlightData::Generator::FlightDataGenerator::weatherDataGenerator(){
-    auto render([](auto a, auto b){ return std::uniform_int_distribution<int>(a,b); });
+    //auto render([](auto a, auto b){ return std::uniform_int_distribution<int>(a,b); });
 
     try{
         weatherData.temp = numberGenerator(21,24);      // Celcius
