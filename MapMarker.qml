@@ -9,6 +9,7 @@ anchorPoint.x: image.width/2
 anchorPoint.y: image.height
 visible: true
 width: 25
+antialiasing: true
 height: 32
 property bool isPositionMarker: true
 signal markerDeleted()

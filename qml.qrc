@@ -59,7 +59,6 @@
         <file>assetsMenu/speed_height_bar.png</file>
         <file>WeatherPageGenerator.js</file>
         <file>WeatherMainPage.qml</file>
-        <file>assetsMenu/windIcon.png</file>
         <file>assetsMenu/rainIcon.png</file>
         <file>assetsMenu/sunLevel.png</file>
         <file>WeatherSettingsPage.qml</file>
@@ -82,5 +81,16 @@
         <file>Marker.qml</file>
         <file>assetsMenu/clock.png</file>
         <file>assetsMenu/BatteryStatus.png</file>
+        <file>assetsMenu/MinusPlus2off.png</file>
+        <file>assetsMenu/MinusPlusMinusOn.png</file>
+        <file>assetsMenu/MinusPlusPlunOn.png</file>
+        <file>assetsMenu/ButtonFollowOn.png</file>
+        <file>assetsMenu/ButtonFollowOff.png</file>
+        <file>assetsMenu/MapProperty.png</file>
+        <file>assetsMenu/locationIcon.png</file>
+        <file>assetsMenu/settingsIconWeather.png</file>
+        <file>assetsMenu/updateIcon.png</file>
+        <file>assetsMenu/moreicon.png</file>
+        <file>assetsMenu/windIcon.png</file>
     </qresource>
 </RCC>

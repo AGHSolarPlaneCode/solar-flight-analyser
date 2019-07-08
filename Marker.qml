@@ -10,14 +10,15 @@ MapQuickItem {
     property string city;
     anchorPoint.x: image.width/2
     anchorPoint.y: image.height/2
+    antialiasing: true
 
     sourceItem: Grid{
 
         horizontalItemAlignment: Grid.AlignHCenter // to rotate whole own axis
         Image {  // add plane marker
             id: image
-            width:60
-            height: 60
+            width:45
+            height: 45
             rotation: rotate
             opacity: 60
             source: "qrc:/assetsMenu/planeMarker.png"

@@ -38,7 +38,7 @@ Item {
         Text{
             id: timeObj
             font.family: fontFamily
-            color: "#F1F1F1"
+            color: "#B7B8BD"
             font {
                 pointSize: (parent.height*0.2).toFixed(0)
                 bold: true
