@@ -2,7 +2,10 @@ import QtQuick 2.0
 
 Item {
     id: root
-    anchors.fill: parent
+
+    height: parent.height
+    width: parent.width
+    anchors.centerIn: parent
     property string mainTemerature: (generate.temp).toString()//weatherAPIAdapter.temp
     property int windValue: generate.wspeed  //weatherAPIAdapter.windSpeed
     property int rainValue: 0 //weatherAPIAdapter -- getter
@@ -299,7 +302,7 @@ Item {
     Rectangle {
         id: bottomRectangle
         color: "transparent"
-        width: parent.width*0.74
+        width: parent.width*0.77
         height: parent.height*0.14
         anchors {
             bottom: parent.bottom
@@ -335,7 +338,7 @@ Item {
             height: parent.height*0.7
             width: parent.height*1
             anchors.left: parent.left
-            anchors.leftMargin: parent.height*0.05
+            anchors.leftMargin: parent.height*0
             anchors.verticalCenter: parent.verticalCenter
             source: "qrc:/assetsMenu/windIcon.png"
 
@@ -401,6 +404,7 @@ Item {
             }
         }
         Text {
+            id: windTXT
             anchors{
                 left: windDot5.right
                 leftMargin: parent.height*0.15
@@ -418,8 +422,8 @@ Item {
             id: rainIcon
             height: parent.height*0.5
             width: parent.height*0.2
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.horizontalCenterOffset: parent.width*0.018
+            anchors.left: windTXT.right
+            anchors.leftMargin: parent.height*0.2
             anchors.verticalCenter: parent.verticalCenter
             source: "qrc:/assetsMenu/rainIcon.png"
         }
@@ -484,6 +488,7 @@ Item {
             }
         }
         Text {
+            id: rainTXT
             anchors{
                 left: rainDot5.right
                 leftMargin: parent.height*0.15
@@ -501,9 +506,9 @@ Item {
             text: sunLevel.toString();
             color: "white"
             font.family: standardFont.name
-            anchors.right: parent.right
+            anchors.left: sunIcon.right
+            anchors.leftMargin: parent.height*0.1
             anchors.verticalCenter: parent.verticalCenter
-            anchors.rightMargin: parent.height*0.1
             anchors.verticalCenterOffset: -parent.height*0.06
         }
         Image {
@@ -512,8 +517,8 @@ Item {
             width: parent.height*0.7
             source: "qrc:/assetsMenu/sunLevel.png"
             anchors.verticalCenter: parent.verticalCenter
-            anchors.right: sunText.left
-            anchors.rightMargin: parent.height*0.04
+            anchors.left: rainTXT.right
+            anchors.leftMargin: parent.height*0.1
         }
 
 

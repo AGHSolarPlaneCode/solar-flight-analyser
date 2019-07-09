@@ -227,9 +227,8 @@ Item {
 
     Item {
         id: weatherWidget
-        ListModel {
-            id: pageList
-        }
+        property int page: 1
+
 
         width: 0.28*parent.width
         height: 0.28*parent.height
@@ -240,6 +239,7 @@ Item {
             right: parent.right
             rightMargin: parent.width*0.05
         }
+
         Component.onCompleted: {
             WeatherPageGenerator.showPage(pageList, 1)
             }
@@ -254,11 +254,19 @@ Item {
         Rectangle {
             id:weatherPageBackground
             height: parent.height
-            width: weatherBackground.width-weatherSideMenuBackground
+            width: parent.width*0.8
             color: "transparent"
             anchors{
                 right: parent.right
                 verticalCenter: parent.verticalCenter
+            }
+            onWidthChanged: {
+                pageList.get(0).width = weatherPageBackground.width
+                pageList.get(0).height = weatherPageBackground.height
+            }
+
+            ListModel {
+                id: pageList
             }
 
         }
@@ -268,6 +276,11 @@ Item {
                 color: "transparent"
                 //opacity: 0.55
                 height: parent.height
+                anchors{
+                    left:parent.left
+                    verticalCenter: parent.verticalCenter
+                }
+
                 Rectangle {
                     id: backgroundBar
                     width: parent.width*0.1

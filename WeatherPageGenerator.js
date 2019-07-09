@@ -7,6 +7,7 @@ function showPage(list, sceneNumber) {
     }
     if(sceneNumber === 1){
         component = Qt.createComponent("WeatherMainPage.qml");
+        weatherWidget.page = 1
         if (component.status === Component.Ready)
             finishCreation(list,scene);
         else
@@ -15,6 +16,7 @@ function showPage(list, sceneNumber) {
     }
     else  if(sceneNumber === 3){
         component = Qt.createComponent("WeatherSettingsPage.qml");
+        weatherWidget.page = 3
         if (component.status === Component.Ready)
             finishCreation(list,scene);
         else
@@ -23,6 +25,7 @@ function showPage(list, sceneNumber) {
     }
     else if(sceneNumber === 2){
         component = Qt.createComponent("WeatherLocationPage.qml");
+        weatherWidget.page = 2
         if (component.status === Component.Ready)
             finishCreation(list,scene);
         else
