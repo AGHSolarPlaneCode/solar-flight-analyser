@@ -55,7 +55,104 @@ void DataManager::setCurrentEndpoint(const QUrl &address)
     }
 }
 
+void DataManager::telemetryDataState(bool state)
+{
+    if(!state){
+        // AppMessage(MESSAGE::INFORMATION) << ""
+        return;
+    }
+
+    setTelemetryData(telemetryInterface->getTelemetry());
+}
+
 QUrl DataManager::getCurrentEndpoint() const
 {
     return connectionStatus->getURLAddress();
 }
+
+void DataManager::setTelemetryData(const Data::TelemetryData &data)
+{
+
+    emit telemetryDataChanged();
+}
+
+double DataManager::getLat() const
+{
+    return telemetryInterface->getTelemetry().Lat;
+}
+
+double DataManager::getLon() const
+{
+    return telemetryInterface->getTelemetry().Lon;
+}
+
+double DataManager::getLatRaw() const
+{
+    return telemetryInterface->getTelemetry().latRaw;
+}
+
+double DataManager::getLonRaw() const
+{
+    return telemetryInterface->getTelemetry().lonRaw;
+}
+
+double DataManager::getAlt() const
+{
+    return telemetryInterface->getTelemetry().Alt;
+}
+
+double DataManager::getRelativeAlt() const
+{
+    return telemetryInterface->getTelemetry().RelativeAlt;
+}
+
+double DataManager::getVx() const
+{
+    return telemetryInterface->getTelemetry().Vx;
+}
+
+double DataManager::getVy() const
+{
+    return telemetryInterface->getTelemetry().Vy;
+}
+
+double DataManager::getVz() const
+{
+    return telemetryInterface->getTelemetry().Vz;
+}
+
+double DataManager::getHdg() const
+{
+    return telemetryInterface->getTelemetry().Hdg;
+}
+
+double DataManager::getRow() const
+{
+    return telemetryInterface->getTelemetry().Row;
+}
+
+double DataManager::getPitch() const
+{
+    return telemetryInterface->getTelemetry().Pitch;
+}
+
+double DataManager::getYaw() const
+{
+    return telemetryInterface->getTelemetry().Yaw;
+}
+
+double DataManager::getRollSpeed() const
+{
+    return telemetryInterface->getTelemetry().RollSpeed;
+}
+
+double DataManager::getPitchSpeed() const
+{
+    return telemetryInterface->getTelemetry().PitchSpeed;
+}
+
+double DataManager::getYawSpeed() const
+{
+    return telemetryInterface->getTelemetry().YawSpeed;
+}
+
