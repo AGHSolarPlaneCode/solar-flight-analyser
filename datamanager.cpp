@@ -16,11 +16,11 @@ void DataManager::getDataAction()  // START/STOP Button service (base on connect
         if(!authorizeState)
             return;
 
-        //telemetryInterface->downloadTelemetry(getCurrentEndpoint());
+        telemetryInterface->downloadTelemetry(getCurrentEndpoint());
 
         connectionStatus->setConnectionStatus(true);
     }else{
-        //telemetryInterface->stopDownloadTelemetry();
+        telemetryInterface->stopDownloadTelemetry();
 
         connectionStatus->setConnectionStatus(false);
     }
@@ -40,7 +40,7 @@ void DataManager::setCurrentEndpoint(const QUrl &address)
 
     if(validConnection.first){
         twoWaysAuthorize.connectionState = true;
-        if(/*clientManager->telemetryDataAuthorization(validConnection.second)*/true){
+        if(telemetryInterface->telemetryDataAuthorization(validConnection.second)){
             twoWaysAuthorize.dataValidation = true;
 
             twoWaysAuthorize.address = address;
@@ -62,18 +62,12 @@ void DataManager::telemetryDataState(bool state)
         return;
     }
 
-    setTelemetryData(telemetryInterface->getTelemetry());
+    emit telemetryDataChanged();
 }
 
 QUrl DataManager::getCurrentEndpoint() const
 {
     return connectionStatus->getURLAddress();
-}
-
-void DataManager::setTelemetryData(const Data::TelemetryData &data)
-{
-
-    emit telemetryDataChanged();
 }
 
 double DataManager::getLat() const

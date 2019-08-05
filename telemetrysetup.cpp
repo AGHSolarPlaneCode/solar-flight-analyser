@@ -1,5 +1,8 @@
 #include "telemetrysetup.h"
 
+TelemetrySetup::TelemetrySetup(QObject* parent): TelemetrySetupInterface(parent),
+    telemetryClient(std::make_unique<RESTClientManager>()) {}
+
 void TelemetrySetup::setTelemetry(const Data::TelemetryData &data)
 {
     //if(telemetry == data) return;
@@ -20,16 +23,13 @@ bool TelemetrySetup::telemetryDataAuthorization(const QString &frame)
 
 void TelemetrySetup::downloadTelemetry(const QUrl &address)  //httpclientmanager service
 {
-    /*
-     if(clientHttpManager->establishConnection(address, )
-     clientHttpManager->startGETRequest();
-
-  */
+    if(telemetryClient->establishConnection(address))
+        telemetryClient->runGETRequests();
 }
 
 void TelemetrySetup::stopDownloadTelemetry()
 {
-    // httpclientmanager method using to stop telemetry flow
+    telemetryClient->stopGETRequests();
 }
 
 void TelemetrySetup::receiveTelemetryData(const Data::TelemetryData &fData)

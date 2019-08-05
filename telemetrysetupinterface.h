@@ -17,7 +17,7 @@ public:
     virtual bool telemetryDataAuthorization(const QString& frame) = 0;
     virtual void downloadTelemetry(const QUrl& address) = 0;
     virtual void stopDownloadTelemetry() = 0;
-
+    virtual ~TelemetrySetupInterface() = default;
 signals:
     void telemetryDataReceivedState(bool state);
 };

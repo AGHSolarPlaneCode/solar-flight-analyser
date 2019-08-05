@@ -11,11 +11,11 @@ public:
     };
     ConnectionSetup();
 
-    virtual void setURLAddress(const QUrl& newUrl) override;
-    virtual void setConnectionStatus(bool status) override;
-    virtual QUrl getURLAddress() const override;
-    virtual QPair<bool, QString> connectionAvailable(const QUrl& qurl) override;
-    virtual bool isRunningConnection() override;
+    void setURLAddress(const QUrl& newUrl) override;
+    void setConnectionStatus(bool status) override;
+    QUrl getURLAddress() const override;
+    QPair<bool, QString> connectionAvailable(const QUrl& qurl) override;
+    bool isRunningConnection() override;
 
 private:
     QUrl endpointAddress;

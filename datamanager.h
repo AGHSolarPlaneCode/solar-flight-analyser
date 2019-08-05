@@ -39,7 +39,6 @@ public:
     void setCurrentEndpoint(const QUrl& address);
     QUrl getCurrentEndpoint() const;
 
-    void setTelemetryData(const TelemetryData& data);
 public:
     // telemetry getters
     double getLat() const;

@@ -19,7 +19,8 @@ SOURCES += \
     weatherdata.cpp \
     datamanager.cpp \
     connectionsetup.cpp \
-    telemetrysetup.cpp
+    telemetrysetup.cpp \
+    restclientmanager.cpp
 
 RESOURCES += qml.qrc
 
@@ -43,5 +44,7 @@ HEADERS += \
     connectionauthorization.h \
     telemetrysetupinterface.h \
     telemetrydata.h \
-    telemetrysetup.h
+    telemetrysetup.h \
+    restclientinterface.h \
+    restclientmanager.h
 
