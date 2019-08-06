@@ -23,9 +23,14 @@ void ConnectionSetup::setURLAddress(const QUrl &newUrl)
     endpointAddress = newUrl;
 }
 
-QPair<bool, QString> ConnectionSetup::connectionAvailable(const QUrl &qurl)  // return pair (bool, QString)
+QPair<bool, QString> ConnectionSetup::connectionAvailable(const QUrl &qurl) // return pair (bool <- connection available, QString <- received data)
 {
-    return QPair<bool, QString>();             // TODO: first way of autorization | using static method of rest client class
+    QByteArray rawFrame = RESTClientManager::getRESTServerRequest(qurl);    // single request to check connection
+        
+    if(rawFrame.isEmpty())
+        return qMakePair<bool, QString>(false, rawFrame);
+    else
+        return qMakePair<bool, QString>(true, rawFrame);
 }
 
 bool ConnectionSetup::isRunningConnection()

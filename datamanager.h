@@ -69,7 +69,6 @@ private:
     std::unique_ptr<ConnectionInterface>     connectionStatus;
     std::unique_ptr<TelemetrySetupInterface> telemetryInterface;
     Authorization twoWaysAuthorize;
-
 };
 
 #endif // DATAMANAGER_H

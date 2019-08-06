@@ -32,6 +32,12 @@ void DataManager::setCurrentEndpoint(const QUrl &address)
        // AppMessage(MESSAGE::INFORMATION) << "You cannot change URL address during the START button is launched";
        return;
      }
+
+    if(!address.isValid()){
+        // AppMessage(MESSAGE::INFORMATION) << "" invalid address
+        return;
+    }
+
     // authorization
     if(twoWaysAuthorize.address == address) // the same address (we don't need double authorization)
         return;

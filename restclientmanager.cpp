@@ -5,24 +5,29 @@ RESTClientManager::RESTClientManager(QObject* parent): RESTClientInterface(paren
     _requestTimer(new QTimer(this)),
     _requestInterval(10),
     _connectionEstablished(false)
-    {}
+    { setConnections(); }
 
 
 bool RESTClientManager::establishConnection(const QUrl &endAddress)
 {
+    _connectionEstablished = false;
+
+    if(_requestTimer->isActive()){
+        // AppMessage(MESSAGE::INFORMATION) << ""
+        return false;
+    }
+
     if(!endAddress.isValid())
         return false;
 
-    if(_endpoint == endAddress)  // the same establishing
+    if(_endpoint == endAddress){  // the same establishing
+        _connectionEstablished = true;
         return true;
-
-    _connectionEstablished = false;
+    }
 
     _endpoint = endAddress;
 
     _networkRequest.setUrl(_endpoint);
-
-    setConnections();
 
     _connectionEstablished = true;
 
@@ -64,6 +69,29 @@ void RESTClientManager::setRequestsInterval(unsigned int peroid)
     _requestInterval = peroid;
 }
 
+QByteArray RESTClientManager::getRESTServerRequest(const QUrl &endpoint)
+{
+    // TODO: definition
+    QNetworkAccessManager tempManager;
+    QNetworkRequest networkRequest;
+    QByteArray tempArray;
+
+
+    networkRequest.setUrl(endpoint);
+    
+    connect(&tempManager, &QNetworkAccessManager::finished, [&tempArray](QNetworkReply* reply) -> void { 
+        if(QNetworkReply::NoError == reply->error())
+            return;
+        tempArray = reply->readAll();
+        
+        reply->deleteLater();
+    });
+    
+    tempManager.get(networkRequest);
+    
+    return tempArray;
+}
+
 void RESTClientManager::_requestFinished(QNetworkReply *reply)
 {
     if(reply->error() != QNetworkReply::NoError) {
@@ -73,6 +101,7 @@ void RESTClientManager::_requestFinished(QNetworkReply *reply)
 
     // TODO: parse
     //emit receivedDataTransmitter()
+    reply->deleteLater();
 }
 
 void RESTClientManager::setConnections()

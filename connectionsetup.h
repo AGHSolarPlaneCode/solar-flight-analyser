@@ -1,6 +1,7 @@
 #ifndef CONNECTIONSETUP_H
 #define CONNECTIONSETUP_H
 #include "connectioninterface.h"
+#include "restclientmanager.h"
 
 class ConnectionSetup: public ConnectionInterface
 {

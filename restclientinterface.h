@@ -12,10 +12,8 @@ public:
     virtual void runGETRequests() = 0;
     virtual void stopGETRequests() = 0;
     virtual void setRequestsInterval(unsigned int peroid) = 0;
-
 signals:
     void receivedDataTransmitter(const Data::TelemetryData& data);
-
 };
 
 #endif // RESTCLIENTINTERFACE_H

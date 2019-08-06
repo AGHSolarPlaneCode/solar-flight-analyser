@@ -8,6 +8,7 @@
 #include <QNetworkRequest>
 
 class RESTClientManager: public RESTClientInterface {
+    Q_OBJECT
 public:
     RESTClientManager(QObject* parent = nullptr);
 
@@ -15,11 +16,13 @@ public:
     void runGETRequests() final;
     void stopGETRequests() final;
     void setRequestsInterval(unsigned int peroid) override;
+
+    static QByteArray getRESTServerRequest(const QUrl& endpoint);
 private slots:
     void _requestFinished(QNetworkReply* reply);
     void _sslErrors      (QNetworkReply *reply, const QList<QSslError> &errors);
 private:
-    void setConnections();
+    void                   setConnections();
     QTimer*                _requestTimer;
     QNetworkAccessManager* _networkManager;
     QNetworkRequest        _networkRequest;
