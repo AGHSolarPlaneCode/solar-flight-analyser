@@ -23,24 +23,22 @@ void ConnectionSetup::setURLAddress(const QUrl &newUrl)
     endpointAddress = newUrl;
 }
 
-QPair<bool, QString> ConnectionSetup::connectionAvailable(const QUrl &qurl) // return pair (bool <- connection available, QString <- received data)
+QPair<bool, QByteArray> ConnectionSetup::connectionAvailable(const QUrl &qurl) // return pair (bool <- connection available, QString <- received data)
 {
     QByteArray rawFrame = RESTClientManager::getRESTServerRequest(qurl);    // single request to check connection
         
     if(rawFrame.isEmpty())
-        return qMakePair<bool, QString>(false, rawFrame);
+        return qMakePair<bool, QByteArray>(false, rawFrame);
     else
-        return qMakePair<bool, QString>(true, rawFrame);
+        return qMakePair<bool, QByteArray>(true, rawFrame);
 }
 
 bool ConnectionSetup::isRunningConnection()
 {
-    switch(buttonStatus){
-    case ConnectButton::START:
-        return true;
-    case ConnectButton::STOP:
+    if(ConnectButton::START != buttonStatus)
         return false;
-    }
+
+    return true;
 }
 
 

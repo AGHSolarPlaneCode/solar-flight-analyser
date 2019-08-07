@@ -2,7 +2,8 @@
 
 DataManager::DataManager(QObject *parent) : QObject(parent),
     connectionStatus(std::make_unique<ConnectionSetup>()),
-    telemetryInterface(std::make_unique<TelemetrySetup>()) {}
+    telemetryInterface(std::make_unique<TelemetrySetup>())
+{ connect(telemetryInterface.get(), &TelemetrySetup::telemetryDataReceivedState, this, &DataManager::telemetryDataState); }
 
 void DataManager::getDataAction()  // START/STOP Button service (base on connection class)
 {
@@ -13,12 +14,14 @@ void DataManager::getDataAction()  // START/STOP Button service (base on connect
             // TODO: invoke QML JS function with dialog | return
         bool authorizeState = (twoWaysAuthorize.connectionState && twoWaysAuthorize.dataValidation);
 
-        if(!authorizeState)
+        if(!authorizeState){  // error message | information
+            // AppMessage(MESSAGE::INFORMATION) << "" invalid address
             return;
+        }
 
         telemetryInterface->downloadTelemetry(getCurrentEndpoint());
 
-        connectionStatus->setConnectionStatus(true);
+        connectionStatus->setConnectionStatus(true);  // button state - to changed encapsulation
     }else{
         telemetryInterface->stopDownloadTelemetry();
 
@@ -42,11 +45,11 @@ void DataManager::setCurrentEndpoint(const QUrl &address)
     if(twoWaysAuthorize.address == address) // the same address (we don't need double authorization)
         return;
 
-    const auto& validConnection = connectionStatus->connectionAvailable(address);
+    const auto& validConnection = connectionStatus->connectionAvailable(address);    // first step
 
     if(validConnection.first){
         twoWaysAuthorize.connectionState = true;
-        if(telemetryInterface->telemetryDataAuthorization(validConnection.second)){
+        if(telemetryInterface->telemetryDataAuthorization(validConnection.second)){  // second step
             twoWaysAuthorize.dataValidation = true;
 
             twoWaysAuthorize.address = address;
@@ -54,9 +57,11 @@ void DataManager::setCurrentEndpoint(const QUrl &address)
 
             emit currentEndpointChanged();
         }else{
+            twoWaysAuthorize.dataValidation = false;
             // AppMessage(MESSAGE::INFORMATION) << ""
         }
     }else{
+        twoWaysAuthorize.connectionState = false;
         // AppMessage(MESSAGE::INFORMATION) << ""
     }
 }

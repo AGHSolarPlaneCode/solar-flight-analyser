@@ -15,7 +15,7 @@ public:
     void setURLAddress(const QUrl& newUrl) override;
     void setConnectionStatus(bool status) override;
     QUrl getURLAddress() const override;
-    QPair<bool, QString> connectionAvailable(const QUrl& qurl) override;
+    QPair<bool, QByteArray> connectionAvailable(const QUrl& qurl) override;
     bool isRunningConnection() override;
 
 private:

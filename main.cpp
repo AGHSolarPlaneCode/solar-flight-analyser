@@ -1,7 +1,7 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
-#include "weatherapi.h"
 #include <QtQuick>
+#include "weatherapi.h"
 #include "datamanager.h"
 
 int main(int argc, char *argv[])
@@ -10,8 +10,6 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);  
     QQmlApplicationEngine engine;
-
-
 
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

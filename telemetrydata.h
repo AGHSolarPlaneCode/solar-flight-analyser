@@ -1,5 +1,6 @@
 #ifndef FLIGHTDATA_H
 #define FLIGHTDATA_H
+#include <tuple>
 
 namespace Data{
     struct TelemetryData{
@@ -19,6 +20,17 @@ namespace Data{
         double RollSpeed;
         double PitchSpeed;
         double YawSpeed;
+        bool operator==(const TelemetryData& compData){
+
+            return std::tie(Lat,Lon,latRaw,lonRaw,Alt,
+                            RelativeAlt,Vx,Vy,Vz,Hdg,Row,
+                            Pitch,Yaw,RollSpeed,PitchSpeed,YawSpeed) ==
+                   std::tie(compData.Lat, compData.Lon, compData.latRaw,
+                            compData.lonRaw, compData.Alt, compData.RelativeAlt,
+                            compData.Vx,compData.Vy,compData.Vz,compData.Hdg,compData.Row,
+                            compData.Pitch, compData.Yaw,compData.RollSpeed,
+                            compData.PitchSpeed,compData.YawSpeed);
+        }
 
         TelemetryData& operator=(const TelemetryData& comp){
             if(this == &comp)

@@ -2,6 +2,7 @@
 #define RESTCLIENTMANAGER_H
 
 #include "restclientinterface.h"
+#include "telemetryjsonmanager.h"
 #include <QTimer>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>

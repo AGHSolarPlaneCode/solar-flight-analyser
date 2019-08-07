@@ -17,13 +17,13 @@ bool RESTClientManager::establishConnection(const QUrl &endAddress)
         return false;
     }
 
-    if(!endAddress.isValid())
-        return false;
-
     if(_endpoint == endAddress){  // the same establishing
         _connectionEstablished = true;
         return true;
     }
+
+    if(!endAddress.isValid())
+        return false;
 
     _endpoint = endAddress;
 
@@ -43,6 +43,7 @@ void RESTClientManager::runGETRequests()
 
     if(!_requestTimer->isActive()){
         _requestTimer->setInterval(static_cast<int>(_requestInterval));
+
         _requestTimer->start();
     }
 }
@@ -58,24 +59,23 @@ void RESTClientManager::stopGETRequests()
 
 void RESTClientManager::setRequestsInterval(unsigned int peroid)
 {
-    if(_requestInterval == peroid)
-        return;
-
     if(_requestTimer->isActive()){
         // AppMessage(MESSAGE::INFORMATION) << "" // can't change during timer started
         return;
     }
+    if(_requestInterval == peroid)
+        return;
 
     _requestInterval = peroid;
 }
 
-QByteArray RESTClientManager::getRESTServerRequest(const QUrl &endpoint)
+QByteArray RESTClientManager::getRESTServerRequest(const QUrl &endpoint)  // static
 {
-    // TODO: definition
     QNetworkAccessManager tempManager;
     QNetworkRequest networkRequest;
     QByteArray tempArray;
 
+    // add errors handler
 
     networkRequest.setUrl(endpoint);
     
@@ -98,9 +98,12 @@ void RESTClientManager::_requestFinished(QNetworkReply *reply)
          // AppMessage(MESSAGE::INFORMATION) << "" reply->errorString();
         return;
     }
+    const auto& telemetryMap = TelemetryJSONManager::parseTelemetryJSONFrame(reply->readAll());
+    if(!telemetryMap.isEmpty())
+        emit receivedDataTransmitter(telemetryMap);
+    else{}
+        // AppMessage(MESSAGE::INFORMATION) << "" Empty frame received!
 
-    // TODO: parse
-    //emit receivedDataTransmitter()
     reply->deleteLater();
 }
 
@@ -124,4 +127,5 @@ void RESTClientManager::_sslErrors(QNetworkReply *reply, const QList<QSslError> 
     }
 
     reply->ignoreSslErrors(errors);
+    //reply->deleteLater();  // ? < --
 }

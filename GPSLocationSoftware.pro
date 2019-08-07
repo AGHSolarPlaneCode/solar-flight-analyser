@@ -20,7 +20,8 @@ SOURCES += \
     datamanager.cpp \
     connectionsetup.cpp \
     telemetrysetup.cpp \
-    restclientmanager.cpp
+    restclientmanager.cpp \
+    telemetryjsonmanager.cpp
 
 RESOURCES += qml.qrc
 
@@ -46,5 +47,6 @@ HEADERS += \
     telemetrydata.h \
     telemetrysetup.h \
     restclientinterface.h \
-    restclientmanager.h
+    restclientmanager.h \
+    telemetryjsonmanager.h
 

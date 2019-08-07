@@ -12,9 +12,10 @@ class TelemetrySetupInterface: public QObject{
 public:
     TelemetrySetupInterface(QObject* parent = nullptr): QObject(parent) {}
 
+    virtual void setTelemetry(const QVariantMap& data) = 0;
     virtual void setTelemetry(const TelemetryData& data) = 0;
     virtual TelemetryData getTelemetry() const = 0;
-    virtual bool telemetryDataAuthorization(const QString& frame) = 0;
+    virtual bool telemetryDataAuthorization(const QByteArray& frame) = 0;
     virtual void downloadTelemetry(const QUrl& address) = 0;
     virtual void stopDownloadTelemetry() = 0;
     virtual ~TelemetrySetupInterface() = default;

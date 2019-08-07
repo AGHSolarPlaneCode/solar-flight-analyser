@@ -8,7 +8,7 @@ public:
     virtual void setURLAddress(const QUrl& newUrl) = 0;
     virtual void setConnectionStatus(bool status) = 0;
     virtual QUrl getURLAddress() const = 0;
-    virtual QPair<bool, QString> connectionAvailable(const QUrl& qurl) = 0;  // check autorization with static ClientManager class
+    virtual QPair<bool, QByteArray> connectionAvailable(const QUrl& qurl) = 0;  // check autorization with static ClientManager class
     virtual bool isRunningConnection() = 0;
     virtual ~ConnectionInterface() = default;
 
