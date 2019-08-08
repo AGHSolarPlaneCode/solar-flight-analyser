@@ -21,7 +21,8 @@ SOURCES += \
     connectionsetup.cpp \
     telemetrysetup.cpp \
     restclientmanager.cpp \
-    telemetryjsonmanager.cpp
+    telemetryjsonmanager.cpp \
+    errorsingleton.cpp
 
 RESOURCES += qml.qrc
 
@@ -48,5 +49,6 @@ HEADERS += \
     telemetrysetup.h \
     restclientinterface.h \
     restclientmanager.h \
-    telemetryjsonmanager.h
+    telemetryjsonmanager.h \
+    errorsingleton.h
 

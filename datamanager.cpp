@@ -12,6 +12,7 @@ void DataManager::getDataAction()  // START/STOP Button service (base on connect
 
         if(address.isEmpty()) {}
             // TODO: invoke QML JS function with dialog | return
+
         bool authorizeState = (twoWaysAuthorize.connectionState && twoWaysAuthorize.dataValidation);
 
         if(!authorizeState){  // error message | information
@@ -46,8 +47,10 @@ void DataManager::setCurrentEndpoint(const QUrl &address)
                       twoWaysAuthorize.connectionState &&
                       twoWaysAuthorize.dataValidation);
 
-    if(authState) // the same address (we don't need double authorization)
+    if(authState){ // the same address (we don't need double authorization)
+        // AppMessage(MESSAGE::INFORMATION) << "" invalid address
         return;
+    }
 
     const auto& validConnection = connectionStatus->connectionAvailable(address);    // first step
 
@@ -61,13 +64,43 @@ void DataManager::setCurrentEndpoint(const QUrl &address)
 
             emit currentEndpointChanged();
         }else{
+            twoWaysAuthorize.address = address;
             twoWaysAuthorize.dataValidation = false;
             // AppMessage(MESSAGE::INFORMATION) << ""
         }
     }else{
+        twoWaysAuthorize.address = address;
         twoWaysAuthorize.connectionState = false;
+        twoWaysAuthorize.dataValidation = false;
         // AppMessage(MESSAGE::INFORMATION) << ""
     }
+
+    //  -- MOCKUP --
+
+    if(!validConnection.first){
+        twoWaysAuthorize.connectionState = false;
+        twoWaysAuthorize.dataValidation = false;
+        twoWaysAuthorize.address = address;
+        // AppMessage(MESSAGE::INFORMATION) << ""
+        return;
+    }
+
+    twoWaysAuthorize.connectionState = true;
+
+    if(!telemetryInterface->telemetryDataAuthorization(validConnection.second)){
+        twoWaysAuthorize.dataValidation = false;
+        twoWaysAuthorize.address = address;
+        // AppMessage(MESSAGE::INFORMATION) << ""
+        return;
+    }
+
+    twoWaysAuthorize.dataValidation = true;
+    twoWaysAuthorize.address = address;
+    connectionStatus->setURLAddress(address);
+
+    emit currentEndpointChanged();
+    // AppMessage(MESSAGE::INFORMATION) << ""
+
 }
 
 void DataManager::telemetryDataState(bool state)
