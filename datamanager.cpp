@@ -42,7 +42,11 @@ void DataManager::setCurrentEndpoint(const QUrl &address)
     }
 
     // authorization
-    if(twoWaysAuthorize.address == address) // the same address (we don't need double authorization)
+    bool authState = (twoWaysAuthorize.address == address &&
+                      twoWaysAuthorize.connectionState &&
+                      twoWaysAuthorize.dataValidation);
+
+    if(authState) // the same address (we don't need double authorization)
         return;
 
     const auto& validConnection = connectionStatus->connectionAvailable(address);    // first step
