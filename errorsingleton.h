@@ -49,7 +49,7 @@ private:
     static QPair<WindowType, MessageType> enumTypes;
 };
 
-using ErrorMessage = ErrorSingleton::MessageType;
+using MessageType = ErrorSingleton::MessageType;
 using WindowType = ErrorSingleton::WindowType;
 constexpr auto RegisterError = &ErrorSingleton::AppWariningRegister;
 
