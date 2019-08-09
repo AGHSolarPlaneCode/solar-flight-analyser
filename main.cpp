@@ -13,16 +13,14 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);  
     QQmlApplicationEngine engine;
 
-    ErrorSingleton::AppWariningRegister() << "Urgent Error";
-    ErrorSingleton::AppWariningRegister() << "Information";
-    ErrorSingleton::AppWariningRegister() << "Inherit Error";
-    ErrorSingleton::AppWariningRegister() << "Access denied";
-    ErrorSingleton::AppWariningRegister() << "Warning";
-    ErrorSingleton::AppWariningRegister() << "Urgent Error";
-    ErrorSingleton::AppWariningRegister() << "Information";
-    ErrorSingleton::AppWariningRegister() << "Inherit Error";
-    ErrorSingleton::AppWariningRegister() << "Access denied";
-    ErrorSingleton::AppWariningRegister() << "Warning";
+
+    // example of error types
+    RegisterError(WindowType::MainAppWindow, ErrorMessage::WARINING) << "Urgent Error";
+    RegisterError(WindowType::MainAppWindow, ErrorMessage::WARINING) << "Information";
+    RegisterError(WindowType::MainAppWindow, ErrorMessage::WARINING) << "Inherit Error";
+    RegisterError(WindowType::MainAppWindow, ErrorMessage::WARINING) << "Access denied";
+    RegisterError(WindowType::MainAppWindow, ErrorMessage::WARINING) << "Warning";
+
 
     ErrorSingleton::showErrorsQueue();
 

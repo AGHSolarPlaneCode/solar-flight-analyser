@@ -54,26 +54,26 @@ void DataManager::setCurrentEndpoint(const QUrl &address)
 
     const auto& validConnection = connectionStatus->connectionAvailable(address);    // first step
 
-    if(validConnection.first){
-        twoWaysAuthorize.connectionState = true;
-        if(telemetryInterface->telemetryDataAuthorization(validConnection.second)){  // second step
-            twoWaysAuthorize.dataValidation = true;
+//    if(validConnection.first){
+//        twoWaysAuthorize.connectionState = true;
+//        if(telemetryInterface->telemetryDataAuthorization(validConnection.second)){  // second step
+//            twoWaysAuthorize.dataValidation = true;
 
-            twoWaysAuthorize.address = address;
-            connectionStatus->setURLAddress(address);
+//            twoWaysAuthorize.address = address;
+//            connectionStatus->setURLAddress(address);
 
-            emit currentEndpointChanged();
-        }else{
-            twoWaysAuthorize.address = address;
-            twoWaysAuthorize.dataValidation = false;
-            // AppMessage(MESSAGE::INFORMATION) << ""
-        }
-    }else{
-        twoWaysAuthorize.address = address;
-        twoWaysAuthorize.connectionState = false;
-        twoWaysAuthorize.dataValidation = false;
-        // AppMessage(MESSAGE::INFORMATION) << ""
-    }
+//            emit currentEndpointChanged();
+//        }else{
+//            twoWaysAuthorize.address = address;
+//            twoWaysAuthorize.dataValidation = false;
+//            // AppMessage(MESSAGE::INFORMATION) << ""
+//        }
+//    }else{
+//        twoWaysAuthorize.address = address;
+//        twoWaysAuthorize.connectionState = false;
+//        twoWaysAuthorize.dataValidation = false;
+//        // AppMessage(MESSAGE::INFORMATION) << ""
+//    }
 
     //  -- MOCKUP --
 

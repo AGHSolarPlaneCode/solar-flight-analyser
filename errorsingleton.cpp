@@ -10,12 +10,25 @@ void operator<<(ErrorSingleton& debug, const QByteArray& reply){
     if(!debug.getNotifyBellState())
         debug.errorQueue.enqueue(reply);
 
-    emit debug.sendMessageToQML(reply);
+        // error validator
+    switch(debug.enumTypes.first){
+        case WindowType::MainAppWindow:
+            emit debug.sendMessageToMainNotification(reply, ErrorMessage::WARINING);
+            break;
+        case WindowType::URLDialogWindow:
+            emit debug.sendMessageToDialogWindow(reply);
+            break;
+        default:
+            emit debug.sendMessageToMainNotification(reply, ErrorMessage::UNDEFINED);
+            break;
+    }
 }
-ErrorSingleton &ErrorSingleton::AppWariningRegister()
+ErrorSingleton &ErrorSingleton::AppWariningRegister(const WindowType& winType, const MessageType& messType)
 {
     if(!error_Handler.get())
         error_Handler = std::make_shared<ErrorSingleton>();
+
+    enumTypes = qMakePair(winType, messType);
 
     return *error_Handler;
 }
