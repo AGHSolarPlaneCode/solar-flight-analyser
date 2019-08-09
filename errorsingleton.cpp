@@ -27,7 +27,7 @@ void operator<<(ErrorSingleton& debug, const QByteArray& reply){
 ErrorSingleton &ErrorSingleton::AppWariningRegister(const WindowType& winType, const MessageType& messType)
 {
     if(!error_Handler.get())
-        error_Handler = std::make_shared<ErrorSingleton>();
+        error_Handler = std::shared_ptr<ErrorSingleton>(new ErrorSingleton());
 
     error_Handler->enumTypes = qMakePair(winType, messType);
 

@@ -27,9 +27,7 @@ public:
     Q_ENUM(MessageType)
 
     ErrorSingleton(const ErrorSingleton& errSing) = delete;
-    ErrorSingleton& operator=(const ErrorSingleton& errSing) = delete;
-    explicit ErrorSingleton(QObject *parent = nullptr): QObject(parent) {}
-
+    ErrorSingleton& operator=(const ErrorSingleton& errSing) = delete;   
     static ErrorSingleton& AppWariningRegister(const WindowType& wType, const MessageType& mType);
     static void showErrorsQueue();
 
@@ -43,6 +41,7 @@ signals:
     void sendMessageToMainNotification(const QString& message, MessageType type);
     void sendMessageToDialogWindow(const QString& message);
 private:
+    explicit ErrorSingleton(QObject *parent = nullptr): QObject(parent) {}
     bool   notifyBellState = true;
     static std::shared_ptr<ErrorSingleton> error_Handler;
     static QQueue<QByteArray> errorQueue;
