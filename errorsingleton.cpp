@@ -2,7 +2,7 @@
 
 std::shared_ptr<ErrorSingleton> ErrorSingleton::error_Handler = nullptr;
 QQueue<QByteArray> ErrorSingleton::errorQueue;
-QPair<WindowType, MessageType> ErrorSingleton::enumTypes;
+QMutex ErrorSingleton::handlerLocker;
 
 void operator<<(ErrorSingleton& debug, const QByteArray& reply){
     #if DEF_DEBUG == 1
@@ -14,7 +14,7 @@ void operator<<(ErrorSingleton& debug, const QByteArray& reply){
         // error validator
     switch(debug.enumTypes.first){
         case WindowType::MainAppWindow:
-            emit debug.sendMessageToMainNotification(reply, MessageType::WARINING);
+            emit debug.sendMessageToMainNotification(reply, debug.enumTypes.second);
             break;
         case WindowType::URLDialogWindow:
             emit debug.sendMessageToDialogWindow(reply);
@@ -26,6 +26,8 @@ void operator<<(ErrorSingleton& debug, const QByteArray& reply){
 }
 ErrorSingleton &ErrorSingleton::AppWariningRegister(const WindowType& winType, const MessageType& messType)
 {
+    QMutexLocker locker(&handlerLocker);
+
     if(!error_Handler.get())
         error_Handler = std::shared_ptr<ErrorSingleton>(new ErrorSingleton());
 
@@ -54,6 +56,7 @@ void ErrorSingleton::setNotifyBellState(bool bellState)
 {
     if (notifyBellState == bellState)
         return;
+    // reaction for turning on
 
     notifyBellState = bellState;
     emit notifyBellStateChanged();

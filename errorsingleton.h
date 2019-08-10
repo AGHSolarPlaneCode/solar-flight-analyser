@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <memory>
 #include <QQueue>
+#include <QMutexLocker>
 #include "notifyenums.h"
 
 class ErrorSingleton : public QObject
@@ -17,7 +18,8 @@ public:
     Q_ENUM(MessageType)
 
     ErrorSingleton(const ErrorSingleton& errSing) = delete;
-    ErrorSingleton& operator=(const ErrorSingleton& errSing) = delete;   
+    ErrorSingleton& operator=(const ErrorSingleton& errSing) = delete;
+
     static ErrorSingleton& AppWariningRegister(const WindowType& wType, const MessageType& mType);
     static void showErrorsQueue();
 
@@ -27,15 +29,16 @@ public:
     friend void operator<<(ErrorSingleton& debug, const QByteArray& reply);
 signals:
     void notifyBellStateChanged();
-
     void sendMessageToMainNotification(const QString& message, MessageType type);
     void sendMessageToDialogWindow(const QString& message);
 private:
     explicit ErrorSingleton(QObject *parent = nullptr): QObject(parent) {}
-    bool   notifyBellState = true;
+
+    bool                                   notifyBellState = true;
+    static QMutex                          handlerLocker;
     static std::shared_ptr<ErrorSingleton> error_Handler;
-    static QQueue<QByteArray> errorQueue;
-    static QPair<WindowType, MessageType> enumTypes;
+    static QQueue<QByteArray>              errorQueue;
+    QPair<WindowType, MessageType>         enumTypes;
 };
 
 constexpr auto RegisterError = &ErrorSingleton::AppWariningRegister;
