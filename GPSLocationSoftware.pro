@@ -50,5 +50,6 @@ HEADERS += \
     restclientinterface.h \
     restclientmanager.h \
     telemetryjsonmanager.h \
-    errorsingleton.h
+    errorsingleton.h \
+    notifyenums.h
 

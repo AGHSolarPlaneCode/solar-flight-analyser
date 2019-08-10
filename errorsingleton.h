@@ -6,23 +6,13 @@
 #include <QDebug>
 #include <memory>
 #include <QQueue>
+#include "notifyenums.h"
 
 class ErrorSingleton : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool notifyBellState READ getNotifyBellState WRITE setNotifyBellState NOTIFY notifyBellStateChanged)
 public:
-    enum class WindowType{
-        MainAppWindow = 1,
-        URLDialogWindow
-    };
-
-    enum class MessageType{
-        WARINING = 1,
-        INFORMATION,
-        UNDEFINED
-    };
-
     Q_ENUM(WindowType)
     Q_ENUM(MessageType)
 
@@ -48,8 +38,6 @@ private:
     static QPair<WindowType, MessageType> enumTypes;
 };
 
-using MessageType = ErrorSingleton::MessageType;
-using WindowType = ErrorSingleton::WindowType;
 constexpr auto RegisterError = &ErrorSingleton::AppWariningRegister;
 
 #endif // ERRORSINGLETON_H
