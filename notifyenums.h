@@ -3,13 +3,14 @@
 
 enum class WindowType{
     MainAppWindow = 1,
-    URLDialogWindow
+    URLDialogWindow,
+    NoType
 };
 
 enum class MessageType{
-    WARINING = 1,
-    INFORMATION,
-    UNDEFINED
+    Warning = 1,
+    Information,
+    NoType
 };
 
 #endif // NOTIFYENUMS_H

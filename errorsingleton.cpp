@@ -1,13 +1,17 @@
 #include "errorsingleton.h"
 
+
 std::shared_ptr<ErrorSingleton> ErrorSingleton::error_Handler = nullptr;
-QQueue<QByteArray> ErrorSingleton::errorQueue;
 QMutex ErrorSingleton::handlerLocker;
 
 void operator<<(ErrorSingleton& debug, const QByteArray& reply){
     #if DEF_DEBUG == 1
         qDebug() << reply;
     #endif
+
+    if(debug.enumTypes.first == WindowType::NoType || debug.enumTypes.second == MessageType::NoType)
+        return;
+
     if(!debug.getNotifyBellState())
         debug.errorQueue.enqueue(reply);
 
@@ -19,11 +23,27 @@ void operator<<(ErrorSingleton& debug, const QByteArray& reply){
         case WindowType::URLDialogWindow:
             emit debug.sendMessageToDialogWindow(reply);
             break;
+        case WindowType::NoType:
+            qDebug() << "Window type doesn't occured!";
+            break;
         default:
-            emit debug.sendMessageToMainNotification(reply, MessageType::UNDEFINED);
+            qDebug() << "Undefined window type!";
             break;
     }
 }
+
+ErrorSingleton *ErrorSingleton::getInstance()
+{
+    QMutexLocker locker(&handlerLocker);
+
+    if(!error_Handler.get())
+        error_Handler = std::shared_ptr<ErrorSingleton>(new ErrorSingleton());
+
+    error_Handler->enumTypes = qMakePair(WindowType::NoType, MessageType::NoType);
+
+    return error_Handler.get();
+}
+
 ErrorSingleton &ErrorSingleton::AppWariningRegister(const WindowType& winType, const MessageType& messType)
 {
     QMutexLocker locker(&handlerLocker);
@@ -38,12 +58,12 @@ ErrorSingleton &ErrorSingleton::AppWariningRegister(const WindowType& winType, c
 
 void ErrorSingleton::showErrorsQueue()
 {
-    if(errorQueue.isEmpty()){
+    if(error_Handler->errorQueue.isEmpty()){
         qDebug()<<"Errors Queue is Empty!";
         return;
     }
 
-    for(const auto& error: errorQueue)
+    for(const auto& error: error_Handler->errorQueue)
         qDebug()<<error;
 }
 

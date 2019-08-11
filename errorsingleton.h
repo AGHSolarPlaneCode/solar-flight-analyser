@@ -19,7 +19,7 @@ public:
 
     ErrorSingleton(const ErrorSingleton& errSing) = delete;
     ErrorSingleton& operator=(const ErrorSingleton& errSing) = delete;
-
+    static ErrorSingleton* getInstance();
     static ErrorSingleton& AppWariningRegister(const WindowType& wType, const MessageType& mType);
     static void showErrorsQueue();
 
@@ -37,7 +37,7 @@ private:
     bool                                   notifyBellState = true;
     static QMutex                          handlerLocker;
     static std::shared_ptr<ErrorSingleton> error_Handler;
-    static QQueue<QByteArray>              errorQueue;
+    QQueue<QByteArray>                     errorQueue;
     QPair<WindowType, MessageType>         enumTypes;
 };
 
