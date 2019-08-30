@@ -10,17 +10,17 @@ Window {
     width: 1600
     height: 900
     title: qsTr("GPS Location Software")
-    property bool connected: false
+     property bool startButtonState: false
+    //
     //
 
-
+    //
     //
 
 
     Connections {
         target: mainMenu
         onConnectionChanged: {
-        root.connected = connectionState
         pageLoader.item.connected = connectionState
         }
         onNotifyChange:{
@@ -126,6 +126,16 @@ Window {
 
 
         }
+    Rectangle{
+        id: requestBackground
+        anchors.fill: parent
+        color: "#292B38"
+        opacity: 0.9
+        visible: false
+        MouseArea{
+            anchors.fill:parent
+        }
+    }
 
     }
 

@@ -84,5 +84,25 @@
         <file>weatherdata.cpp</file>
         <file>weatherdata.h</file>
         <file>assetsMenu/BatteryStatus.png</file>
+        <file>interfaceFunction.js</file>
+        <file>assetsMenu/ButtonFollowOff.png</file>
+        <file>assetsMenu/ButtonFollowOn.png</file>
+        <file>assetsMenu/MapProperty.png</file>
+        <file>assetsMenu/MinusPlus2off.png</file>
+        <file>assetsMenu/MinusPlusMinusOn.png</file>
+        <file>assetsMenu/MinusPlusPlunOn.png</file>
+        <file>assetsMenu/locationIcon.png</file>
+        <file>assetsMenu/settingsIconWeather.png</file>
+        <file>assetsMenu/updateIcon.png</file>
+        <file>assetsMenu/addressBox.svg</file>
+        <file>assetsMenu/clock.png</file>
+        <file>listViewFun.js</file>
+        <file>assetsMenu/CLEARALLALERTS.svg</file>
+        <file>assetsMenu/CLEARONEALERT.svg</file>
+        <file>assetsMenu/wind.svg</file>
+        <file>assetsMenu/rainIcon.svg</file>
+        <file>assetsMenu/iIcon.svg</file>
+        <file>assetsMenu/vicon.svg</file>
+        <file>assetsMenu/xicon.svg</file>
     </qresource>
 </RCC>

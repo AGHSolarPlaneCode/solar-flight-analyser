@@ -1,11 +1,15 @@
 import QtQuick 2.0
 import QtLocation 5.9
 import QtPositioning 5.8
+import QtQuick.Controls 2.5
 import "MarkerGenerator.js" as MarkerGenerator
 import "distanceCalculator.js" as DistanceCalculator
 import "ShowErrors.js" as ShowErrors
 import QtCharts 2.0
 import "WeatherPageGenerator.js" as WeatherPageGenerator
+import "interfaceFunction.js" as Interface
+import "listViewFun.js" as ListFun
+
 Item {
     id: root
     signal connectionChanged(var connectionState)
@@ -13,9 +17,8 @@ Item {
     property double distanceToNextPoint: DistanceCalculator.distanceCalculate();
     property double longitude: NaN
     property double latitude: NaN
-    property string serverAdress : "LOCALHOST" //get from settings (database) or RequestDialog
-    property bool connected: false
-    property double transmitterDistance : 2 //get from backend
+    property string serverAdress : NaN //get from settings (database) or RequestDialog
+    property double transmitterDistance : NaN //get from backend
     property double groundSpeed : NaN //get from backend
     property double altitude : NaN
     property var planePosition: QtPositioning.coordinate(NaN,NaN)
@@ -23,31 +26,33 @@ Item {
     property double xVelocity: NaN
     property double yVelocity: NaN
     property string fontFamily: standardFont.name
-    property bool notify: false
-    property string realPortS: "3000"
-    property int numberOfInformation: 0
-    property int numberOfWarning: 0
-    property int errorIterator: 0
-    property var jsonError: 0
-    property int numberOfError: 0
-    property int informationIterator: 0
-    property var requestError: 0
-    property var informations: []
-    property var sslerror: []
+    property bool notify: true
+    property string realPortS: NaN
+//    property int numberOfInformation: 0
+//    property int numberOfWarning: 0
+//    property int errorIterator: 0
+//    property var jsonError: 0
+//    property int numberOfError: 0
+//    property int informationIterator: 0
+//    property var requestError: 0
+//    property var informations: []
+//    property var sslerror: []
+
     property real timeElapsed:0
+    property bool connected: startButtonState
     property double hdg: NaN
     property real batteryPercentage: 99.5456
 
     Connections{
         target: adapter
-        onFlightDataChanged:{
+        onTelemetryDataChanged:{
           hdg = adapter.Hdg
-          longitude = (adapter.Lon).toFixed(8).toString()
-          latitude = (adapter.Lon).toFixed(8).toString()
-          altitude = (adapter.Alt).toFixed(1).toString()
-          groundSpeed = (adapter.GroundSpeed).toFixed(1).toString()
-          xVelocity = adapter.Vx
-          yVelocity = adapter.Vy
+          longitude = (adapter.lon).toFixed(8).toString()
+          latitude = (adapter.lat).toFixed(8).toString()
+          altitude = (adapter.alt).toFixed(1).toString()
+          groundSpeed = (sqrt((((adapter.vx))^2)+((adapter.vy)^2))).toFixed(1).toString()
+          xVelocity = adapter.vx
+          yVelocity = adapter.vy
           planePosition = QtPositioning.coordinate(latitude, longitude)
           transmitterTXT.color = "#38865B" //green
           portTXT.color = "#38865B"
@@ -68,7 +73,7 @@ Item {
 
         if(connected == true )
         {
-                controller.doUpdates(true)
+                adapter.getDataAction()
 
         }
             else
@@ -92,19 +97,19 @@ Item {
             }
 
     }
-    Connections{
-        target: error
-        onSendJSONErrors:{
-            jsonError = err
-        }
-        onSendRequestError:{
-            requestError = err
-        }
-        onSendSslVector:{
-            sslerror = data
-        }
+//    Connections{
+//        target: error
+//        onSendJSONErrors:{
+//            jsonError = err
+//        }
+//        onSendRequestError:{
+//            requestError = err
+//        }
+//        onSendSslVector:{
+//            sslerror = data
+//        }
 
-    }
+//    }
     onBatteryPercentageChanged: {
         if(connected == true){
             transmitterTXT.text = transmitterDistance.toFixed(0).toString() + "%"
@@ -140,64 +145,15 @@ Item {
 //    }
 
 
-    Component.onCompleted: {
-        sslerror = 0;
-        informations = 0;
-        requestError = 0;
-        ShowErrors.showErrors();
-        if(!numberOfInformation){
-            informationTXT.text = "Nothing to say"
-        }
-        else {
-            ShowErrors.showInformation();
-        }
-    }
-    Timer {
-        repeat: false
-        interval: 50
-        running: true
-        onTriggered: {
-            weatherPageBackground.width = weatherBackground.width - weatherSideMenuBackground.width
-
-        }
-    }
-
-    onNumberOfInformationChanged: {
-        if(!numberOfInformation){
-            informationTXT.text = "Nothing to say"
-        }
-        else {
-            ShowErrors.showInformation();
-        }
-    }
-
-
-    RequestDialog{
-        id:request
-    }
 
 
 
-    Timer { //information Timer
-        interval: 3000; running: true; repeat: true
-        onTriggered: {
-                if((requestError!==0)||(jsonError!==0)||(sslerror!==0)){
-                    ShowErrors.showErrors();
-                }
 
-                if(informationIterator<numberOfInformation){
-                informationIterator++;
-                }
-                else {informationIterator = 1;}
 
-            if(!numberOfInformation){
-                informationTXT.text = "Nothing to say"
-            }
-            else {
-                ShowErrors.showInformation();
-            }
-        }
-    }
+
+
+
+
 
     FontLoader {
         id: standardFont
@@ -252,9 +208,8 @@ Item {
 
     Item {
         id: weatherWidget
-        ListModel {
-            id: pageList
-        }
+        property int page: 1
+
 
         width: 0.28*parent.width
         height: 0.28*parent.height
@@ -265,6 +220,7 @@ Item {
             right: parent.right
             rightMargin: parent.width*0.05
         }
+
         Component.onCompleted: {
             WeatherPageGenerator.showPage(pageList, 1)
             }
@@ -279,168 +235,139 @@ Item {
         Rectangle {
             id:weatherPageBackground
             height: parent.height
-            width: weatherBackground.width*0.85
+            width: parent.width*0.8
             color: "transparent"
             anchors{
                 right: parent.right
                 verticalCenter: parent.verticalCenter
             }
-            NumberAnimation on width{
-                id: pageRollOutAnim
-                running: false
-                //alwaysRunToEnd: true
-                from: weatherBackground.width - weatherSideMenuBackground.width
-                to: (weatherBackground.width - weatherSideMenuBackground.width)*0.9
-                //duration: 1000
 
+            ListModel {
+                id: pageList
             }
-            NumberAnimation on width{
-                id: pageRollBackAnim
-                running: false
-                //alwaysRunToEnd: true
-                from: (weatherBackground.width - weatherSideMenuBackground.width)*0.9
-                to: weatherBackground.width - weatherSideMenuBackground.width
-                duration: 1000
-            }
+
         }
             Rectangle {
                 id: weatherSideMenuBackground
-                width: parent.width*0.15
-                height: parent.height
+                width: parent.width*0.2
                 color: "transparent"
-                SequentialAnimation {
-                        id: weatherMenuRollBackAnim
-                        alwaysRunToEnd: true
-                        running: false
-                    NumberAnimation {
-                        target: weatherRefreshButton
-                        alwaysRunToEnd: true
-                        property: "height"
-                        duration: 330
-                        easing.type: Easing.Linear
-                        to: 0
-                    }
-                    NumberAnimation {
-                        target: weatherLocationButton
-                        alwaysRunToEnd: true
-                        property: "height"
-                        duration: 330
-                        easing.type: Easing.Linear
-                        to: 0
-                    }
-                    NumberAnimation {
-                        target: weatherSettingsButton
-                        alwaysRunToEnd: true
-                        property: "height"
-                        duration: 330
-                        easing.type: Easing.Linear
-                        to: 0
-                    }
+                //opacity: 0.55
+                height: parent.height
+                anchors{
+                    left:parent.left
+                    verticalCenter: parent.verticalCenter
                 }
-                    SequentialAnimation {
-                            id: weatherMenuRollOutAnim
-                            alwaysRunToEnd: true
-                            running: false
-                        NumberAnimation {
-                            target: weatherSettingsButton
-                            alwaysRunToEnd: true
-                            property: "height"
-                            duration: 330
-                            easing.type: Easing.Linear
-                            to: weatherSideMenuBackground.height*0.25
-                        }
-                        NumberAnimation {
-                            target: weatherLocationButton
-                            alwaysRunToEnd: true
-                            property: "height"
-                            duration: 330
-                            easing.type: Easing.Linear
-                            to: weatherSideMenuBackground.height*0.25
-                        }
-                        NumberAnimation {
-                            target: weatherRefreshButton
-                            alwaysRunToEnd: true
-                            property: "height"
-                            duration: 330
-                            easing.type: Easing.Linear
-                            to: weatherSideMenuBackground.height*0.25
-                        }
-                    }
 
                 Rectangle {
-                    id: weatherMainButton
-                    width: parent.width
-                    height: parent.height*0.25
-                    color: "transparent"
-                    anchors{
-                        top: parent.top
+                    id: backgroundBar
+                    width: parent.width*0.1
+                    height: parent.height*0.6
+                    color: "#F2B81E"
+                    anchors {
+                        verticalCenter: parent.verticalCenter
                         horizontalCenter: parent.horizontalCenter
                     }
+                }
+                Rectangle {
+                    id: locationCircle
+                    color: "#2F3243"
+                    width: parent.width*0.6*1.1
+                    height: width
+                    radius: width
+                    border{
+                        color :"#F2B81E"
+                        width: radius*0.02
+                    }
+                    anchors {
+                        verticalCenter: backgroundBar.verticalCenter
+                        horizontalCenter: backgroundBar.horizontalCenter
+                    }
                     Image {
-                        id: weatherMainButtonImage
-                        source: "qrc:/assetsMenu/WeatherMenuButton.png"
-                        width: parent.width
-                        height: parent.height
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: {
-                                WeatherPageGenerator.showPage(pageList, 1)
-                                if(!(pageRollBackAnim.running||weatherMenuRollOutAnim.running)){
-                                if(weatherWidget.menuState){
-                                    weatherMainButtonImage.source = "qrc:/assetsMenu/WeatherMenuButton.png"
-                                    pageRollBackAnim.start();
-                                    weatherMenuRollBackAnim.start();
-                                    weatherWidget.menuState = false;
-                                }
-                                else {
-                                    weatherMainButtonImage.source = "qrc:/assetsMenu/WeatherMenuButtonClicked.png"
-                                    pageRollOutAnim.start();
-                                    weatherMenuRollOutAnim.start();
-                                    weatherWidget.menuState = true;
-
-                                }
-                                }
-                            }
+                        source: "qrc:/assetsMenu/locationIcon.png"
+                        antialiasing: true
+                        anchors{
+                            centerIn: parent
                         }
                     }
-                }
-                Image {
-                    id: weatherRefreshButton
-                    width: parent.width
-                    anchors.top: weatherMainButton.bottom
-                    anchors.horizontalCenter: weatherMainButton.horizontalCenter
-                    source: "qrc:/assetsMenu/WeatherRefreshButton.png"
-                    height: 0
-                }
-                Image {
-                    id:weatherLocationButton
-                    width: parent.width
-                    anchors.top:  weatherRefreshButton.bottom
-                    anchors.horizontalCenter: weatherMainButton.horizontalCenter
-                    source: "qrc:/assetsMenu/WeatherLocationButton.png"
-                    height: 0
                     MouseArea {
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
                         anchors.fill: parent
-                        onClicked: {
-                            WeatherPageGenerator.showPage(pageList, 2)
+                        onEntered: {
+                            parent.color = "#292B37"
+                        }
+                        onExited: {
+                            parent.color = "#2F3243"
                         }
                     }
                 }
-                Image {
-                    id:weatherSettingsButton
-                    width: parent.width
-                    anchors.top:  weatherLocationButton.bottom
-                    anchors.horizontalCenter: weatherMainButton.horizontalCenter
-                    source: "qrc:/assetsMenu/WeatherSettingsButton.png"
-                    height: 0
+                Rectangle {
+                    id: refreshCircle
+                    color: "#2F3243"
+                    width: parent.width*0.6*1.1
+                    height: width
+                    radius: width
+                    border{
+                        color :"#F2B81E"
+                        width: radius*0.02
+                    }
+                    anchors {
+                        verticalCenter: backgroundBar.top
+                        horizontalCenter: backgroundBar.horizontalCenter
+                    }
+                    Image {
+                        source: "qrc:/assetsMenu/updateIcon.png"
+                        antialiasing: true
+                        anchors{
+                            centerIn: parent
+                        }
+                    }
                     MouseArea {
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
                         anchors.fill: parent
-                        onClicked: {
-                            WeatherPageGenerator.showPage(pageList, 3)
+                        onEntered: {
+                            parent.color = "#292B37"
+                        }
+                        onExited: {
+                            parent.color = "#2F3243"
                         }
                     }
                 }
+                Rectangle {
+                    id: settingsCircle
+                    color: "#2F3243"
+                    width: parent.width*0.6*1.1
+                    height: width
+                    radius: width
+                    border{
+                        color :"#F2B81E"
+                        width: radius*0.02
+                    }
+                    anchors {
+                        verticalCenter: backgroundBar.bottom
+                        horizontalCenter: backgroundBar.horizontalCenter
+                    }
+                    Image {
+                        source: "qrc:/assetsMenu/settingsIconWeather.png"
+                        antialiasing: true
+                        anchors{
+                            centerIn: parent
+                        }
+                    }
+                    MouseArea {
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        anchors.fill: parent
+                        onEntered: {
+                            parent.color = "#292B37"
+                        }
+                        onExited: {
+                            parent.color = "#2F3243"
+                        }
+                    }
+                }
+
             }
 
         }
@@ -473,7 +400,7 @@ Item {
                     top: parent.top
                     left: parent.left
                     topMargin: parent.height*0.04
-                    leftMargin: parent.width*0.15
+                    leftMargin: parent.width*0.08
                 }
             }
 
@@ -497,6 +424,13 @@ Item {
 
         }
     }
+    Connections{
+        target: errorManager
+        onSendMessageToMainNotification:{
+            errorModel.append({"msg": message, "type" : type})
+        }
+    }
+
     Item {
         id: alertsWidget
         width: 0.28*parent.width
@@ -510,11 +444,13 @@ Item {
         Rectangle {
             id: alertsBackground
             anchors.fill:parent
-            color: "#2F3243"
+            color: "#424D5C"
             radius: height*0.02
+
+            //================= TOPBAR
             Rectangle { //tob bar
                 id: alertsTopBar
-                height: parent.height
+                height: parent.height*0.3
                 width: parent.width
                 radius: parent.height*0.02
                 color: "#313646"
@@ -523,277 +459,201 @@ Item {
                     horizontalCenter: parent.horizontalCenter
 
                 }
+                Image { //change to trashbin Icon
+                    id: clearListViewButton
+                    source: "qrc:/assetsMenu/CLEARALLALERTS.svg"
+                    height: parent.height*0.7
+                    width: height
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                        right: alertsPropertiesSquares.left
+                        rightMargin: width*0.5
+                    }
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            errorModel.clear()
+                        }
+                    }
+                }
+//                Rectangle { //change to trashbin Icon
+//                    color: "red"
+//                    height: parent.height*0.5
+//                    width: height
+//                    anchors {
+//                        verticalCenter: parent.verticalCenter
+//                        right: clearListViewButton.left
+//                        rightMargin: width*0.5
+//                    }
+//                    MouseArea {
+//                        anchors.fill: parent
+//                        onClicked: {
+//                            errorModel.append({"msg": "Error occurred no. 404", "type" : 1})
+//                            errorModel.append({"msg": "Strong wind \'25 m/s \'", "type" : 2})
+//                        }
+//                    }
+//                }
+
                 Image { //properties squares
-                    height: parent.height*0.15
-                    width: parent.width*0.01
+                    id: alertsPropertiesSquares
+                    height: parent.height*0.5
+                    width: parent.width*0.012
+                    opacity: 0.75
                     source: "qrc:/assetsMenu/PROPERTIES SQUARES.png"
                     anchors {
-                        top: parent.top
-                        topMargin: parent.height*0.12
+                        verticalCenter: parent.verticalCenter
                         right: parent.right
                         rightMargin: 0.03*parent.width
                     }
                 }
                 Image { //alert icon
-                    height: parent.height*0.18
-                    width: parent.width*0.08
+                    id:alertsIcon
+                    height: parent.height*0.36
+                    width: height
                     source: "qrc:/assetsMenu/NotificationIcon.png"
                     anchors {
-                        top: parent.top
-                        topMargin: parent.height*0.07
+                        verticalCenter: parent.verticalCenter
                         left: parent.left
                         leftMargin: 0.03*parent.width
                     }
+                }
                     Text {
-                        font.pointSize: 0.8*parent.height.toFixed(0)
-                        font.family: fontFamily
-                        text: "Alerts"
+                        font.pointSize: 0.8*alertsIcon.height.toFixed(0)
+                        font.family: standardFont.name
+                        text: ("Alerts").toUpperCase()
                         color: "#999AA3"
                         font.bold: true
                         anchors {
                             verticalCenter: parent.verticalCenter
-                            horizontalCenter: parent.horizontalCenter
-                            horizontalCenterOffset: parent.width*2.2
-                        }
-                        Image {
-                            source: "qrc:/assetsMenu/exampleAlertIcon2.png"
-                            height: parent.height*0.6
-                            width: parent.height*0.6
-                            anchors{
-                                left: parent.right
-                                leftMargin: parent.height
-                                verticalCenter: parent.verticalCenter
-                            }
-                            Text {
-                                text: numberOfError
-                                font.pointSize: 0.7*parent.height.toFixed(0);
-                                color: "White"
-                                anchors{
-                                    verticalCenter: parent.verticalCenter
-                                    left: parent.right
-                                    leftMargin: 0.16*parent.width
-                                }
-                            }
-                            Image {
-                                source: "qrc:/assetsMenu/warningIcon.png"
-                                height: parent.height
-                                width: parent.width
-                                anchors{
-                                    left: parent.right
-                                    verticalCenter: parent.verticalCenter
-                                    leftMargin: 0.85*parent.width
-                                }
-                                Text {
-                                    text: numberOfWarning
-                                    font.pointSize: 0.7*parent.height.toFixed(0);
-                                    color: "White"
-                                    anchors{
-                                        verticalCenter: parent.verticalCenter
-                                        left: parent.right
-                                        leftMargin: 0.1*parent.width
-                                    }
-                                }
-                            }
-                            Image {
-                                source: "qrc:/assetsMenu/exampleAlertIcon.png"
-                                height: parent.height
-                                width: parent.width
-                                anchors{
-                                    left: parent.right
-                                    verticalCenter: parent.verticalCenter
-                                    leftMargin: 2.8*parent.width
-                                }
-                                Text {
-                                    text: numberOfInformation
-                                    font.pointSize: 0.7*parent.height.toFixed(0);
-                                    color: "White"
-                                    anchors{
-                                        verticalCenter: parent.verticalCenter
-                                        left: parent.right
-                                        leftMargin: 0.2*parent.width
-                                    }
-                                }
-                            }
+                            left: alertsIcon.right
+                            leftMargin: alertsIcon.width*0.3
                         }
 
                     }
 
                 }
-                Rectangle { //bottom alert
-                    radius: parent.radius
-                    color: "#424D5C"
-                    height: parent.height*0.6
-                    width: parent.width
-                    anchors{
-                        bottom: parent.bottom
-                        horizontalCenter: parent.horizontalCenter
+            //================= ListView
+            ListView{
+                 width: alertsBackground.width
+                 model: errorModel
+                 //anim
+                 add: Transition {
+                           NumberAnimation { properties: "y"; from: alertsBackground.height; duration: 300 }
+                       }
+                 remove: Transition {
+                     NumberAnimation { properties: "opacity"; to: 0; duration: 300 }
+                 }
+                 move: Transition{NumberAnimation { properties: "y"; duration: 300}}
 
-                    }
-                    Image {
-                        height: parent.height*0.25
-                        width: parent.height*0.25
-                        source: "qrc:/assetsMenu/exampleAlertIcon.png"
-                        anchors {
-                            left: parent.left
-                            leftMargin: 0.03*parent.width
-                            bottom: parent.bottom
-                            bottomMargin: parent.height*0.1
-                        }
+                 displaced: Transition {
+                     SequentialAnimation{
+                     PauseAnimation{duration: 200}
+                     NumberAnimation { properties: "y"; duration: 300 }
+                     }
+                 }
+                 //-----------------------anim
+                 clip: true
+                 spacing: alertsBackground.height*0.02
+                 ScrollBar.vertical: ScrollBar {
+                 active: true
+                 anchors {
+                     right: parent.right
+                     verticalCenter: parent.verticalCenter
+                 }
+                 }
+                 delegate: delegate
+                 anchors {
+                 top: alertsTopBar.bottom
+                 topMargin: alertsBackground.height*0.02
+                 horizontalCenter: alertsBackground.horizontalCenter
+                 bottom: parent.bottom
+                 }
 
-                            Text {
-                                id: informationTXT
-                                font.family: fontFamily
-                                font.pointSize: (parent.height*0.5).toFixed(0)
-                                text: "Test text" //add text
-                                color: "#2281D1"
-                                anchors {
-                                    verticalCenter: parent.verticalCenter
-                                    left: parent.right
-                                    leftMargin: parent.width
-                                }
-
-                        }
-                    }
-                }
-                Rectangle{ //spacer
-                    id: alertSpacer
-                    width: parent.width
-                    height: parent.height*0.005
-                    color: "#707070"
-                    anchors {
-                        verticalCenter: parent.verticalCenter
-                        verticalCenterOffset: parent.height*0.2
-                    }
-
-                }
-                Rectangle { //middle bar
-                color: "#424D5C"
-                height: parent.height*0.35
-                width: parent.width
-                anchors{
-                    bottom: alertSpacer.top
-                    horizontalCenter: parent.horizontalCenter
-
-                }
-                Image {
-                    id: ignoreButton
-                    height: parent.height*0.45
-                    width: parent.height*0.45
-                    anchors{
-                        verticalCenter: parent.verticalCenter
-                        right: parent.right
-                        rightMargin: parent.width*0.03
-                    }
-                    source: "qrc:/assetsMenu/okIcon.png"
-                    visible: false
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked:{
-                            if(requestError!==0){
-                               requestError = 0;
-                                ignoreButton.visible = false;
-                                stopConnectionButton.visible = false;
-                                error.ignoreRequestErrors();
-                            }
-
-                            else if(jsonError!==0){
-                                jsonError = 0;
-                                ignoreButton.visible = false;
-                                stopConnectionButton.visible = false;
-                            }
-                            else if(sslerror !== 0){
-                                sslerror = 0;
-                                ignoreButton.visible = false;
-                                stopConnectionButton.visible = false;
-                                error.ignoreRequestErrors();
-                            }
-
-                            else {
-                                errorIcon.source="qrc:/assetsMenu/okIcon.png"
-                                errorTXT.text = "Everything works correctly"
-                                errorTXT.color = "#38865B"
-                            }
-                            ShowErrors.showErrors();
-                        }
-                    }
-                }
-                Image {
-                    id: stopConnectionButton
-                    height: parent.height*0.45
-                    width: parent.height*0.45
-                    anchors{
-                        verticalCenter: parent.verticalCenter
-                        right: ignoreButton.left
-                        rightMargin: parent.width*0.015
-                    }
-                    source: "qrc:/assetsMenu/exampleAlertIcon2.png"
-                    visible: false
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked:{
-                            if(requestError!==0){
-                               requestError = 0;
-                                ignoreButton.visible = false;
-                                stopConnectionButton.visible = false;
-                                connectionChanged(false);
-                            }
-
-                            else if(jsonError!==0){
-                                jsonError = 0;
-                                ignoreButton.visible = false;
-                                stopConnectionButton.visible = false;
-                            }
-                            else if(sslerror !== 0){
-                                sslerror = 0;
-                                ignoreButton.visible = false;
-                                stopConnectionButton.visible = false;
-                                connectionChanged(false);
-                            }
-
-                            else {
-                                errorIcon.source="qrc:/assetsMenu/okIcon.png"
-                                errorTXT.text = "Everything works correctly"
-                                errorTXT.color = "#38865B"
-                            }
-                            ShowErrors.showErrors();
-                        }
-                    }
-                }
-
-
-                Image {
-                    id: errorIcon
-                    height: parent.height*0.45
-                    width: parent.height*0.45
-                    anchors{
-                        verticalCenter: parent.verticalCenter
-                        left: parent.left
-                        leftMargin: parent.width*0.03
-                    }
-
-                    source: "qrc:/assetsMenu/exampleAlertIcon2.png"
-                Text {
-                    id: errorTXT
-                    font.pointSize: (parent.height*0.5).toFixed(0)
-                    text: "Test text"  //add text
-                    font.family: fontFamily
-                    color: "#DB3D40"
-                    anchors {
-                        verticalCenter: errorIcon.verticalCenter
-                        left: errorIcon.right
-                        leftMargin: errorIcon.width
-                    }
-
-
-                }
-                }
-
+                   }
 
             }
-            }
+        Component{
 
+        id: delegate
+
+        Rectangle {
+        color: "#363b4d"
+        width: alertsBackground.width
+        height: alertsBackground.height*0.2
+        radius: height*0.2
+        border{
+            color: "#F2B81E"
+            width: height*0.02
         }
+        Image {
+            id: messageTypeIcon
+            height: parent.height*0.6
+            source: {
+                if(type==0){
+                   source = "qrc:/assetsMenu/okIcon.png"
+                }else if(type ==1){
+                    source = "qrc:/assetsMenu/exampleAlertIcon2.png"
+                }
+                else {source = "qrc:/assetsMenu/exampleAlertIcon.png"}
+            }
+
+            width: height
+            anchors{
+                left: parent.left
+                leftMargin: height*0.3
+                verticalCenter: parent.verticalCenter
+            }
+        }
+
+        Text {
+             anchors{
+                 left: messageTypeIcon.right
+                 leftMargin: messageTypeIcon.width*0.2
+                 verticalCenter: parent.verticalCenter
+             }
+             color: "white"
+             font.pixelSize: messageTypeIcon.height
+             font.family: standardFont.name
+             text: msg
+                }
+
+        Image {
+            anchors.right: parent.right
+            anchors.rightMargin: width*0.5
+            anchors.verticalCenter: parent.verticalCenter
+            width: height
+            visible: {
+                if(!type){
+                    visible = false
+                }
+                else{ visible = true
+                }
+            }
+            height: parent.height*0.7
+            source: "qrc:/assetsMenu/CLEARONEALERT.svg"
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    errorModel.remove(index)
+                }
+            }
+        }
+        }
+        }
+        ListModel {
+            id: errorModel
+            onCountChanged: {
+                ListFun.checkList()
+            }
+            ListElement {
+                type: 0
+                msg: "No problem detected"
+                selected: false
+            }
     }
+
+
+}
     Item {
 
         id: graphWidget
@@ -844,13 +704,12 @@ Item {
                     id: chartsIcon
                     source: "qrc:/assetsMenu/chartsIcon.png"
                     anchors {
+                        verticalCenter: parent.verticalCenter
                         left: parent.left
-                        top: parent.top
-                        leftMargin: parent.width * 0.02
-                        topMargin: parent.height * 0.1
+                        leftMargin: parent.width*0.02
                     }
-                    width: parent.width * 0.08
-                    height: parent.height * 0.7
+                    width: parent.width * 0.04
+                    height: parent.height * 0.45
                 }
 //                Rectangle {
 //                    id: chartsTextRect
@@ -872,19 +731,18 @@ Item {
 //                }
                 Text {
                     id: chartText
-                    text: qsTr("Speed/Height chart")
+                    text: ("Speed/Height chart").toUpperCase()
                     color: "#999AA3"
+                    font.bold: true
                     font {
-                        pointSize: parent.width * 0.045
+                        pointSize: parent.width * 0.03
                         family: fontFamily
                     }
                     anchors {
+                        verticalCenter: chartsIcon.verticalCenter
                         left: chartsIcon.right
-                        leftMargin: parent.width * 0.02
-//                        top: parent.top
-//                        topMargin: parent.height * 0.04
-                        bottom: parent.bottom
-//                        bottomMargin: parent.height * 0.01
+                        leftMargin: parent.width*0.02
+                        verticalCenterOffset: parent.height*0.17
                     }
                     width: parent.width * 0.6
                     height: parent.height * 0.8
@@ -1073,7 +931,7 @@ Item {
                     top: parent.top
                     left: parent.left
                     topMargin: parent.height*0.04
-                    leftMargin: parent.width*0.15
+                    leftMargin: parent.width*0.08
                 }
             }
 
@@ -1090,7 +948,7 @@ Item {
                 height: parent.height*0.2
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
-                    request.visible = true;
+                    Interface.showDialog()
 
                 }
 
@@ -1103,7 +961,7 @@ Item {
                 font.pointSize: (parent.height*0.05).toFixed(0)
                 anchors {
                     bottom: parent.bottom
-                    bottomMargin: 0.01*parent.height
+                    bottomMargin: 0.1*parent.height
                     horizontalCenter: parent.horizontalCenter
                 }
                 text:"Not Connected"
@@ -1119,7 +977,7 @@ Item {
                     verticalCenter: parent.verticalCenter
                     horizontalCenter: parent.horizontalCenter
                     horizontalCenterOffset: parent.width*0.1
-                    verticalCenterOffset: parent.height*0.1
+                    verticalCenterOffset: parent.height*0.05
                 }
 
                 text: "---"
@@ -1431,6 +1289,12 @@ Item {
 
         }
     }
+    DropArea {
+        anchors.fill: parent
+        onDropped: {
+            anim.running = true;
+        }
+    }
     Item {
         id: mapWidget
         height: parent.height*0.5
@@ -1536,7 +1400,7 @@ Item {
 
             Rectangle { //bottomBar
                 id: bottomBar
-                color: parent.color
+                color: "#2F3243"
                 width: parent.width
                 height: parent.parent.parent.height*0.1*0.5
                 opacity: 0.85
@@ -1558,7 +1422,6 @@ Item {
                     height: parent.height*0.6
                     anchors.centerIn: parent
                     source: "qrc:/assetsMenu/mapFullScreen.png"
-
                 }
 
                 MouseArea {
@@ -1570,33 +1433,142 @@ Item {
                 }
                 }
                 Rectangle {
-                width: parent.height*0.95
-                height: parent.height*0.95
+                id: plusMinusRectangle
+                width: height*2
+                height: parent.height*1.3
                 color: "transparent"
                 opacity: 1
                 anchors.left: parent.left
-                anchors.leftMargin: parent.height*0.5
+                anchors.leftMargin: -parent.height*0.1
                 anchors.verticalCenter: parent.verticalCenter
-                SliderSwitch {
-                    id: followSwitch
+                anchors.verticalCenterOffset: parent.height*0.1
+                Image {
+                    id: plusMinusIcon
+                    source: "qrc:/assetsMenu/MinusPlus2off.png"
                     anchors.fill: parent
-                    size: parent.width*0.8
-                    onstatecolor: "#009688"
-                    offstatecolor: "#424D5C"
-                    state: "on"
+                    MouseArea {
+                        height: parent.height
+                        width: parent.width*0.5
+                        hoverEnabled: true
+                        anchors{
+                            left:parent.left
+                            verticalCenter: parent.verticalCenter
+                        }
+
+                        onClicked: {
+                            map.zoomLevel = map.zoomLevel+1
+                        }
+                        onEntered: {
+                            plusMinusIcon.source = "qrc:/assetsMenu/MinusPlusPlunOn.png"
+                        }
+                        onExited: {
+                            plusMinusIcon.source = "qrc:/assetsMenu/MinusPlus2off.png"
+                        }
+                    }
+                    MouseArea {
+                        height: parent.height
+                        width: parent.width*0.5
+                        hoverEnabled: true
+                        anchors{
+                            right: parent.right
+                            verticalCenter: parent.verticalCenter
+                        }
+
+                        onClicked: {
+                            map.zoomLevel = map.zoomLevel-1
+                        }
+                        onEntered: {
+                            plusMinusIcon.source = "qrc:/assetsMenu/MinusPlusMinusOn.png"
+                        }
+                        onExited: {
+                            plusMinusIcon.source = "qrc:/assetsMenu/MinusPlus2off.png"
+                        }
+                    }
                 }
-                Text{
-                    text: "Follow"
-                    font.family: fontFamily
-                    font.pointSize: (parent.height*0.3).toFixed(0)
-                    anchors.left: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.leftMargin: parent.width*0.2
-                    color: "#707070"
 
 
+//                SliderSwitch {
+//                    id: followSwitch
+//                    anchors.fill: parent
+//                    size: parent.width*0.8
+//                    onstatecolor: "#009688"
+//                    offstatecolor: "#424D5C"
+//                    state: "on"
+//                }
+                }
+                Rectangle {
+                    id: followRectangle
+                width: height*1.1
+                height: parent.height*1.3
+                color: "transparent"
+                opacity: 1
+                anchors.left: plusMinusRectangle.horizontalCenter
+                anchors.leftMargin: parent.height*0.9
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: parent.height*0.1
+                Image {
+                    id: followSwitch
+                    property bool onOffState: true
+                    anchors.fill: parent
+                    source: "qrc:/assetsMenu/ButtonFollowOn.png"
+                    MouseArea{
+                        anchors.fill:parent
+                        onClicked: {
+                            if(parent.onOffState == true){
+                                parent.source = "qrc:/assetsMenu/ButtonFollowOff.png"
+                                parent.onOffState = false
+                            }
+                            else
+                            {
+                                parent.source = "qrc:/assetsMenu/ButtonFollowOn.png"
+                                parent.onOffState = true
+                            }
+                        }
+                    }
 
-            }
+                    }
+                }
+                Rectangle {
+                    id: markerRectangle
+                width: height*1.1
+                height: parent.height*0.83
+                color: "#2F3243"
+                opacity: 1
+                radius: height*0.15
+                anchors.left: followRectangle.right
+                anchors.leftMargin: -parent.height*0.1
+                anchors.verticalCenter: followRectangle.verticalCenter
+                anchors.verticalCenterOffset: -parent.height*0.070
+                }
+                Image {
+                    id: dragAndDropIcon
+                    source: "qrc:/assetsMenu/markerIcon.png"
+                    width: bottomBar.height*0.4
+                    antialiasing: true
+                    height: bottomBar.height*0.6
+                   x: markerRectangle.x + markerRectangle.width*0.28
+                   y: markerRectangle.y + markerRectangle.height*0.1
+                    Drag.active: markerDragAndDropMouseArea.drag.active
+                    Drag.hotSpot.x: 20
+                    Drag.hotSpot.y: 20
+                    SequentialAnimation {
+                        id: anim
+                        running: false
+                        NumberAnimation { target: dragAndDropIcon; property: "opacity"; to: 0; duration: 250 }
+                        PropertyAction { target: dragAndDropIcon; property: "x"; value: markerRectangle.x + markerRectangle.width*0.28 }
+                        PropertyAction { target: dragAndDropIcon; property: "y"; value: markerRectangle.y + markerRectangle.height*0.1 }
+                        NumberAnimation { target: dragAndDropIcon; property: "opacity"; to: 1; duration: 250 }
+                    }
+                    MouseArea {
+                        id: markerDragAndDropMouseArea
+                        anchors.fill: parent
+                        drag.target: dragAndDropIcon
+                        propagateComposedEvents: true
+                        onReleased: {
+                            dragAndDropIcon.Drag.drop()
+                        }
+                    }
+
                 }
 
             }
@@ -1604,7 +1576,7 @@ Item {
 
 
             Rectangle { //topBar
-                color: parent.color
+                color: "#2F3243"
                 width: parent.width
                 height: parent.parent.parent.height*0.2*0.5
                 opacity: 0.85
@@ -1757,38 +1729,24 @@ Item {
             }
 
         }
-
-    }
-            Image {
-                id: dragAndDropIcon
-                source: "qrc:/assetsMenu/markerIcon.png"
-                width: bottomBar.height*0.55
-                height: bottomBar.height*0.8
-                x: mapWidget.width*0.95
-                y: root.height*0.03
-                Drag.active: markerDragAndDropMouseArea.drag.active
-                Drag.hotSpot.x: 20
-                Drag.hotSpot.y: 20
-                SequentialAnimation {
-                    id: anim
-                    running: false
-                    NumberAnimation { target: dragAndDropIcon; property: "opacity"; to: 0; duration: 500 }
-                    PropertyAction { target: dragAndDropIcon; property: "x"; value: mapWidget.width*0.95 }
-                    PropertyAction { target: dragAndDropIcon; property: "y"; value: root.height*0.03 }
-                    NumberAnimation { target: dragAndDropIcon; property: "opacity"; to: 1; duration: 500 }
-                }
-                MouseArea {
-                    id: markerDragAndDropMouseArea
-                    anchors.fill: parent
-                    drag.target: dragAndDropIcon
-                    propagateComposedEvents: true
-                    onReleased: {
-                        dragAndDropIcon.Drag.drop()
+                Image{
+                    source: "qrc:/assetsMenu/MapProperty.png"
+                    height: parent.height*0.7
+                    width: height*1.1
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                        right: parent.right
+                        rightMargin: parent.height*0.1
+                        verticalCenterOffset: 0
                     }
                 }
 
-            }
     }
+    }
+
+    }
+    RequestDialog{
+        id:request
 
     }
 

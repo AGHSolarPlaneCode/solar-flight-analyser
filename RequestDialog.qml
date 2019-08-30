@@ -1,14 +1,47 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.4
 import QtQuick.Window 2.3
+import "interfaceFunction.js" as Interface
     Window {
         id: root
         flags: Qt.FramelessWindowHint
         height: 250
-        width: 800
+        width: 650
         color: "transparent"
         property string textS: ""
         property var textToVar: []
+        property string errorMessage: "No error" //connect to errorManager
+        x: (parent.width*0.5)-(root.width*0.35)
+        y: (parent.height*0.5)-(root.height*0.15)
+        onVisibleChanged: {
+            okIndicator.visible = false
+            wrongIndicator.visible = true
+        }
+        Connections{
+            target: errorManager
+            onSendMessageToDialogWindow:{
+                errorMessage = message
+                switch(type){
+                case 1:
+                    errorMessageIcon.source = "qrc:/assetsMenu/xicon.svg"
+                    if(okIndicator.visible === true){
+                    okIndicatorOFFAnim.start()
+                    }
+                    break
+                case 2:
+                    errorMessageIcon.source = "qrc:/assetsMenu/iIcon.svg"
+                    break
+                case 3:
+                    errorMessageIcon.source = "qrc:/assetsMenu/vicon.svg"
+                    if(okIndicator.visible === false){
+                    okIndicatorOnAnim.start()
+                    break
+                    }
+                }
+
+
+            }
+        }
 
         signal setAdress(var adressS,var portS)
 
@@ -45,6 +78,7 @@ import QtQuick.Window 2.3
                     opacity: 1
                 }
                 Rectangle {
+                    id: exitButton
                     height: parent.height*0.75
                     width: parent.height*0.75
                     radius: width
@@ -53,31 +87,48 @@ import QtQuick.Window 2.3
                     anchors.rightMargin: height*0.5
                     opacity: 1
                     color: "#F2B81E"
+
                     border{
                         color: "Black"
-                        width: width*0.05
+                        width: width*0.00
                     }
                     Rectangle{
-                        width: parent.width*0.7
+                        width: parent.width*0.6
                         height: parent.height*0.1
                         antialiasing: true
-                        anchors.centerIn: parent
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenterOffset: height*0.5
+                        anchors.horizontalCenterOffset: parent.height*0.03
                         color: "#2C2F3E"
                         rotation: 45
                     }
                     Rectangle{
-                        width: parent.width*0.7
+                        width: parent.width*0.6
                         height: parent.height*0.1
+                        anchors.horizontalCenterOffset: parent.height*0.03
                         antialiasing: true
-                        anchors.centerIn: parent
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenterOffset: height*0.5
                         color: "#2C2F3E"
                         rotation: 135
                     }
 
                     MouseArea {
                         anchors.fill:parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
                         onClicked: {
-                            root.visible=false;
+                            Interface.closeDialog();
+                            textInputTXT.text = ""
+                        }
+                        onEntered: {
+                            exitButton.color = "#e8ac0e"
+
+                        }
+                        onExited: {
+                           exitButton.color = "#F2B81E"
                         }
                     }
                 }
@@ -89,11 +140,92 @@ import QtQuick.Window 2.3
             anchors {
                 verticalCenter: parent.verticalCenter
                 horizontalCenter: parent.horizontalCenter
-                verticalCenterOffset: parent.height*0.08
+                verticalCenterOffset: parent.height*0.05
             }
+            Rectangle {
+                color: "transparent"
+                opacity: 1
+                anchors{
+                    right: parent.right
+                    rightMargin: parent.height*0.35
+                    verticalCenter: parent.verticalCenter
+                    verticalCenterOffset: -parent.height*0.05
+                }
+                width: parent.height*0.6
+                height: parent.height*0.5
+            }
+
             height: parent.height*0.22
             width: parent.width*0.5
-            source: "qrc:/assetsMenu/addressBox.png"
+            opacity: 0.9
+            antialiasing: true
+            source: "qrc:/assetsMenu/addressBox.svg"
+            Rectangle {
+                id: okIndicator
+                visible: false
+                color: "transparent"
+                width: parent.height*0.7*0.8
+                height: parent.height*0.6*0.8
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: -parent.height*0.05
+                anchors.right: parent.right
+                anchors.rightMargin: parent.height*0.2
+                Rectangle{
+                    id: okFirstBar
+                    color: "#F2B81E"
+                    height: parent.height*0.8
+                    width: height*0.15
+                    radius: height*0.1
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.horizontalCenterOffset: parent.width*0.1
+                    rotation: 50
+                }
+                Rectangle{
+                    id: okSecoundBar
+                    color: "#F2B81E"
+                    height: parent.height*0.5
+                    width: okFirstBar.height*0.15
+                    radius: height*0.1
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenterOffset: parent.height*0.05
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.horizontalCenterOffset: -parent.width*0.25
+                    rotation: -35
+                }
+            }
+            Rectangle {
+                id: wrongIndicator
+                color: "transparent"
+                visible: true
+                width: parent.height*0.7
+                height: parent.height*0.6
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: -parent.height*0.05
+                anchors.right: parent.right
+                anchors.rightMargin: parent.height*0.15
+                Rectangle{
+                    color: "#F2B81E"
+                    height: parent.height*0.55
+                    width: height*0.15
+                    radius: height*0.1
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    rotation: 40
+                }
+                Rectangle{
+                    color: "#F2B81E"
+                    height: parent.height*0.55
+                    width: height*0.15
+                    radius: height*0.1
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    rotation: -40
+                }
+            }
+
+
+
             TextInput {
                 id: textInputTXT
                 anchors.verticalCenter: parent.verticalCenter
@@ -112,13 +244,49 @@ import QtQuick.Window 2.3
                       font.family: standardFont.name
                       font.pixelSize: parent.font.pixelSize
                       anchors.verticalCenter: parent.verticalCenter
+                      anchors.verticalCenterOffset: -parent.height*0.2
+                      anchors.horizontalCenterOffset: -parent.width*0.5
                       visible: !textInputTXT.text && !textInputTXT.activeFocus // <----------- ;-)
                   }
               }
 
             }
+        Rectangle{
+            id: messageBackground
+            visible: false
+            width: textInputRectangle.width
+            color: "transparent"
+            height: textInputRectangle.height*0.4
+            anchors {
+                horizontalCenter: textInputRectangle.horizontalCenter
+                top: textInputRectangle.bottom
+                topMargin: -textInputRectangle.height*0.25
+            }
+            Text {
+                id: errorMessageTXT
+                text: errorMessage
+                color: "white"
+                anchors.left: errorMessageIcon.right
+                anchors.leftMargin: parent.height*0.5
+                anchors.verticalCenter: parent.verticalCenter
+                font.family: standardFont.name
+                font.pixelSize: parent.height*0.8
 
-        Rectangle{ //accpetButton
+            }
+            Image {
+                id: errorMessageIcon
+                source: "qrc:/assetsMenu/iIcon.svg"
+                height: parent.height*0.7
+                width: height
+                anchors{
+                    verticalCenter: parent.verticalCenter
+                    left: parent.left
+                    leftMargin: parent.height*0.5
+                }
+            }
+        }
+
+        Rectangle{ //verifyButton
             id:accpetButton
             color: "#3C4151"
             width: parent.width*0.16
@@ -136,7 +304,7 @@ import QtQuick.Window 2.3
             }
 
             Text{
-                text: "ACCEPT"
+                text: "VERIFY"
                 anchors.centerIn: parent
                 font.family: standardFont.name
                 font.pixelSize: parent.height*0.5
@@ -146,16 +314,21 @@ import QtQuick.Window 2.3
 
             MouseArea {
                 anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
                 onClicked: {
-                    textS = textInputTXT.text
-                    textToVar = textS.split(':')
-                    setAdress(textToVar[0],textToVar[1])
-                    root.visible=false;
-                    textInputTXT.text = ""
+                adapter.currentEndpoint = textInputTXT.text
+                //okIndicatorOnAnim.running = true
+                }
+                onEntered: {
+                    accpetButton.color = "#424D5C"
+                }
+                onExited: {
+                    accpetButton.color = "#3C4151"
                 }
             }
         }
-        Rectangle { //cancelButton
+        Rectangle { //OKButton
             id: cancelButton
             color: "#3C4151"
             radius: height*0.5
@@ -171,7 +344,7 @@ import QtQuick.Window 2.3
                 width: parent.height*0.005
             }
             Text{
-                text: "CANCEL"
+                text: "OK"
                 anchors.centerIn: parent
                 font.family: standardFont.name
                 font.pixelSize: parent.height*0.5
@@ -180,9 +353,18 @@ import QtQuick.Window 2.3
             }
             MouseArea {
                 anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                hoverEnabled: true
                 onClicked: {
-                    root.visible = false
+                    Interface.closeDialog()
                     textInputTXT.text = ""
+
+                }
+                onEntered: {
+                    cancelButton.color = "#424D5C"
+                }
+                onExited: {
+                    cancelButton.color = "#3C4151"
                 }
             }
         }
@@ -200,5 +382,71 @@ import QtQuick.Window 2.3
             opacity: 95
 
 
+        }
+        SequentialAnimation{
+            id: okIndicatorOnAnim
+            running: false
+            PropertyAnimation {
+                target: wrongIndicator
+                property: "anchors.verticalCenterOffset"
+                from: -wrongIndicator.parent.height*0.05
+                to: -wrongIndicator.parent.height*0.1
+                duration: 100
+            }
+            PropertyAnimation {
+                target: wrongIndicator
+                property: "anchors.verticalCenterOffset"
+                to: -wrongIndicator.parent.height*0.05
+                from: -wrongIndicator.parent.height*0.1
+                duration: 100
+
+            }
+            PropertyAnimation{
+                target: wrongIndicator
+                property: "visible"
+                from: true
+                to: false
+                duration: 0
+            }
+            PropertyAnimation{
+                target: okIndicator
+                property: "visible"
+                from: false
+                to: true
+                duration: 0
+            }
+        }
+        SequentialAnimation{
+            id: okIndicatorOFFAnim
+            running: false
+            PropertyAnimation {
+                target: okIndicator
+                property: "anchors.verticalCenterOffset"
+                from: -wrongIndicator.parent.height*0.05
+                to: -wrongIndicator.parent.height*0.1
+                duration: 100
+            }
+            PropertyAnimation {
+                target: okIndicator
+                property: "anchors.verticalCenterOffset"
+                to: -wrongIndicator.parent.height*0.05
+                from: -wrongIndicator.parent.height*0.1
+                duration: 100
+
+            }
+            PropertyAnimation{
+                target: okIndicator
+                property: "visible"
+                from: true
+                to: false
+                duration: 0
+            }
+            PropertyAnimation{
+                target: wrongIndicator
+                property: "visible"
+                from: false
+                to: true
+                duration: 0
+            }
         }
     }

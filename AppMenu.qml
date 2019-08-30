@@ -38,17 +38,17 @@ Item {
         Text{
             id: timeObj
             font.family: fontFamily
-            color: "#F1F1F1"
+            color: "#B7B8BD"
             font {
-                pointSize: (parent.height*0.2).toFixed(0)
+                pointSize: (parent.height*0.2).toFixed(0)*1.2
                 bold: true
             }
 
             anchors {
                 verticalCenter: parent.verticalCenter
-                verticalCenterOffset: -parent.height*0.025
+               // verticalCenterOffset: -parent.height*0.025
                 left: notifyBell.left
-                leftMargin: -parent.width*0.075
+                leftMargin: -parent.width*0.093
             }
             Timer{
                 id: timeTimer
@@ -59,28 +59,43 @@ Item {
                 onTriggered: timeObj.text = new Date().toLocaleString(Qt.locale(),"hh:mm:ss")
             }
         }
+        Image {
+            id: clockIMG
+            width: timeObj.height*0.7
+            height: timeObj.height*0.7
+            anchors{
+                verticalCenter: parent.verticalCenter
+                right: timeObj.left
+                rightMargin: width*0.2
+            }
+            source: "qrc:/assetsMenu/clock.png"
+        }
 
         Image { //connectButton
              id: connectionSlider
              source: "qrc:/assetsMenu/START BUTTON.png"
              width: parent.width*0.1
-             height: parent.height*0.3
+             height: parent.height*0.33*1.1
              anchors {
-                 right: topBar.right
-                 rightMargin: parent.width*0.22
+                 right: clockIMG.left
+                 rightMargin: clockIMG.width*0.7
                  verticalCenter: parent.verticalCenter
              }
              MouseArea {
                  anchors.fill: parent
                  hoverEnabled: true
+                 cursorShape: Qt.PointingHandCursor
                  onClicked: {
+                     adapter.getDataAction()
                     if(parent.source=="qrc:/assetsMenu/START BUTTON.png"){
                         connectionChanged(true);
+                        startButtonState = true;
                         parent.source="qrc:/assetsMenu/STOP BUTTON.png"
                     }
                     else {
                        parent.source="qrc:/assetsMenu/START BUTTON.png";
-                       connectionChanged(false);
+                        startButtonState = false;
+                      connectionChanged(false);
                     }
                  }
              }
@@ -88,22 +103,21 @@ Item {
         }
         Image {
             id: notifyBell
-            source: "qrc:/assetsMenu/NOTIFY BELL.png"
+            source: "qrc:/assetsMenu/NOTIFY BELL ON.png"
             property bool menu
-            property bool notify: false
+            property bool notify: true
             property var menuObj: undefined
             onNotifyChanged: {
                 NotifyMenu.deleteMenu();
-                notifyChange(notify)
             }
 
             anchors {
                 right: parent.right
-                rightMargin: parent.width*0.1
+                rightMargin: parent.width*0.078
                 verticalCenter: parent.verticalCenter
             }
-            height: parent.height*0.3
-            width: parent.width*0.020
+            height: parent.height*0.3*1.2
+            width: parent.width*0.020*1.2
             MouseArea {
                 anchors.fill: notifyBell
                 onClicked: {
@@ -147,7 +161,7 @@ Item {
             Rectangle {
                 id: planeGroupRect
                 width: parent.width*0.944
-                height: parent.height*0.12
+                height: parent.height*0.135
                 color: standardcolor
                 radius: 5
                     border {
