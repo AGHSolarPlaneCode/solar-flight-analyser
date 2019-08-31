@@ -10,7 +10,15 @@
 class DataManager : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QUrl currentEndpoint READ getCurrentEndpoint WRITE setCurrentEndpoint NOTIFY currentEndpointChanged)
+
+    Q_PROPERTY(QUrl currentEndpoint READ getCurrentEndpoint WRITE setCurrentEndpoint NOTIFY connectionDataChanged)
+
+    Q_PROPERTY(bool authorizeStatus READ getCurrentAuthorizationStatus NOTIFY connectionDataChanged) // change to same  signal
+    // VERIFY.onClicked{ currentEndpoint = address < -  address from qml | if(authorizationStatus) setIcon/setPlaceholder to address
+    // currentEndpoint - addres to set in onClicked area of VERIFY button
+    // currentEndpoint = address; < - address in currently pressed URL value by user
+
+    // authorizeStatus - variable used to set authorization icon - (true = > \/ icon), (false = > X icon)
 
     Q_PROPERTY(double lat READ getLat NOTIFY telemetryDataChanged)
     Q_PROPERTY(double lon READ getLon NOTIFY telemetryDataChanged)
@@ -60,9 +68,15 @@ public:
     double getRollSpeed() const;
     double getPitchSpeed() const;
     double getYawSpeed() const;
+
+    bool getCurrentAuthorizationStatus() const;
 signals:
-    void currentEndpointChanged();
+    void connectionDataChanged();
     void telemetryDataChanged();
+
+    //to connect in QML
+    void activeDataFlowButton(bool state);
+    void showDialogAddressWindow();
 public slots:
     void telemetryDataState(bool state);
 private:

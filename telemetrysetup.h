@@ -16,7 +16,7 @@ public:
     void setTelemetry(const TelemetryData& data) override;
     TelemetryData getTelemetry() const override;
     bool telemetryDataAuthorization(const QByteArray& frame) override;
-    void downloadTelemetry(const QUrl& address) override;
+    void runTelemetryDownloader(const QUrl& address, bool& runState) override;
     void stopDownloadTelemetry() override;
 public slots:
     void receiveTelemetryData(const QVariantMap& recData);

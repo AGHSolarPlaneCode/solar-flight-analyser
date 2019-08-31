@@ -5,13 +5,16 @@ DataManager::DataManager(QObject *parent) : QObject(parent),
     telemetryInterface(std::make_unique<TelemetrySetup>())
 { connect(telemetryInterface.get(), &TelemetrySetup::telemetryDataReceivedState, this, &DataManager::telemetryDataState); }
 
-void DataManager::getDataAction()  // START/STOP Button service (base on connection class)
+void DataManager::getDataAction()                       // START/STOP Button service
 {
     if(!connectionStatus->isRunningConnection()){
         const auto& address(connectionStatus->getURLAddress());
 
-        if(address.isEmpty()) {}
-            // TODO: invoke QML JS function with dialog | return
+        if(address.isEmpty()) {
+            emit showDialogAddressWindow();
+            return;
+        }
+                                                        // TODO: button to clear URL address < - valid
 
         bool authorizeState = (twoWaysAuthorize.connectionState && twoWaysAuthorize.dataValidation);
 
@@ -20,14 +23,29 @@ void DataManager::getDataAction()  // START/STOP Button service (base on connect
             return;
         }
 
-        telemetryInterface->downloadTelemetry(getCurrentEndpoint());
+        bool stableRun;
+        telemetryInterface->runTelemetryDownloader(address, stableRun);
 
-        connectionStatus->setConnectionStatus(true);  // button state - to changed encapsulation
+        emit activeDataFlowButton(stableRun);           // base on stable run we decide about right data flow
+
+        connectionStatus->setConnectionStatus(stableRun);
+
     }else{
-        telemetryInterface->stopDownloadTelemetry();
+        telemetryInterface->stopDownloadTelemetry();    // stop data flow, based on current URL address
 
-        connectionStatus->setConnectionStatus(false);
+        emit activeDataFlowButton(false);               // notify frontend
+        connectionStatus->setConnectionStatus(false);   // set backend option
     }
+}
+
+bool DataManager::getCurrentAuthorizationStatus() const{
+    if(twoWaysAuthorize.address.isEmpty())
+        return false;
+
+    if(!twoWaysAuthorize.connectionState || !twoWaysAuthorize.dataValidation)
+        return false;
+
+    return true;
 }
 
 void DataManager::setCurrentEndpoint(const QUrl &address)
@@ -46,36 +64,13 @@ void DataManager::setCurrentEndpoint(const QUrl &address)
     bool authState = (twoWaysAuthorize.address == address &&
                       twoWaysAuthorize.connectionState &&
                       twoWaysAuthorize.dataValidation);
-
+    // check
     if(authState){ // the same address (we don't need double authorization)
-        // AppMessage(MESSAGE::INFORMATION) << "" invalid address
+        // AppMessage(MESSAGE::INFORMATION) << "" Address authorization has already done
         return;
     }
 
     const auto& validConnection = connectionStatus->connectionAvailable(address);    // first step
-
-//    if(validConnection.first){
-//        twoWaysAuthorize.connectionState = true;
-//        if(telemetryInterface->telemetryDataAuthorization(validConnection.second)){  // second step
-//            twoWaysAuthorize.dataValidation = true;
-
-//            twoWaysAuthorize.address = address;
-//            connectionStatus->setURLAddress(address);
-
-//            emit currentEndpointChanged();
-//        }else{
-//            twoWaysAuthorize.address = address;
-//            twoWaysAuthorize.dataValidation = false;
-//            // AppMessage(MESSAGE::INFORMATION) << ""
-//        }
-//    }else{
-//        twoWaysAuthorize.address = address;
-//        twoWaysAuthorize.connectionState = false;
-//        twoWaysAuthorize.dataValidation = false;
-//        // AppMessage(MESSAGE::INFORMATION) << ""
-//    }
-
-    //  -- MOCKUP --
 
     if(!validConnection.first){
         twoWaysAuthorize.connectionState = false;
@@ -94,13 +89,14 @@ void DataManager::setCurrentEndpoint(const QUrl &address)
         return;
     }
 
+    //success
+
     twoWaysAuthorize.dataValidation = true;
     twoWaysAuthorize.address = address;
     connectionStatus->setURLAddress(address);
 
-    emit currentEndpointChanged();
+    emit connectionDataChanged();
     // AppMessage(MESSAGE::INFORMATION) << ""
-
 }
 
 void DataManager::telemetryDataState(bool state)
@@ -197,4 +193,3 @@ double DataManager::getYawSpeed() const
 {
     return telemetryInterface->getTelemetry().YawSpeed;
 }
-

@@ -48,10 +48,15 @@ bool TelemetrySetup::telemetryDataAuthorization(const QByteArray &frame)
     return true;
 }
 
-void TelemetrySetup::downloadTelemetry(const QUrl &address)  // httpclientmanager service
+void TelemetrySetup::runTelemetryDownloader(const QUrl &address, bool& runState)  // httpclientmanager service
 {
-    if(telemetryClient->establishConnection(address))
+    runState = false;
+
+    if(telemetryClient->establishConnection(address)){
+
         telemetryClient->runGETRequests();
+        runState = true;
+    }
 }
 
 void TelemetrySetup::stopDownloadTelemetry()

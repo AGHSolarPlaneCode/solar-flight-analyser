@@ -1,4 +1,4 @@
-#ifndef ERRORSINGLETON_H
+ #ifndef ERRORSINGLETON_H
 #define ERRORSINGLETON_H
 
 #define DEF_DEBUG 0
@@ -9,35 +9,41 @@
 #include <QMutexLocker>
 #include "notifyenums.h"
 
+// QTimer::singleShot(5000,[](){});
+
 class ErrorSingleton : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool notifyBellState READ getNotifyBellState WRITE setNotifyBellState NOTIFY notifyBellStateChanged)
+    // notifyBellState < - set according to notify bell reaction (QML)
 public:
-    Q_ENUM(WindowType)
-    Q_ENUM(MessageType)
-
     ErrorSingleton(const ErrorSingleton& errSing) = delete;
     ErrorSingleton& operator=(const ErrorSingleton& errSing) = delete;
+
     static ErrorSingleton* getInstance();
-    static ErrorSingleton& AppWariningRegister(const WindowType& wType, const MessageType& mType);
-    static void showErrorsQueue();
+    static void            showErrorsQueue();
+    static ErrorSingleton& AppWariningRegister(const WindowType& wType,
+                                               const MessageType& mType);
 
     void setNotifyBellState(bool bellState);
     bool getNotifyBellState() const;
 
-    friend void operator<<(ErrorSingleton& debug, const QByteArray& reply);
+    friend void operator<<(ErrorSingleton& debug,
+                           const QByteArray& reply);
 signals:
     void notifyBellStateChanged();
-    void sendMessageToMainNotification(const QString& message, MessageType type);
-    void sendMessageToDialogWindow(const QString& message);
+    void sendMessageToDialogWindow(const QString& message,
+                                   MessageType type);
+
+    void sendMessageToMainNotification(const QString& message,
+                                       MessageType type);
 private:
     explicit ErrorSingleton(QObject *parent = nullptr): QObject(parent) {}
 
     bool                                   notifyBellState = true;
     static QMutex                          handlerLocker;
     static std::shared_ptr<ErrorSingleton> error_Handler;
-    QQueue<QByteArray>                     errorQueue;
+    QQueue<QByteArray>                     errorQueue; // TODO: QPair: message and message type!
     QPair<WindowType, MessageType>         enumTypes;
 };
 

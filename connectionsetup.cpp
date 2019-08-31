@@ -1,13 +1,13 @@
 #include "connectionsetup.h"
 
-ConnectionSetup::ConnectionSetup(): buttonStatus(ConnectButton::STOP) {}
+ConnectionSetup::ConnectionSetup() {}
 
 void ConnectionSetup::setConnectionStatus(bool status)
-{
-    if(status)
-        buttonStatus = ConnectButton::START;
-    else
-        buttonStatus = ConnectButton::STOP;
+{   
+    if(_dataFlowButtonState == status)
+        return;
+
+    _dataFlowButtonState = status;
 }
 
 QUrl ConnectionSetup::getURLAddress() const
@@ -33,12 +33,9 @@ QPair<bool, QByteArray> ConnectionSetup::connectionAvailable(const QUrl &qurl) /
         return qMakePair<bool, QByteArray>(true, rawFrame);
 }
 
-bool ConnectionSetup::isRunningConnection()
+bool ConnectionSetup::isRunningConnection() const
 {
-    if(ConnectButton::START != buttonStatus)
-        return false;
-
-    return true;
+    return _dataFlowButtonState;    // < true - is running
 }
 
 

@@ -4,6 +4,9 @@
 std::shared_ptr<ErrorSingleton> ErrorSingleton::error_Handler = nullptr;
 QMutex ErrorSingleton::handlerLocker;
 
+// 1. TODO: Priority Queue collection
+// 2. TODO: Enum register
+
 void operator<<(ErrorSingleton& debug, const QByteArray& reply){
     #if DEF_DEBUG == 1
         qDebug() << reply;
@@ -12,23 +15,18 @@ void operator<<(ErrorSingleton& debug, const QByteArray& reply){
     if(debug.enumTypes.first == WindowType::NoType || debug.enumTypes.second == MessageType::NoType)
         return;
 
-    if(!debug.getNotifyBellState())
-        debug.errorQueue.enqueue(reply);
-
-        // error validator
-    switch(debug.enumTypes.first){
-        case WindowType::MainAppWindow:
-            emit debug.sendMessageToMainNotification(reply, debug.enumTypes.second);
-            break;
-        case WindowType::URLDialogWindow:
-            emit debug.sendMessageToDialogWindow(reply);
-            break;
-        case WindowType::NoType:
-            qDebug() << "Window type doesn't occured!";
-            break;
-        default:
-            qDebug() << "Undefined window type!";
-            break;
+    if(WindowType::MainAppWindow == debug.enumTypes.first){
+        if(debug.notifyBellState){
+            debug.sendMessageToMainNotification(reply, debug.enumTypes.second);
+        }else{
+            // add to own container
+        }
+        
+    }else if(WindowType::URLDialogWindow == debug.enumTypes.first){
+        // it doesn't depend for notify bell
+        debug.sendMessageToDialogWindow(reply, debug.enumTypes.second);
+    }else{
+        
     }
 }
 

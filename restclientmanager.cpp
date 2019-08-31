@@ -80,7 +80,7 @@ QByteArray RESTClientManager::getRESTServerRequest(const QUrl &endpoint)  // sta
     networkRequest.setUrl(endpoint);
     
     connect(&tempManager, &QNetworkAccessManager::finished, [&tempArray](QNetworkReply* reply) -> void { 
-        if(QNetworkReply::NoError == reply->error())
+        if(QNetworkReply::NoError == reply->error()) //throw error
             return;
         tempArray = reply->readAll();
         
@@ -94,7 +94,7 @@ QByteArray RESTClientManager::getRESTServerRequest(const QUrl &endpoint)  // sta
 
 void RESTClientManager::_requestFinished(QNetworkReply *reply)
 {
-    if(reply->error() != QNetworkReply::NoError) {
+    if(reply->error() != QNetworkReply::NoError) { // check kind of errors, and stop connection
          // AppMessage(MESSAGE::INFORMATION) << "" reply->errorString();
         return;
     }

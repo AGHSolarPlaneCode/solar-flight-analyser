@@ -3,7 +3,6 @@
 #include <QtQuick>
 #include "weatherapi.h"
 #include "datamanager.h"
-
 #include "errorsingleton.h"
 
 int main(int argc, char *argv[])
@@ -32,5 +31,4 @@ int main(int argc, char *argv[])
 
 
     return app.exec();
-
 }
