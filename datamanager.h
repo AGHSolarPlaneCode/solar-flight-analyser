@@ -6,6 +6,7 @@
 #include "connectionsetup.h"
 #include "connectionauthorization.h"
 #include "telemetrysetup.h"
+#include "errorsingleton.h"
 
 class DataManager : public QObject
 {

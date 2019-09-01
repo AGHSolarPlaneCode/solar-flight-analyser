@@ -33,10 +33,10 @@ public:
 signals:
     void notifyBellStateChanged();
     void sendMessageToDialogWindow(const QString& message,
-                                   MessageType type);
+                                   int type);
 
     void sendMessageToMainNotification(const QString& message,
-                                       MessageType type);
+                                       int type);
 private:
     explicit ErrorSingleton(QObject *parent = nullptr): QObject(parent) {}
 

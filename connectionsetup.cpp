@@ -25,8 +25,9 @@ void ConnectionSetup::setURLAddress(const QUrl &newUrl)
 
 QPair<bool, QByteArray> ConnectionSetup::connectionAvailable(const QUrl &qurl) // return pair (bool <- connection available, QString <- received data)
 {
-    QByteArray rawFrame = RESTClientManager::getRESTServerRequest(qurl);    // single request to check connection
-        
+    using namespace REST::ClientAuthorization;
+    QByteArray rawFrame = RESTAuthorizator::getRESTServerRequest(qurl);   // single request to check connection
+
     if(rawFrame.isEmpty())
         return qMakePair<bool, QByteArray>(false, rawFrame);
     else

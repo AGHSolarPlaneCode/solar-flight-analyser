@@ -6,6 +6,8 @@
 #include "restclientmanager.h"
 #include "telemetryjsonmanager.h"
 
+using namespace REST::Client;
+
 class TelemetrySetup: public TelemetrySetupInterface
 {
     Q_OBJECT

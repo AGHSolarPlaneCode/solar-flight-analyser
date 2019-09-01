@@ -17,14 +17,15 @@ void operator<<(ErrorSingleton& debug, const QByteArray& reply){
 
     if(WindowType::MainAppWindow == debug.enumTypes.first){
         if(debug.notifyBellState){
-            debug.sendMessageToMainNotification(reply, debug.enumTypes.second);
+            debug.sendMessageToMainNotification(reply, static_cast<int>(debug.enumTypes.second));
         }else{
             // add to own container
         }
         
     }else if(WindowType::URLDialogWindow == debug.enumTypes.first){
         // it doesn't depend for notify bell
-        debug.sendMessageToDialogWindow(reply, debug.enumTypes.second);
+        //qDebug()<<"Sending error!";
+        debug.sendMessageToDialogWindow(reply, static_cast<int>(debug.enumTypes.second));
     }else{
         
     }

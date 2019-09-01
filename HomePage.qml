@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import QtLocation 5.9
 import QtPositioning 5.8
-import QtQuick.Controls 2.5
+import QtQuick.Controls 2.4
 import "MarkerGenerator.js" as MarkerGenerator
 import "distanceCalculator.js" as DistanceCalculator
 import "ShowErrors.js" as ShowErrors
@@ -1374,7 +1374,7 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
-                        value: "***"                                                            //add your own acces token
+                        value: "****"                                                            //add your own acces token
                     }
                     PluginParameter{
                         name: "mapbox.mapping.map_id"

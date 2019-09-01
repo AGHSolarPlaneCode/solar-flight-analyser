@@ -19,7 +19,8 @@ import "interfaceFunction.js" as Interface
         }
         Connections{
             target: errorManager
-            onSendMessageToDialogWindow:{
+            onSendMessageToDialogWindow:{  // receiving messages - checked
+                console.log(message, type);
                 errorMessage = message
                 switch(type){
                 case 1:
@@ -230,27 +231,30 @@ import "interfaceFunction.js" as Interface
                 id: textInputTXT
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
+                selectByMouse: true
                 height: parent.height*0.36
                 width: parent.width*0.8
-                font.pointSize: parent.height*0.33
+                font.pointSize: parent.height*0.26
                 font.family: standardFont.name
                 color: "#3C4151"
-                validator: RegExpValidator {regExp: /((((localhost)|(([2]([0-4][0-9]|[5][0-5])|[0-1]?[0-9]?[0-9])[.]){3}(([2]([0-4][0-9]|[5][0-5])|[0-1]?[0-9]?[0-9])))(:[0-9]{1,5})?[;]?)+)/ }
+                maximumLength: 32
+                //validator: RegExpValidator {regExp: /((((localhost)|(([2]([0-4][0-9]|[5][0-5])|[0-1]?[0-9]?[0-9])[.]){3}(([2]([0-4][0-9]|[5][0-5])|[0-1]?[0-9]?[0-9])))(:[0-9]{1,5})?[;]?)+)/ }
+                //validator: RegExpValidator {regExp: /^https?:\/\/(localhost:([0-9]+\.)+[a-zA-Z0-9]{1,6})?$/}
                 property string placeholderText: "Enter address:port ..."
 
                   Text {
                       text: (textInputTXT.placeholderText).toUpperCase()
                       color: "#3C4151"
                       font.family: standardFont.name
-                      font.pixelSize: parent.font.pixelSize
+                      font.pixelSize: parent.font.pixelSize* 0.7
                       anchors.verticalCenter: parent.verticalCenter
                       anchors.verticalCenterOffset: -parent.height*0.2
                       anchors.horizontalCenterOffset: -parent.width*0.5
                       visible: !textInputTXT.text && !textInputTXT.activeFocus // <----------- ;-)
                   }
               }
-
             }
+
         Rectangle{
             id: messageBackground
             visible: false

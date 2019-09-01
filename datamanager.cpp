@@ -51,32 +51,44 @@ bool DataManager::getCurrentAuthorizationStatus() const{
 void DataManager::setCurrentEndpoint(const QUrl &address)
 {
     if(connectionStatus->isRunningConnection()){  // check actual position of start button
-       // AppMessage(MESSAGE::INFORMATION) << "You cannot change URL address during the START button is launched";
+       RegisterError(WindowType::URLDialogWindow, MessageType::Information) << "You cannot change URL address during the START button is launched";
        return;
      }
 
     if(!address.isValid()){
-        // AppMessage(MESSAGE::INFORMATION) << "" invalid address
+        qDebug()<<"Address received: " << address.toString();
+        RegisterError(WindowType::URLDialogWindow, MessageType::Warning) <<"Invalid address";
         return;
     }
 
     // authorization
-    bool authState = (twoWaysAuthorize.address == address &&
-                      twoWaysAuthorize.connectionState &&
-                      twoWaysAuthorize.dataValidation);
-    // check
-    if(authState){ // the same address (we don't need double authorization)
-        // AppMessage(MESSAGE::INFORMATION) << "" Address authorization has already done
-        return;
+//    bool authState = (twoWaysAuthorize.address == address &&
+//                      twoWaysAuthorize.connectionState &&
+//                      twoWaysAuthorize.dataValidation);
+
+    if(twoWaysAuthorize.address == address){
+        if(twoWaysAuthorize.connectionState && twoWaysAuthorize.dataValidation){
+            RegisterError(WindowType::URLDialogWindow, MessageType::Information) << "Address authorization has already done.";
+            return;
+        }
+        else{
+            RegisterError(WindowType::URLDialogWindow, MessageType::Information) << "Address authorization has already denied.";
+            return;
+        }
     }
+
+//    if(authState){ // the same address (we don't need double authorization)
+//        RegisterError(WindowType::URLDialogWindow, MessageType::Information) << "Address authorization has already done";
+//        return;
+//    }
 
     const auto& validConnection = connectionStatus->connectionAvailable(address);    // first step
 
     if(!validConnection.first){
         twoWaysAuthorize.connectionState = false;
         twoWaysAuthorize.dataValidation = false;
-        twoWaysAuthorize.address = address;
-        // AppMessage(MESSAGE::INFORMATION) << ""
+        twoWaysAuthorize.address = address;;
+        RegisterError(WindowType::URLDialogWindow, MessageType::Warning) << "Connection authorization denied.";
         return;
     }
 
@@ -85,18 +97,16 @@ void DataManager::setCurrentEndpoint(const QUrl &address)
     if(!telemetryInterface->telemetryDataAuthorization(validConnection.second)){
         twoWaysAuthorize.dataValidation = false;
         twoWaysAuthorize.address = address;
-        // AppMessage(MESSAGE::INFORMATION) << ""
+        RegisterError(WindowType::URLDialogWindow, MessageType::Warning) << "Telemetry authorization denied.";
         return;
     }
-
-    //success
 
     twoWaysAuthorize.dataValidation = true;
     twoWaysAuthorize.address = address;
     connectionStatus->setURLAddress(address);
 
     emit connectionDataChanged();
-    // AppMessage(MESSAGE::INFORMATION) << ""
+    RegisterError(WindowType::URLDialogWindow, MessageType::Success) << "Authorization Success!";
 }
 
 void DataManager::telemetryDataState(bool state)

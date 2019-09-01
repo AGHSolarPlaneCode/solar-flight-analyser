@@ -1,5 +1,8 @@
 #include "restclientmanager.h"
 
+using namespace REST::Client;
+using namespace REST::ClientAuthorization;
+
 RESTClientManager::RESTClientManager(QObject* parent): RESTClientInterface(parent),
     _networkManager(new QNetworkAccessManager(this)),
     _requestTimer(new QTimer(this)),
@@ -69,28 +72,35 @@ void RESTClientManager::setRequestsInterval(unsigned int peroid)
     _requestInterval = peroid;
 }
 
+/*
 QByteArray RESTClientManager::getRESTServerRequest(const QUrl &endpoint)  // static
 {
-    QNetworkAccessManager tempManager;
+    static QNetworkAccessManager tempManager;
+    //QEventLoop loop;
+
     QNetworkRequest networkRequest;
     QByteArray tempArray;
 
-    // add errors handler
-
+    //loop.connect(&tempManager, &QNetworkAccessManager::finished,&loop, &QEventLoop::quit);
     networkRequest.setUrl(endpoint);
     
-    connect(&tempManager, &QNetworkAccessManager::finished, [&tempArray](QNetworkReply* reply) -> void { 
-        if(QNetworkReply::NoError == reply->error()) //throw error
+    connect(&tempManager, &QNetworkAccessManager::finished, [](QNetworkReply* reply) -> void { // http://localhost:8080/currTele
+        if(QNetworkReply::NoError != reply->error()){ //throw error
+            qDebug()<<reply->errorString();
             return;
-        tempArray = reply->readAll();
-        
+        }
+        //tempArray = reply->readAll();
+        qDebug() <<"JSON: "<< reply->readAll();
+
         reply->deleteLater();
     });
-    
+
     tempManager.get(networkRequest);
-    
+    //loop.exec();
+
     return tempArray;
 }
+*/
 
 void RESTClientManager::_requestFinished(QNetworkReply *reply)
 {
@@ -128,4 +138,43 @@ void RESTClientManager::_sslErrors(QNetworkReply *reply, const QList<QSslError> 
 
     reply->ignoreSslErrors(errors);
     //reply->deleteLater();  // ? < --
+}
+
+
+// AUTHORIZATION
+
+std::unique_ptr<QNetworkAccessManager> RESTAuthorizator::authManager = nullptr;
+QByteArray RESTAuthorizator::authArray;
+
+RESTAuthorizator::RESTAuthorizator(QObject* parent): QObject(parent) {}
+
+//TEST -> http://localhost:8080/currTele
+
+QByteArray RESTAuthorizator::getRESTServerRequest(const QUrl &endpoint)  // < single request with finished waiting
+{
+    if(!authManager.get()){
+        authManager = std::make_unique<QNetworkAccessManager>();
+        connect(authManager.get(), &QNetworkAccessManager::finished, [](QNetworkReply* reply) -> void {
+            if(QNetworkReply::NoError != reply->error()){
+                qDebug()<<reply->errorString();
+                return;
+            }
+            authArray = reply->readAll();
+            reply->deleteLater();
+        });
+    }
+
+    QEventLoop loop;                                                     // < waiting for lambda finished
+    QNetworkRequest networkRequest;
+    QByteArray tempArray;
+    loop.connect(authManager.get(), &QNetworkAccessManager::finished, &loop, &QEventLoop::quit);
+
+    networkRequest.setUrl(endpoint);
+    authArray.clear();
+
+    if(authManager)
+        authManager->get(networkRequest);
+    loop.exec();
+
+    return authArray;
 }
