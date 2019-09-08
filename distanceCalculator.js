@@ -30,6 +30,9 @@ function  distanceCalculate(){
 }
 function checkDistance (value){
     return (planePosition.distanceTo(value.coordinate))
-
-
 }
+
+function sqrt(value){
+    return Math.sqrt(value);
+}
+

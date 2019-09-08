@@ -1,4 +1,5 @@
 #include "telemetryjsonmanager.h"
+#include <QDebug>
 
 namespace Validator{
     QByteArray getRandomTelemetryField(){
@@ -48,6 +49,9 @@ bool TelemetryJSONManager::isTelemetryJSONFrame(const QByteArray& frame){
 
 QVariantMap TelemetryJSONManager::parseTelemetryJSONFrame(const QByteArray& package){
     QJsonParseError jerror;
+
+    qDebug() << package;
+
     QJsonDocument responseJson = QJsonDocument::fromJson(package, &jerror);
 
     if(QJsonParseError::NoError != jerror.errorString()){

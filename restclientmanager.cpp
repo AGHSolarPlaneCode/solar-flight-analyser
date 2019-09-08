@@ -1,9 +1,9 @@
 #include "restclientmanager.h"
 
-using namespace REST::Client;
-using namespace REST::ClientAuthorization;
+//using namespace REST::Client;
+//using namespace REST::ClientAuthorization;
 
-RESTClientManager::RESTClientManager(QObject* parent): RESTClientInterface(parent),
+REST::Client::RESTClientManager::RESTClientManager(QObject* parent): RESTClientInterface(parent),
     _networkManager(new QNetworkAccessManager(this)),
     _requestTimer(new QTimer(this)),
     _requestInterval(10),
@@ -11,12 +11,13 @@ RESTClientManager::RESTClientManager(QObject* parent): RESTClientInterface(paren
     { setConnections(); }
 
 
-bool RESTClientManager::establishConnection(const QUrl &endAddress)
+bool REST::Client::RESTClientManager::establishConnection(const QUrl &endAddress)
 {
     _connectionEstablished = false;
 
     if(_requestTimer->isActive()){
         // AppMessage(MESSAGE::INFORMATION) << ""
+        _connectionEstablished = true;
         return false;
     }
 
@@ -37,7 +38,7 @@ bool RESTClientManager::establishConnection(const QUrl &endAddress)
     return true;
 }
 
-void RESTClientManager::runGETRequests()
+void REST::Client::RESTClientManager::runGETRequests()
 {
     if(!_connectionEstablished){
         // AppMessage(MESSAGE::INFORMATION) << ""
@@ -51,7 +52,7 @@ void RESTClientManager::runGETRequests()
     }
 }
 
-void RESTClientManager::stopGETRequests()
+void REST::Client::RESTClientManager::stopGETRequests()
 {
     if(_requestTimer->isActive()){
         _requestTimer->stop();
@@ -60,7 +61,7 @@ void RESTClientManager::stopGETRequests()
     }
 }
 
-void RESTClientManager::setRequestsInterval(unsigned int peroid)
+void REST::Client::RESTClientManager::setRequestsInterval(unsigned int peroid)
 {
     if(_requestTimer->isActive()){
         // AppMessage(MESSAGE::INFORMATION) << "" // can't change during timer started
@@ -73,7 +74,7 @@ void RESTClientManager::setRequestsInterval(unsigned int peroid)
 }
 
 /*
-QByteArray RESTClientManager::getRESTServerRequest(const QUrl &endpoint)  // static
+QByteArray REST::Client::RESTClientManager::getRESTServerRequest(const QUrl &endpoint)  // static
 {
     static QNetworkAccessManager tempManager;
     //QEventLoop loop;
@@ -102,13 +103,15 @@ QByteArray RESTClientManager::getRESTServerRequest(const QUrl &endpoint)  // sta
 }
 */
 
-void RESTClientManager::_requestFinished(QNetworkReply *reply)
+void REST::Client::RESTClientManager::_requestFinished(QNetworkReply *reply)
 {
     if(reply->error() != QNetworkReply::NoError) { // check kind of errors, and stop connection
          // AppMessage(MESSAGE::INFORMATION) << "" reply->errorString();
         return;
     }
+
     const auto& telemetryMap = TelemetryJSONManager::parseTelemetryJSONFrame(reply->readAll());
+
     if(!telemetryMap.isEmpty())
         emit receivedDataTransmitter(telemetryMap);
     else{}
@@ -117,7 +120,7 @@ void RESTClientManager::_requestFinished(QNetworkReply *reply)
     reply->deleteLater();
 }
 
-void RESTClientManager::setConnections()
+void REST::Client::RESTClientManager::setConnections()
 {
     connect(_networkManager, &QNetworkAccessManager::finished, this, &RESTClientManager::_requestFinished);
 
@@ -126,7 +129,7 @@ void RESTClientManager::setConnections()
     connect(_networkManager, &QNetworkAccessManager::sslErrors, this, &RESTClientManager::_sslErrors);
 }
 
-void RESTClientManager::_sslErrors(QNetworkReply *reply, const QList<QSslError> &errors) // FUTURE: user decides about error rejecting
+void REST::Client::RESTClientManager::_sslErrors(QNetworkReply *reply, const QList<QSslError> &errors) // FUTURE: user decides about error rejecting
 {
     for(const auto& error: errors){
         // AppMessage(MESSAGE::INFORMATION) << "" error.errorString();
@@ -143,14 +146,14 @@ void RESTClientManager::_sslErrors(QNetworkReply *reply, const QList<QSslError> 
 
 // AUTHORIZATION
 
-std::unique_ptr<QNetworkAccessManager> RESTAuthorizator::authManager = nullptr;
-QByteArray RESTAuthorizator::authArray;
+std::unique_ptr<QNetworkAccessManager> REST::ClientAuthorization::RESTAuthorizator::authManager = nullptr;
+QByteArray REST::ClientAuthorization::RESTAuthorizator::authArray;
 
-RESTAuthorizator::RESTAuthorizator(QObject* parent): QObject(parent) {}
+REST::ClientAuthorization::RESTAuthorizator::RESTAuthorizator(QObject* parent): QObject(parent) {}
 
 //TEST -> http://localhost:8080/currTele
 
-QByteArray RESTAuthorizator::getRESTServerRequest(const QUrl &endpoint)  // < single request with finished waiting
+QByteArray REST::ClientAuthorization::RESTAuthorizator::getRESTServerRequest(const QUrl &endpoint)  // < single request with finished waiting
 {
     if(!authManager.get()){
         authManager = std::make_unique<QNetworkAccessManager>();

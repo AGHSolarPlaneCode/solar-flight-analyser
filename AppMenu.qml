@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import "NotifyMenu.js" as NotifyMenu
-
+import "interfaceFunction.js" as Interface
+import QtQuick.Controls 2.2
 Item {
     id: root
     property string standardcolor
@@ -26,6 +27,28 @@ Item {
         }
     }
 
+    Connections{
+        target: adapter
+        onActiveDataFlowButton:{
+
+            if(state){
+                console.log("STATE TRUE");
+                connectionSlider.source = "qrc:/assetsMenu/STOP BUTTON.png"
+                startButtonState = true;
+                connectionChanged(true);
+            }else{
+                console.log("STATE FALSE");
+                connectionSlider.source = "qrc:/assetsMenu/START BUTTON.png";
+                startButtonState = false;
+                connectionChanged(false);
+            }
+
+            // Signal end
+        }
+
+        // Connections end
+    }
+
     Rectangle {
         id: topBar
         width: parent.width*0.92
@@ -35,6 +58,7 @@ Item {
         top: parent.top
         right:parent.right
         }
+
         Text{
             id: timeObj
             font.family: fontFamily
@@ -87,16 +111,17 @@ Item {
                  cursorShape: Qt.PointingHandCursor
                  onClicked: {
                      adapter.getDataAction()
-                    if(parent.source=="qrc:/assetsMenu/START BUTTON.png"){
-                        connectionChanged(true);
-                        startButtonState = true;
-                        parent.source="qrc:/assetsMenu/STOP BUTTON.png"
-                    }
-                    else {
-                       parent.source="qrc:/assetsMenu/START BUTTON.png";
-                        startButtonState = false;
-                      connectionChanged(false);
-                    }
+
+//                    if(parent.source=="qrc:/assetsMenu/START BUTTON.png"){
+//                        connectionChanged(true);
+//                        startButtonState = true;
+//                        parent.source="qrc:/assetsMenu/STOP BUTTON.png"
+//                    }
+//                    else {
+//                       parent.source="qrc:/assetsMenu/START BUTTON.png";
+//                        startButtonState = false;
+//                      connectionChanged(false);
+//                    }
                  }
              }
 
@@ -149,6 +174,7 @@ Item {
         }
 
     }
+
     Rectangle {
         id: sideBar
         width: parent.width*0.08

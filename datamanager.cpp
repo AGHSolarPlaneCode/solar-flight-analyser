@@ -31,10 +31,10 @@ void DataManager::getDataAction()                       // START/STOP Button ser
         connectionStatus->setConnectionStatus(stableRun);
 
     }else{
-        telemetryInterface->stopDownloadTelemetry();    // stop data flow, based on current URL address
+         telemetryInterface->stopDownloadTelemetry();    // stop data flow, based on current URL address
 
-        emit activeDataFlowButton(false);               // notify frontend
-        connectionStatus->setConnectionStatus(false);   // set backend option
+         emit activeDataFlowButton(false);               // notify frontend
+         connectionStatus->setConnectionStatus(false);   // set backend option
     }
 }
 
@@ -87,7 +87,7 @@ void DataManager::setCurrentEndpoint(const QUrl &address)
     if(!validConnection.first){
         twoWaysAuthorize.connectionState = false;
         twoWaysAuthorize.dataValidation = false;
-        twoWaysAuthorize.address = address;;
+        twoWaysAuthorize.address = address;
         RegisterError(WindowType::URLDialogWindow, MessageType::Warning) << "Connection authorization denied.";
         return;
     }
@@ -105,8 +105,9 @@ void DataManager::setCurrentEndpoint(const QUrl &address)
     twoWaysAuthorize.address = address;
     connectionStatus->setURLAddress(address);
 
-    emit connectionDataChanged();
     RegisterError(WindowType::URLDialogWindow, MessageType::Success) << "Authorization Success!";
+
+    emit connectionDataChanged();
 }
 
 void DataManager::telemetryDataState(bool state)

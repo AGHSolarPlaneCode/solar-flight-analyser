@@ -46,57 +46,66 @@ Item {
     Connections{
         target: adapter
         onTelemetryDataChanged:{
-          hdg = adapter.Hdg
+          hdg = adapter.hdg
           longitude = (adapter.lon).toFixed(8).toString()
           latitude = (adapter.lat).toFixed(8).toString()
           altitude = (adapter.alt).toFixed(1).toString()
-          groundSpeed = (sqrt((((adapter.vx))^2)+((adapter.vy)^2))).toFixed(1).toString()
+          groundSpeed = (DistanceCalculator.sqrt((((adapter.vx))^2)+((adapter.vy)^2))).toFixed(1).toString()
           xVelocity = adapter.vx
           yVelocity = adapter.vy
           planePosition = QtPositioning.coordinate(latitude, longitude)
-          transmitterTXT.color = "#38865B" //green
-          portTXT.color = "#38865B"
-          portTXT.text = "Correctly Connected"
-          port.color = "#38865B"
-          realPort.color = "#38865B"
-          realPort.text = "Port: " + realPortS
-          port.text = serverAdress.toUpperCase()
-          transmitterTXT.text = (batteryPercentage.toFixed(1)).toString() + "%"
-            distanceToNextPoint = DistanceCalculator.distanceCalculate()
+//          transmitterTXT.color = "#38865B" //green
+//          portTXT.color = "#38865B"
+//          portTXT.text = "Correctly Connected"
+//          port.color = "#38865B"
+//          realPort.color = "#38865B"
+//          realPort.text = "Port: " + realPortS
+//          port.text = serverAdress.toUpperCase()
+//          transmitterTXT.text = (batteryPercentage.toFixed(1)).toString() + "%"
+//            distanceToNextPoint = DistanceCalculator.distanceCalculate()
 
-          if(mapFollow==true){
+          if(mapFollow == true){
               map.center = planePosition
           }
         }
-    }
-    onConnectedChanged: {
 
-        if(connected == true )
-        {
-                adapter.getDataAction()
-
+        onShowDialogAddressWindow:{
+            Interface.showDialog();
         }
-            else
-            {
-                 controller.doUpdates(false)
-                 transmitterTXT.color = "#DB3D40"
-                 portTXT.color = "#DB3D40"//red
-                 portTXT.text = "Not Connected"
-                 port.color = "#DB3D40"
-                 port.text =  "---"
-                 realPort.text = "---"
-                 realPort.color = "#DB3D40"
-                 transmitterTXT.text = "---"
-                 latitude = NaN;
-                 longitude = NaN;
-                 groundSpeed = NaN;
-                 planePosition = QtPositioning.coordinate(latitude, longitude)
-                 hdg = NaN
-                 altitude = NaN
-
-            }
-
     }
+
+
+
+    onConnectedChanged: {
+        if(connected === true )
+        {
+            transmitterTXT.color = "#38865B" //green
+            portTXT.color = "#38865B"
+            portTXT.text = "Correctly Connected"
+            port.color = "#38865B"
+            realPort.color = "#38865B"
+            realPort.text = "Port: " + realPortS
+            port.text = serverAdress.toUpperCase()
+            transmitterTXT.text = (batteryPercentage.toFixed(1)).toString() + "%"
+              distanceToNextPoint = DistanceCalculator.distanceCalculate()
+        }else{
+            transmitterTXT.color = "#DB3D40"
+            portTXT.color = "#DB3D40"//red
+            portTXT.text = "Not Connected"
+            port.color = "#DB3D40"
+            port.text =  "---"
+            realPort.text = "---"
+            realPort.color = "#DB3D40"
+            transmitterTXT.text = "---"
+            latitude = NaN;
+            longitude = NaN;
+            groundSpeed = NaN;
+            planePosition = QtPositioning.coordinate(NaN, NaN)
+            hdg = NaN;
+            altitude = NaN;
+        }
+    }
+
 //    Connections{
 //        target: error
 //        onSendJSONErrors:{
@@ -1374,7 +1383,7 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
-                        value: "****"                                                            //add your own acces token
+                        value: "*****"                                                            //add your own acces token
                     }
                     PluginParameter{
                         name: "mapbox.mapping.map_id"

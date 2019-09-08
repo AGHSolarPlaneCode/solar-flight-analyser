@@ -322,6 +322,7 @@ import "interfaceFunction.js" as Interface
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
                 adapter.currentEndpoint = textInputTXT.text
+
                 //okIndicatorOnAnim.running = true
                 }
                 onEntered: {
