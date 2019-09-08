@@ -18,9 +18,9 @@ Item {
     property double longitude: NaN
     property double latitude: NaN
     property string serverAdress : NaN //get from settings (database) or RequestDialog
-    property double transmitterDistance : NaN //get from backend
-    property double groundSpeed : NaN //get from backend
-    property double altitude : NaN
+    property double transmitterDistance : 0 //get from backend
+    property double groundSpeed : 0 //get from backend
+    property double altitude : 0
     property var planePosition: QtPositioning.coordinate(NaN,NaN)
     property bool mapFollow: followSwitch.status
     property double xVelocity: NaN
@@ -28,6 +28,20 @@ Item {
     property string fontFamily: standardFont.name
     property bool notify: true
     property string realPortS: NaN
+    property double maxtransmitterDistance: 40
+    property double maxaltitude: 250
+    property double maxgroundSpeed: 60
+//    property int numberOfInformation: 0
+//    property int numberOfWarning: 0
+//    property int errorIterator: 0
+//    property var jsonError: 0
+//    property int numberOfError: 0
+//    property int informationIterator: 0
+//    property var requestError: 0
+//    property var informations: []
+//    property var sslerror: []
+
+
     property real timeElapsed:0
     property bool connected: startButtonState
     property double hdg: NaN
@@ -694,7 +708,6 @@ Item {
                     bottom: parent.bottom
                 }
                 height: parent.height * 0.8
-//                color: parent.color
                 color: "#25263B"
                 ChartView {
                     anchors.fill: parent
@@ -705,15 +718,6 @@ Item {
                     antialiasing: true
                     backgroundColor: "#25263B"
                     legend.visible: false
-                    // Define x-axis to be used with the series instead of default one
-//                    ValueAxis {
-//                        min: 20
-//                        max: 31
-//                        tickCount: 12
-//                        labelFormat: "%.0f"
-//                        gridVisible: false
-//                        color: "#2F3243"
-//                    }
                     DateTimeAxis {
                         id: xAxis
                         gridVisible: false
@@ -725,7 +729,7 @@ Item {
                     ValueAxis {
                         id: yAxis1
                         min: 0
-                        max: 50
+                        max: maxgroundSpeed
                         tickCount: 5
                         gridVisible: false
                         gridLineColor: "#2F3243"
@@ -735,7 +739,7 @@ Item {
                     ValueAxis {
                         id: yAxis2
                         min: 0
-                        max: 200
+                        max: maxaltitude
                         tickCount: 4
                         gridVisible: false
                         gridLineColor: "#2F3243"
@@ -753,18 +757,6 @@ Item {
                         borderWidth: 5.0
                         upperSeries: LineSeries {
                             id: y1
-//                            XYPoint { x: 20; y: 4 }
-//                            XYPoint { x: 21; y: 5 }
-//                            XYPoint { x: 22; y: 6 }
-//                            XYPoint { x: 23; y: 8 }
-//                            XYPoint { x: 24; y: 7 }
-//                            XYPoint { x: 25; y: 6 }
-//                            XYPoint { x: 26; y: 4 }
-//                            XYPoint { x: 27; y: 6 }
-//                            XYPoint { x: 28; y: 4 }
-//                            XYPoint { x: 29; y: 5 }
-//                            XYPoint { x: 30; y: 6 }
-//                            XYPoint { x: 31; y: 7 }
                         }
                     }
                     AreaSeries {
@@ -777,18 +769,6 @@ Item {
                         borderWidth: 5.0
                         upperSeries: LineSeries {
                             id: y2
-//                            XYPoint { x: 20; y: 2 }
-//                            XYPoint { x: 21; y: 3 }
-//                            XYPoint { x: 22; y: 2 }
-//                            XYPoint { x: 23; y: 2 }
-//                            XYPoint { x: 24; y: 3 }
-//                            XYPoint { x: 25; y: 3 }
-//                            XYPoint { x: 26; y: 2 }
-//                            XYPoint { x: 27; y: 3 }
-//                            XYPoint { x: 28; y: 2 }
-//                            XYPoint { x: 29; y: 2 }
-//                            XYPoint { x: 30; y: 3 }
-//                            XYPoint { x: 31; y: 1 }
                         }
                     }
                     Timer {
@@ -807,8 +787,8 @@ Item {
                         triggeredOnStart: true
                         repeat: true
                         onTriggered: {
-                            y1.append(new Date(Date.now()), 25 - 25 * Math.exp(-timeElapsed/10000));
-                            y2.append(new Date(Date.now()), 160 -  160 * Math.exp(-timeElapsed/10000));
+                            y1.append(new Date(Date.now()), groundSpeed);
+                            y2.append(new Date(Date.now()), altitude);
 
                         }
                     }                    
@@ -977,40 +957,20 @@ Item {
                           id: speedSeries
                           PieSlice{
                               id: speedSlice
-                              value: 70
+                              value: groundSpeed
                               color: "#292BFF"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
                           PieSlice{
-                              value: 100-speedSlice.value
+                              value: maxgroundSpeed-speedSlice.value
                               color: "#292BAA"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
                           holeSize: 0.5
                       }
-                      Timer{
-                          id: pieTimer
-                          interval: 500
-                          running: true
-                          repeat: true
-                          triggeredOnStart: true
-                          onTriggered: {
-                              speedSlice.value= 70 + Math.random()*(5-2)+2
-                              heightSlice.value= 60 + Math.random()*(5-2)+2
-                              connectionSlice.value= 30 + Math.random()*(5-2)+2
-                              distanceSlice.value= 50 + Math.random()*(5-2)+2
-                          }
-                      }
                   }
-//                  Image {
-//                      width: parent.width*0.98
-//                      height: parent.height*0.98
-//                      anchors.centerIn: parent
-//                      source: "qrc:/assetsMenu/SpeedParametr.png"
-
-//                  }
                   Text {
                       id:groundSpeedParamTXT
                       color: "#F5F0F0"
@@ -1035,13 +995,6 @@ Item {
 //                  anchors.topMargin: -0.18*height
                   anchors.bottom: groundSpeedRect.bottom
                   color: "transparent"
-//                  Image {
-//                      width: parent.width
-//                      height: parent.height
-//                      anchors.centerIn: parent
-//                      source: "qrc:/assetsMenu/Height.png"
-
-//                  }
                   ChartView{
                       anchors.centerIn: parent
                       anchors.fill: parent
@@ -1059,13 +1012,13 @@ Item {
                           id: heightSeries
                           PieSlice{
                               id: heightSlice
-                              value: 60
+                              value: altitude
 //                              color: "#292BFF"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
                           PieSlice{
-                              value: 100-heightSlice.value
+                              value: maxaltitude-heightSlice.value
 //                              color: "#292BAA"
                               borderWidth: 0
                               borderColor: "transparent"
@@ -1084,12 +1037,12 @@ Item {
                        horizontalCenterOffset: parent.width*0.01
                       }
                       font.pointSize: (parent.height*0.12).toFixed(0)
-                      text: altitude.toFixed(0).toString() + "m"}
-
+                      text: heightSlice.value.toFixed(0).toString() + "m"
+                  }
 
               }
-              Rectangle { //connectionPower
-                  id: connectionPowerRect
+              Rectangle { //transmitterDistance
+                  id: transmitterDistanceRect
                   width: parent.width*0.75
                   height: parent.height*0.75
                   anchors.bottom: parent.bottom
@@ -1097,13 +1050,6 @@ Item {
 //                  anchors.leftMargin: -0.1*width
                   color: "transparent"
                   anchors.bottomMargin: -0.18*width
-//                  Image {
-//                      width: parent.width*0.98
-//                      height: parent.height*0.98
-//                      anchors.centerIn: parent
-//                      source: "qrc:/assetsMenu/connectionPower.png"
-
-//                  }
                   ChartView{
                       anchors.centerIn: parent
                       anchors.fill: parent
@@ -1118,16 +1064,16 @@ Item {
                       }
                       legend.visible: false
                       PieSeries {
-                          id: connectionSeries
+                          id: transmitterDistanceSeries
                           PieSlice{
-                              id: connectionSlice
-                              value: 30
+                              id: transmitterDistanceSlice
+                              value: transmitterDistance
 //                              color: "#292BFF"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
                           PieSlice{
-                              value: 100-connectionSlice.value
+                              value: maxtransmitterDistance-transmitterDistanceSlice.value
 //                              color: "#292BAA"
                               borderWidth: 0
                               borderColor: "transparent"
@@ -1136,7 +1082,7 @@ Item {
                       }
                   }
                   Text {
-                      id: connectionText
+                      id: transmitterDistanceText
                       color: "#F5F0F0"
                       font.family: fontFamily
                       anchors {
@@ -1146,24 +1092,15 @@ Item {
                        horizontalCenterOffset: -parent.width*0.02
                       }
                       font.pointSize: (parent.height*0.11).toFixed(0)
-                      text: batteryPercentage.toFixed(0).toString()+"%"
+                      text: transmitterDistance.toFixed(0).toString()+"m"
                   }
               }
-              Rectangle { //Distance
+              Rectangle { //DistanceToNextPoint
                   width: parent.width*0.75
                   height: parent.height*0.75
-                  anchors.bottom: connectionPowerRect.bottom
-//                  anchors.right: parent.right
-//                  anchors.rightMargin: -0.1*width
+                  anchors.bottom: transmitterDistanceRect.bottom
                   anchors.left: heightRect.left
                   color: "transparent"
-//                  Image {
-//                      width: parent.width
-//                      height: parent.height
-//                      anchors.centerIn: parent
-//                      source: "qrc:/assetsMenu/Distance.png"
-
-//                  }
                   ChartView{
                       anchors.centerIn: parent
                       anchors.fill: parent
@@ -1181,15 +1118,12 @@ Item {
                           id: distanceSeries
                           PieSlice{
                               id: distanceSlice
-//                              value: 50
-                              value: distanceToNextPoint.toFixed(1).toString() + "km"
-//                              color: "#292BFF"
+                              value: distanceToNextPoint.toFixed(1)
                               borderWidth: 0
                               borderColor: "transparent"
                           }
                           PieSlice{
                               value: 100-distanceSlice.value
-//                              color: "#292BAA"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
@@ -1211,16 +1145,20 @@ Item {
                   }
               }
               Timer{
-                  id: textTimer
+                  id: ringTimer
                   interval: 200
                   running: true
                   repeat: true
                   triggeredOnStart: true
                   onTriggered: {
-                      groundSpeedParamTXT.text= (70 + Math.random()*(5-2)+2).toFixed().toString() + "km/h"
-                      altitudeParamTXT.text= (60 + Math.random()*(5-2)+2).toFixed(1).toString() + "m"
-                      connectionText.text= (30 + Math.random()*(5-2)+2).toFixed(1).toString() + "%"
-                      distanceText.text= (50 + Math.random()*(5-2)+2).toFixed(1).toString() + "m"
+                      speedSlice.value = groundSpeed
+                      groundSpeedParamTXT.text= groundSpeed.toFixed(1).toString() + "km/h"
+                      heightSlice.value = altitude
+                      altitudeParamTXT.text= altitude.toFixed(1).toString() + "m"
+                      transmitterDistanceSlice.value = transmitterDistance.toFixed(0)
+                      transmitterDistanceText.text= transmitterDistance.toFixed(0).toString() + "m"
+                      distanceSlice.value = distanceToNextPoint.toFixed(1)
+                      distanceText.text= distanceToNextPoint.toFixed(1).toString() + "m"
                   }
               }
 
