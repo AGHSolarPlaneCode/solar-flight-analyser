@@ -1301,7 +1301,7 @@ Item {
                     name: "mapbox"
                     PluginParameter{
                         name: "mapbox.access_token"
-                        value: "*****"                                                            //add your own acces token
+                        value: "****"                                                            //add your own acces token
                     }
                     PluginParameter{
                         name: "mapbox.mapping.map_id"

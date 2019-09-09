@@ -2,6 +2,7 @@
 #define DATAMANAGER_H
 
 #include <QObject>
+#include <QTimer>
 #include <memory>
 #include "connectionsetup.h"
 #include "connectionauthorization.h"

@@ -3,7 +3,14 @@
 DataManager::DataManager(QObject *parent) : QObject(parent),
     connectionStatus(std::make_unique<ConnectionSetup>()),
     telemetryInterface(std::make_unique<TelemetrySetup>())
-{ connect(telemetryInterface.get(), &TelemetrySetup::telemetryDataReceivedState, this, &DataManager::telemetryDataState); }
+{ connect(telemetryInterface.get(), &TelemetrySetup::telemetryDataReceivedState, this, &DataManager::telemetryDataState);
+    QTimer::singleShot(3000, [](){
+
+        RegisterError(WindowType::MainAppWindow, MessageType::Information) << "Enter URL address";
+        RegisterError(WindowType::MainAppWindow, MessageType::Information) << "Enjoy this app!";
+
+    });
+}
 
 void DataManager::getDataAction()                       // START/STOP Button service
 {
@@ -18,8 +25,8 @@ void DataManager::getDataAction()                       // START/STOP Button ser
 
         bool authorizeState = (twoWaysAuthorize.connectionState && twoWaysAuthorize.dataValidation);
 
-        if(!authorizeState){  // error message | information
-            // AppMessage(MESSAGE::INFORMATION) << "" invalid address
+        if(!authorizeState){
+            RegisterError(WindowType::MainAppWindow, MessageType::Warning) << "Invalid authorization";
             return;
         }
 

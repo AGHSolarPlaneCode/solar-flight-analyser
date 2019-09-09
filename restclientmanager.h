@@ -3,6 +3,7 @@
 
 #include "restclientinterface.h"
 #include "telemetryjsonmanager.h"
+#include "errorsingleton.h"
 #include <QTimer>
 #include <memory>
 #include <QNetworkAccessManager>

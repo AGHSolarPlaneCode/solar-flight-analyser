@@ -16,7 +16,7 @@ bool REST::Client::RESTClientManager::establishConnection(const QUrl &endAddress
     _connectionEstablished = false;
 
     if(_requestTimer->isActive()){
-        // AppMessage(MESSAGE::INFORMATION) << ""
+        RegisterError(WindowType::MainAppWindow, MessageType::Information) << "Request timer is running";
         _connectionEstablished = true;
         return false;
     }
@@ -41,7 +41,7 @@ bool REST::Client::RESTClientManager::establishConnection(const QUrl &endAddress
 void REST::Client::RESTClientManager::runGETRequests()
 {
     if(!_connectionEstablished){
-        // AppMessage(MESSAGE::INFORMATION) << ""
+        RegisterError(WindowType::MainAppWindow, MessageType::Information) << "Connection has not established yet";
         return;
     }
 
@@ -57,14 +57,14 @@ void REST::Client::RESTClientManager::stopGETRequests()
     if(_requestTimer->isActive()){
         _requestTimer->stop();
     }else{
-        // AppMessage(MESSAGE::INFORMATION) << "" // info about hasn't started yet ...
+        RegisterError(WindowType::MainAppWindow, MessageType::Information) << "Request Timer has not started yet";
     }
 }
 
 void REST::Client::RESTClientManager::setRequestsInterval(unsigned int peroid)
 {
     if(_requestTimer->isActive()){
-        // AppMessage(MESSAGE::INFORMATION) << "" // can't change during timer started
+        RegisterError(WindowType::MainAppWindow, MessageType::Information) << "Request timer is running";
         return;
     }
     if(_requestInterval == peroid)
@@ -114,8 +114,10 @@ void REST::Client::RESTClientManager::_requestFinished(QNetworkReply *reply)
 
     if(!telemetryMap.isEmpty())
         emit receivedDataTransmitter(telemetryMap);
-    else{}
-        // AppMessage(MESSAGE::INFORMATION) << "" Empty frame received!
+    else{
+        RegisterError(WindowType::MainAppWindow, MessageType::Information) << "Empty frame received";
+    }
+
 
     reply->deleteLater();
 }
