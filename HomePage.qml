@@ -28,16 +28,6 @@ Item {
     property string fontFamily: standardFont.name
     property bool notify: true
     property string realPortS: NaN
-//    property int numberOfInformation: 0
-//    property int numberOfWarning: 0
-//    property int errorIterator: 0
-//    property var jsonError: 0
-//    property int numberOfError: 0
-//    property int informationIterator: 0
-//    property var requestError: 0
-//    property var informations: []
-//    property var sslerror: []
-
     property real timeElapsed:0
     property bool connected: startButtonState
     property double hdg: NaN
@@ -54,15 +44,6 @@ Item {
           xVelocity = adapter.vx
           yVelocity = adapter.vy
           planePosition = QtPositioning.coordinate(latitude, longitude)
-//          transmitterTXT.color = "#38865B" //green
-//          portTXT.color = "#38865B"
-//          portTXT.text = "Correctly Connected"
-//          port.color = "#38865B"
-//          realPort.color = "#38865B"
-//          realPort.text = "Port: " + realPortS
-//          port.text = serverAdress.toUpperCase()
-//          transmitterTXT.text = (batteryPercentage.toFixed(1)).toString() + "%"
-//            distanceToNextPoint = DistanceCalculator.distanceCalculate()
 
           if(mapFollow == true){
               map.center = planePosition
@@ -138,21 +119,6 @@ Item {
         }
 
     }
-
-
-//    Connections {
-//        //target: //get target from context
-//        onSendJSONErrors:{
-//            jsonError = err
-//        }
-//        onSendRequestError:{
-//            requestError = err
-//        }
-//        onSendSslVector:{
-//            sslerror = data
-//        }
-//    }
-
 
 
 
@@ -485,23 +451,6 @@ Item {
                         }
                     }
                 }
-//                Rectangle { //change to trashbin Icon
-//                    color: "red"
-//                    height: parent.height*0.5
-//                    width: height
-//                    anchors {
-//                        verticalCenter: parent.verticalCenter
-//                        right: clearListViewButton.left
-//                        rightMargin: width*0.5
-//                    }
-//                    MouseArea {
-//                        anchors.fill: parent
-//                        onClicked: {
-//                            errorModel.append({"msg": "Error occurred no. 404", "type" : 1})
-//                            errorModel.append({"msg": "Strong wind \'25 m/s \'", "type" : 2})
-//                        }
-//                    }
-//                }
 
                 Image { //properties squares
                     id: alertsPropertiesSquares
@@ -694,21 +643,7 @@ Item {
                     width: parent.width
                     height: parent.height
                 }
-//                Rectangle {
-//                    id: chartsIcon
-//                    anchors {
-//                        left: parent.left
-//                        top: parent.top
-//                        leftMargin: 10
-//                        topMargin: 5
-//                    }
-//                    Image {
-//                        id: chartsIconImage
-//                        source: "qrc:/assetsMenu/chartsIcon.png"
-////                        width: parent.width
-////                        height: parent.height
-//                    }
-//                }
+
                 Image {
                     id: chartsIcon
                     source: "qrc:/assetsMenu/chartsIcon.png"
@@ -720,24 +655,7 @@ Item {
                     width: parent.width * 0.04
                     height: parent.height * 0.45
                 }
-//                Rectangle {
-//                    id: chartsTextRect
-//                    anchors {
-//                        left: chartsIcon.right
-//                        top: parent.top
-//                        leftMargin: 40
-//                        bottom: chartsIcon.bottom
-//                    }
-//                    Text {
-//                        id: chartsText
-//                        text: qsTr("Speed/Height chart")
-//                        color: "#999AA3"
-//                        font {
-//                            pointSize: parent.height * 4.5
-//                            family: fontFamily
-//                        }
-//                    }
-//                }
+
                 Text {
                     id: chartText
                     text: ("Speed/Height chart").toUpperCase()
@@ -1496,14 +1414,6 @@ Item {
                 }
 
 
-//                SliderSwitch {
-//                    id: followSwitch
-//                    anchors.fill: parent
-//                    size: parent.width*0.8
-//                    onstatecolor: "#009688"
-//                    offstatecolor: "#424D5C"
-//                    state: "on"
-//                }
                 }
                 Rectangle {
                     id: followRectangle

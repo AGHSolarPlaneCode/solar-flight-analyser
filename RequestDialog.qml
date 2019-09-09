@@ -10,6 +10,7 @@ import "interfaceFunction.js" as Interface
         color: "transparent"
         property string textS: ""
         property var textToVar: []
+        property bool success: false
         property string errorMessage: "No error" //connect to errorManager
         x: (parent.width*0.5)-(root.width*0.35)
         y: (parent.height*0.5)-(root.height*0.15)
@@ -22,6 +23,7 @@ import "interfaceFunction.js" as Interface
             onSendMessageToDialogWindow:{  // receiving messages - checked
                 console.log(message, type);
                 errorMessage = message
+                messageBackground.visible = true
                 switch(type){
                 case 1:
                     errorMessageIcon.source = "qrc:/assetsMenu/xicon.svg"
@@ -34,6 +36,7 @@ import "interfaceFunction.js" as Interface
                     break
                 case 3:
                     errorMessageIcon.source = "qrc:/assetsMenu/vicon.svg"
+                    success = true
                     if(okIndicator.visible === false){
                     okIndicatorOnAnim.start()
                     break
@@ -264,14 +267,14 @@ import "interfaceFunction.js" as Interface
             anchors {
                 horizontalCenter: textInputRectangle.horizontalCenter
                 top: textInputRectangle.bottom
-                topMargin: -textInputRectangle.height*0.25
+                topMargin: -textInputRectangle.height*0.20
             }
             Text {
                 id: errorMessageTXT
                 text: errorMessage
                 color: "white"
                 anchors.left: errorMessageIcon.right
-                anchors.leftMargin: parent.height*0.5
+                anchors.leftMargin: parent.height*0.2
                 anchors.verticalCenter: parent.verticalCenter
                 font.family: standardFont.name
                 font.pixelSize: parent.height*0.8
@@ -280,8 +283,9 @@ import "interfaceFunction.js" as Interface
             Image {
                 id: errorMessageIcon
                 source: "qrc:/assetsMenu/iIcon.svg"
-                height: parent.height*0.7
+                height: parent.height*0.8
                 width: height
+                smooth: true
                 anchors{
                     verticalCenter: parent.verticalCenter
                     left: parent.left
@@ -322,7 +326,6 @@ import "interfaceFunction.js" as Interface
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
                 adapter.currentEndpoint = textInputTXT.text
-
                 //okIndicatorOnAnim.running = true
                 }
                 onEntered: {
@@ -362,7 +365,10 @@ import "interfaceFunction.js" as Interface
                 hoverEnabled: true
                 onClicked: {
                     Interface.closeDialog()
+                    if(!success){
                     textInputTXT.text = ""
+                    textInputRectangle.forceActiveFocus()
+                    }
 
                 }
                 onEntered: {
