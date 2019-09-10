@@ -27,16 +27,19 @@ import "interfaceFunction.js" as Interface
                 switch(type){
                 case 1:
                     errorMessageIcon.source = "qrc:/assetsMenu/xicon.svg"
+                    errorMessageTXT.color = "#FF5050"
                     if(okIndicator.visible === true){
                     okIndicatorOFFAnim.start()
                     }
                     break
                 case 2:
                     errorMessageIcon.source = "qrc:/assetsMenu/iIcon.svg"
+                    errorMessageTXT.color = "#3F75C8"
                     break
                 case 3:
                     errorMessageIcon.source = "qrc:/assetsMenu/vicon.svg"
                     success = true
+                    errorMessageTXT.color = "#24A635"
                     if(okIndicator.visible === false){
                     okIndicatorOnAnim.start()
                     break
