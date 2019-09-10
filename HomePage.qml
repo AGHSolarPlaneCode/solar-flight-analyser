@@ -274,6 +274,9 @@ Item {
                         onExited: {
                             parent.color = "#2F3243"
                         }
+                        onClicked: {
+                            WeatherPageGenerator.showPage(pageList, 2)
+                        }
                     }
                 }
                 Rectangle {
@@ -307,6 +310,9 @@ Item {
                         onExited: {
                             parent.color = "#2F3243"
                         }
+                        onClicked: {
+                            WeatherPageGenerator.showPage(pageList, 1)
+                        }
                     }
                 }
                 Rectangle {
@@ -339,6 +345,9 @@ Item {
                         }
                         onExited: {
                             parent.color = "#2F3243"
+                        }
+                        onClicked: {
+                            WeatherPageGenerator.showPage(pageList, 3)
                         }
                     }
                 }
@@ -438,6 +447,7 @@ Item {
                     id: clearListViewButton
                     source: "qrc:/assetsMenu/CLEARALLALERTS.svg"
                     height: parent.height*0.7
+                    smooth: true
                     width: height
                     anchors {
                         verticalCenter: parent.verticalCenter

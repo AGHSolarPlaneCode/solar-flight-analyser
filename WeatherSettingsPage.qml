@@ -57,6 +57,7 @@ Rectangle {
     height: parent.height*0.75
     anchors.top: parent.top
     anchors.horizontalCenter: parent.horizontalCenter
+    anchors.horizontalCenterOffset: -width*0.05
     color: "transparent"
     Loader {
         id: pageLoader
@@ -72,7 +73,8 @@ Rectangle {
     anchors {
         horizontalCenter: parent.horizontalCenter
         verticalCenter: parent.verticalCenter
-        verticalCenterOffset: parent.height*0.3
+        verticalCenterOffset: parent.height*0.32
+        horizontalCenterOffset: -parent.width*0.05
     }
 
     Rectangle {

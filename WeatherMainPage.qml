@@ -10,9 +10,9 @@ Item {
     property int windValue: weather.windSpeed  //weatherAPIAdapter.windSpeed
     property int rainValue: weather.hum //weatherAPIAdapter -- getter
     property int sunLevel: 50 //get from backend -- don't know which class field
-    property string icon: "01d"//weather.iconID
+    property string icon: "0"//weather.iconID
     property color windOff: "#5E5A5A"
-    property string sunrise: "-"
+    property string sunrise: ""
     property string sunset: "-"
     property color windOn: "#FFFFFF"
     property color rainOff: "#CDE7EF"
@@ -21,6 +21,7 @@ Item {
     property int minTemp: 0
     property int pressure: 1024
     antialiasing: true
+
     FontLoader{
         id: standardFont
         source: "qrc:/assetsMenu/agency_fb.ttf"
@@ -300,7 +301,16 @@ Item {
         width: parent.width*0.32
         smooth: true
         antialiasing: true
-        source: ("qrc:/assetsMenu/weatherIcons/" + icon + ".png")
+        source:{
+            if(icon !== "0"){
+
+                source = ("qrc:/assetsMenu/weatherIcons/" + icon + ".png")
+            }
+            else {
+               source = ("qrc:/assetsMenu/weatherIcons/" + icon + ".svg")
+            }
+
+        }
         anchors {
             top: parent.top
             topMargin: parent.height*0.05

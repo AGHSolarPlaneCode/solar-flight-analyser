@@ -1,7 +1,11 @@
 import QtQuick 2.0
 
 Item {
-anchors.fill: parent
+anchors.verticalCenter: parent.verticalCenter
+anchors.horizontalCenter: parent.horizontalCenter
+anchors.horizontalCenterOffset: -parent.width*0.04
+height: parent.height
+width: parent.width
 property bool planePosAsSource: true
 FontLoader{
     id: standardFont

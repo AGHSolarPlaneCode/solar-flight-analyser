@@ -104,5 +104,6 @@
         <file>assetsMenu/iIcon.svg</file>
         <file>assetsMenu/vicon.svg</file>
         <file>assetsMenu/xicon.svg</file>
+        <file>assetsMenu/weatherIcons/0.svg</file>
     </qresource>
 </RCC>
