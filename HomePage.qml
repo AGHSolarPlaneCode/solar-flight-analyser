@@ -1245,17 +1245,19 @@ Item {
                         center = planePosition
                     }
                 }
-                plugin: Plugin{
-                    name: "mapbox"
-                    PluginParameter{
-                        name: "mapbox.access_token"
-                        value: "****"                                                            //add your own acces token
-                    }
-                    PluginParameter{
-                        name: "mapbox.mapping.map_id"
-                        value: "mapbox.dark"
-                    }
-                }
+//                plugin: Plugin{
+//                    id: mapBoxPlugin
+//                    name: "mapbox"
+//                    PluginParameter{
+//                        id: mapBoxPlugintoken
+//                        name: "mapbox.access_token"
+//                        value: "****"                                                            //add your own acces token
+//                    }
+//                    PluginParameter{
+//                        name: "mapbox.mapping.map_id"
+//                        value: "mapbox.dark"
+//                    }
+//                }
                 DropArea {
                     anchors.fill: parent
                     onDropped: {
@@ -1606,6 +1608,13 @@ Item {
                         rightMargin: parent.height*0.1
                         verticalCenterOffset: 0
                     }
+                    MouseArea {
+                        anchors.fill: parent
+                        onDoubleClicked: {
+                            pluginDialog.visible = true
+                            requestBackground.visible = true
+                        }
+                    }
                 }
 
     }
@@ -1615,6 +1624,10 @@ Item {
     RequestDialog{
         id:request
 
+    }
+    PluginParameterDialog{
+        id: pluginDialog
+        visible: false
     }
 
 }
