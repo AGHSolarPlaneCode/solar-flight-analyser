@@ -10,11 +10,14 @@ Window {
     width: 1600
     height: 900
 
-    minimumWidth: 1600
-    minimumHeight: 900
+    visibility: "Maximized"
+
+    minimumWidth: Screen.width - 200
+    minimumHeight: Screen.height - 200
 
     title: qsTr("GPS Location Software")
-     property bool startButtonState: false
+    property bool startButtonState: false
+
     //
     //
 
