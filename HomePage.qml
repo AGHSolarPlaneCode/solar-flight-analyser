@@ -1231,6 +1231,29 @@ Item {
             anchors.fill: parent
             color : "#2F3243"
             //radius: parent.height*0.02
+            Rectangle{
+                anchors.fill: parent
+                color: "#B6B7BD"
+                Image {
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenterOffset: -parent.height*0.05
+                    height: parent.height*0.35
+                    width: height*1.1
+                    smooth: true
+                    source: "qrc:/assetsMenu/mapIcon.svg"
+                }
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    color: "#363E4E"
+                    anchors.verticalCenterOffset: parent.height*0.25
+                    font.pixelSize: parent.height*0.07
+                    font.family: standardFont.name
+                    font.bold: true
+                    text: "PLEASE ADD YOUR OWN MAPBOX ACCESS TOKEN"
+                }
+            }
 
             Map { //map
                id: map

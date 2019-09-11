@@ -109,5 +109,6 @@
         <file>assetsMenu/xiconP.svg</file>
         <file>assetsMenu/viconP.svg</file>
         <file>PluginParameterDialog.qml</file>
+        <file>assetsMenu/mapIcon.svg</file>
     </qresource>
 </RCC>

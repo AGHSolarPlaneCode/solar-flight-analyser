@@ -21,7 +21,7 @@ import "interfaceFunction.js" as Interface
         Timer {
             id: errorTimer
             repeat: false
-            interval: 5*1000
+            interval: 6*1000
             onTriggered: {
                 messageBackground.visible = false
             }
