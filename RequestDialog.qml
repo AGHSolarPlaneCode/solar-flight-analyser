@@ -177,28 +177,14 @@ import "interfaceFunction.js" as Interface
                 anchors.verticalCenterOffset: -parent.height*0.05
                 anchors.right: parent.right
                 anchors.rightMargin: parent.height*0.2
-                Rectangle{
-                    id: okFirstBar
-                    color: "#F2B81E"
-                    height: parent.height*0.8
-                    width: height*0.15
-                    radius: height*0.1
+                Image {
+                    height: parent.height*0.6
+                    width: height
+                    smooth: true
+                    antialiasing: true
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.horizontalCenterOffset: parent.width*0.1
-                    rotation: 50
-                }
-                Rectangle{
-                    id: okSecoundBar
-                    color: "#F2B81E"
-                    height: parent.height*0.5
-                    width: okFirstBar.height*0.15
-                    radius: height*0.1
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: parent.height*0.05
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.horizontalCenterOffset: -parent.width*0.25
-                    rotation: -35
+                    source: "qrc:/assetsMenu/viconP.svg"
                 }
             }
             Rectangle {
@@ -211,23 +197,14 @@ import "interfaceFunction.js" as Interface
                 anchors.verticalCenterOffset: -parent.height*0.05
                 anchors.right: parent.right
                 anchors.rightMargin: parent.height*0.15
-                Rectangle{
-                    color: "#F2B81E"
-                    height: parent.height*0.55
-                    width: height*0.15
-                    radius: height*0.1
+                Image {
+                    height: parent.height*0.6
+                    width: height
+                    smooth: true
+                    antialiasing: true
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
-                    rotation: 40
-                }
-                Rectangle{
-                    color: "#F2B81E"
-                    height: parent.height*0.55
-                    width: height*0.15
-                    radius: height*0.1
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    rotation: -40
+                    source: "qrc:/assetsMenu/xiconP.svg"
                 }
             }
 

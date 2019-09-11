@@ -19,7 +19,7 @@ Item {
     property color rainOn: "#8FD2E7"
     property int maxTemp: 0
     property int minTemp: 0
-    property int pressure: 1024
+    property int pressure: 0
     antialiasing: true
 
     FontLoader{
@@ -340,7 +340,15 @@ Item {
             bottom: moreBarBottom.top
             bottomMargin: moreBarBottom.height*0.05
         }
-        text: mainTemerature + "\u00B0" + "C"
+        text:
+    {
+            if(mainTemerature != ""){
+            text = mainTemerature + "\u00B0" + "C"
+        }
+            else {
+                text = "--" + "\u00B0" + "C"
+            }
+    }
     }
     Text{
         id: weatherCityName
