@@ -92,12 +92,12 @@ Item {
             realPort.text = "---"
             realPort.color = "#DB3D40"
             transmitterTXT.text = "---"
-            latitude = NaN;
+            latitude = 0;
             longitude = NaN;
-            groundSpeed = NaN;
+            groundSpeed = 0;
             planePosition = QtPositioning.coordinate(NaN, NaN)
             hdg = NaN;
-            altitude = NaN;
+            altitude = 0;
         }
     }
 
@@ -981,7 +981,7 @@ Item {
                        horizontalCenter: parent.horizontalCenter
                        horizontalCenterOffset: parent.width*0.01
                       }
-                      font.pointSize: (parent.height*0.11).toFixed(0)
+                      font.pointSize: (parent.height*0.09).toFixed(0)
                       text: groundSpeed.toFixed(0).toString()
                   }
               }
@@ -1036,7 +1036,7 @@ Item {
                        horizontalCenter: parent.horizontalCenter
                        horizontalCenterOffset: parent.width*0.01
                       }
-                      font.pointSize: (parent.height*0.12).toFixed(0)
+                      font.pointSize: (parent.height*0.09).toFixed(0)
                       text: heightSlice.value.toFixed(0).toString() + "m"
                   }
 
@@ -1091,7 +1091,7 @@ Item {
                        horizontalCenter: parent.horizontalCenter
                        horizontalCenterOffset: -parent.width*0.02
                       }
-                      font.pointSize: (parent.height*0.11).toFixed(0)
+                      font.pointSize: (parent.height*0.09).toFixed(0)
                       text: transmitterDistance.toFixed(0).toString()+"m"
                   }
               }
@@ -1140,7 +1140,7 @@ Item {
                        horizontalCenter: parent.horizontalCenter
 //                       horizontalCenterOffset: parent.width*0.01
                       }
-                      font.pointSize: (parent.height*0.12).toFixed(0)
+                      font.pointSize: (parent.height*0.09).toFixed(0)
                       text: distanceToNextPoint.toFixed(1).toString() + "km"
                   }
               }
@@ -1153,7 +1153,7 @@ Item {
                   onTriggered: {
                       speedSlice.value = groundSpeed
                       groundSpeedParamTXT.text= groundSpeed.toFixed(1).toString() + "km/h"
-                      heightSlice.value = altitude
+                      heightSlice.value = altitude.toFixed(1)
                       altitudeParamTXT.text= altitude.toFixed(1).toString() + "m"
                       transmitterDistanceSlice.value = transmitterDistance.toFixed(0)
                       transmitterDistanceText.text= transmitterDistance.toFixed(0).toString() + "m"
