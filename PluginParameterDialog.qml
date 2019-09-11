@@ -6,6 +6,7 @@ import "interfaceFunction.js" as Interface
         id: root
         flags: Qt.FramelessWindowHint
         height: 250
+        property bool isKeyLoaded: false
         width: 650
         property string token: ""
         color: "transparent"
@@ -143,7 +144,7 @@ import "interfaceFunction.js" as Interface
                 font.family: standardFont.name
                 color: "#3C4151"
                 maximumLength: 102
-                property string placeholderText: "MAPBOX access token"
+                property string placeholderText: "MAPBOX access token..."
 
                   Text {
                       text: (textInputTXT.placeholderText).toUpperCase()
@@ -204,7 +205,7 @@ import "interfaceFunction.js" as Interface
                 bottom: parent.bottom
                 bottomMargin: parent.height*0.05
                 left: parent.left
-                leftMargin: parent.width*0.05
+                leftMargin: parent.width*0.03
             }
             border{
                 color: "#F2B81E"
@@ -226,8 +227,15 @@ import "interfaceFunction.js" as Interface
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
                     token =textInputTXT.text
-                    if(!(token == "")){
-                        token = "pk.eyJ1IjoiYndpZWN6b3JlayIsImEiOiJjang2MHV2NHowNzRtNDNxejZ6eXo5cGdjIn0.-GgqCX-gGnJ3EgKlcapDZA"
+                    console.log("ACCES token lenght:")
+                    console.log(token.length)
+                    if(isKeyLoaded){
+                        errorModel.append({"type": 2, "msg" : "You have one chance to change API token"})
+                    }
+                    else {
+
+                    if((!(token == "")) && token.length>=70){
+                        isKeyLoaded = true
                         map.plugin = Qt.createQmlObject('import QtLocation 5.6; Plugin{
                                 id: mapBoxPlugin
                                 name: "mapbox"
@@ -240,10 +248,21 @@ import "interfaceFunction.js" as Interface
                                     value: "mapbox.dark"
                                 }
                             }', map)
+                        if(map.error !== Map.NoError){
+                        errorModel.append({"type": 2, "msg" : "MapBox access token loaded succesfuly"})
+                    }
+                        else {
+                            errorModel.append({"type": 1, "msg" : "Error on access token loading occured"})
+                        }
+                        }
+                    else {
+                        errorModel.append({"type": 2, "msg" : "MapBox access token is incorrect"})
+                    }
                     }
                     pluginDialog.visible = false
                     textInputTXT.text = ""
                     requestBackground.visible = false
+
                 }
                 onEntered: {
                     accpetButton.color = "#424D5C"
@@ -300,7 +319,7 @@ import "interfaceFunction.js" as Interface
             text: "MAPBOX API ACCESS TOKEN"
             anchors {
                 bottom: textInputRectangle.top
-                bottomMargin: parent.height*0.1
+                bottomMargin: parent.height*0.05
                 horizontalCenter: parent.horizontalCenter
             }
             font.pointSize: parent.height*0.08

@@ -212,7 +212,7 @@ import "interfaceFunction.js" as Interface
                 anchors.right: parent.right
                 anchors.rightMargin: parent.height*0.15
                 Image {
-                    height: parent.height*0.6
+                    height: parent.height*0.5
                     width: height
                     smooth: true
                     antialiasing: true

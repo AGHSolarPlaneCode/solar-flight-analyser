@@ -1633,7 +1633,7 @@ Item {
                     }
                     MouseArea {
                         anchors.fill: parent
-                        onDoubleClicked: {
+                        onClicked: {
                             pluginDialog.visible = true
                             requestBackground.visible = true
                         }

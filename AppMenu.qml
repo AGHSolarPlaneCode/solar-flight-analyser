@@ -16,6 +16,8 @@ Item {
     signal buttonStop()
 
 
+
+
     FontLoader { //load Agency FB from assets
         id: standardFont
         source: "qrc:/assetsMenu/agency_fb.ttf"
@@ -131,8 +133,10 @@ Item {
             source: "qrc:/assetsMenu/NOTIFY BELL ON.png"
             property bool menu
             property bool notify: true
+
             property var menuObj: undefined
             onNotifyChanged: {
+                    errorManager.notifyBellState = notify
                 NotifyMenu.deleteMenu();
             }
 
