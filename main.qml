@@ -9,6 +9,10 @@ Window {
     visible: true
     width: 1600
     height: 900
+
+    minimumWidth: 1600
+    minimumHeight: 900
+
     title: qsTr("GPS Location Software")
      property bool startButtonState: false
     //
