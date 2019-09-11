@@ -18,11 +18,21 @@ import "interfaceFunction.js" as Interface
             okIndicator.visible = false
             wrongIndicator.visible = true
         }
+        Timer {
+            id: errorTimer
+            repeat: false
+            interval: 5*1000
+            onTriggered: {
+                messageBackground.visible = false
+            }
+        }
+
         Connections{
             target: errorManager
             onSendMessageToDialogWindow:{  // receiving messages - checked
                 console.log(message, type);
                 errorMessage = message
+                errorMessageTXT.text = errorMessage
                 messageBackground.visible = true
                 switch(type){
                 case 1:
@@ -31,10 +41,12 @@ import "interfaceFunction.js" as Interface
                     if(okIndicator.visible === true){
                     okIndicatorOFFAnim.start()
                     }
+                    errorTimer.start()
                     break
                 case 2:
                     errorMessageIcon.source = "qrc:/assetsMenu/iIcon.svg"
                     errorMessageTXT.color = "#3F75C8"
+                    errorTimer.start()
                     break
                 case 3:
                     errorMessageIcon.source = "qrc:/assetsMenu/vicon.svg"
@@ -42,8 +54,10 @@ import "interfaceFunction.js" as Interface
                     errorMessageTXT.color = "#24A635"
                     if(okIndicator.visible === false){
                     okIndicatorOnAnim.start()
+                         }
+                        errorTimer.start()
                     break
-                    }
+
                 }
 
 
@@ -306,7 +320,6 @@ import "interfaceFunction.js" as Interface
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
                 adapter.currentEndpoint = textInputTXT.text
-                //okIndicatorOnAnim.running = true
                 }
                 onEntered: {
                     accpetButton.color = "#424D5C"
