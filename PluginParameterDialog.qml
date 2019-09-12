@@ -143,6 +143,13 @@ import "interfaceFunction.js" as Interface
                 wrapMode: Text.Wrap
                 height: parent.height*0.8
                 width: parent.width*0.8
+                onLengthChanged: {
+                    if(length >= 120){
+                        text = text.slice(0, 119)
+                        cursorPosition = 119
+                    }
+                }
+
                 font.pointSize: parent.height*0.2
                 font.family: standardFont.name
                 color: "#3C4151"
