@@ -273,6 +273,7 @@ import "interfaceFunction.js" as Interface
                     }
                     pluginDialog.visible = false
                     textInputTXT.text = ""
+                    exitButton.forceActiveFocus()
                     requestBackground.visible = false
 
                 }
