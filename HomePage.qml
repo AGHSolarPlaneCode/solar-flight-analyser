@@ -22,7 +22,7 @@ Item {
     property double groundSpeed : 0 //get from backend
     property double altitude : 0
     property var planePosition: QtPositioning.coordinate(NaN,NaN)
-    property bool mapFollow: followSwitch.status
+    property bool mapFollow: followSwitch.onOffState
     property double xVelocity: NaN
     property double yVelocity: NaN
     property string fontFamily: standardFont.name
@@ -72,7 +72,7 @@ Item {
           longitude = (adapter.lon).toFixed(8).toString()
           latitude = (adapter.lat).toFixed(8).toString()
           altitude = (adapter.alt).toFixed(1).toString()
-          groundSpeed = (DistanceCalculator.sqrt((((adapter.vx))^2)+((adapter.vy)^2))).toFixed(1).toString()
+          groundSpeed = (adapter.gndSpeed).toFixed(1).toString()
           xVelocity = adapter.vx
           yVelocity = adapter.vy
           planePosition = QtPositioning.coordinate(latitude, longitude)
@@ -102,8 +102,9 @@ Item {
             transmitterTXT.text = (batteryPercentage.toFixed(1)).toString() + "%"
               distanceToNextPoint = DistanceCalculator.distanceCalculate()
         }else{
-            groundSpeed = 0.0;
+
             adapter.resetTelemetryData();
+
             transmitterTXT.color = "#DB3D40"
             portTXT.color = "#DB3D40"//red
             portTXT.text = "Not Connected"
@@ -112,13 +113,7 @@ Item {
             realPort.text = "---"
             realPort.color = "#DB3D40"
             transmitterTXT.text = "---"
-            //latitude = 0;
-            //longitude = 0;
-            //groundSpeed = 0;
             planePosition = QtPositioning.coordinate(NaN, NaN)
-            //hdg = NaN;
-            //altitude = 0;
-
         }
     }
 
@@ -901,29 +896,6 @@ Item {
                 }
             }
 
-            // TOOLS TIP - START
-
-              ToolTip {
-                  id: requestTip
-                  text: "ENTER REQUEST ADDRESS"
-                  visible: requestMouseArea.containsMouse
-
-                  contentItem: Text {
-                      text: requestTip.text
-                      font.bold: true
-                      font.family: standardFont
-                      color: "#F2B81E"
-                  }
-
-                  background: Rectangle {
-                      border.color: "#F2B81E"
-                      color: "#424D5C"
-                      radius: 5
-                  }
-              }
-
-            // TOOLS TIP - END
-
             MouseArea{
                 id: requestMouseArea
                 anchors{
@@ -940,6 +912,29 @@ Item {
                 onClicked: {
                     Interface.showDialog()
                 }
+
+                // TOOLS TIP - START
+
+                  ToolTip {
+                      id: requestTip
+                      text: "ENTER REQUEST ADDRESS"
+                      visible: requestMouseArea.containsMouse
+
+                      contentItem: Text {
+                          text: requestTip.text
+                          font.bold: true
+                          font.family: standardFont
+                          color: "#F2B81E"
+                      }
+
+                      background: Rectangle {
+                          border.color: "#F2B81E"
+                          color: "#424D5C"
+                          radius: 5
+                      }
+                  }
+
+                // TOOLS TIP - END
 
             }
 
@@ -1030,14 +1025,14 @@ Item {
                           PieSlice{
                               id: speedSlice
                               value: groundSpeed
-                              color: "#292BFF"
+                              color: "#1DC58F"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
                           PieSlice{
                               id: groundSpeedValue
                               value: maxgroundSpeed-speedSlice.value
-                              color: "#292BAA"
+                              color: "#191A2F"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
@@ -1086,13 +1081,13 @@ Item {
                           PieSlice{
                               id: heightSlice
                               value: altitude
-//                              color: "#292BFF"
+                              color: "#C61E5D"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
                           PieSlice{
                               value: maxaltitude-heightSlice.value
-//                              color: "#292BAA"
+                              color: "#34495E"
                               borderWidth: 0
                               borderColor: "transparent"
                           }

@@ -13,7 +13,7 @@ void TelemetrySetup::setTelemetry(const TelemetryData& data){
 }
 void TelemetrySetup::resetTelemetry(){
 
-    telemetry = TelemetryData { 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0 };
+    telemetry = TelemetryData { 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0 };
 
     qDebug() << telemetry;
 }
@@ -36,6 +36,9 @@ void TelemetrySetup::setTelemetry(const QVariantMap &fData)
     telemetry.RollSpeed   = fData["rollSpeed"].toDouble();
     telemetry.PitchSpeed  = fData["pitchSpeed"].toDouble();
     telemetry.YawSpeed    = fData["yawSpeed"].toDouble();
+    telemetry.gndSpeed    = sqrt((telemetry.Vx*telemetry.Vx) + (telemetry.Vy*telemetry.Vy));
+
+    qDebug() << telemetry;
 
     emit telemetryDataReceivedState(true);
 }

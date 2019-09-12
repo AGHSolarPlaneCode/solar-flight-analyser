@@ -112,7 +112,7 @@ Item {
 
              ToolTip {
                  id: startTip
-                 text: "LAUNCH DATA FLOW"
+                 text: "START/STOP DATA FLOW"
                  visible: startButtonArea.containsMouse
 
                  contentItem: Text {

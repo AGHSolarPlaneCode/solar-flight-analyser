@@ -6,7 +6,7 @@
 REST::Client::RESTClientManager::RESTClientManager(QObject* parent): RESTClientInterface(parent),
     _networkManager(new QNetworkAccessManager(this)),
     _requestTimer(new QTimer(this)),
-    _requestInterval(10),
+    _requestInterval(200),
     _connectionEstablished(false)
     { setConnections(); }
 

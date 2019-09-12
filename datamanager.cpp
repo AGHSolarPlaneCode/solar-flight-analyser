@@ -217,3 +217,8 @@ double DataManager::getYawSpeed() const
 {
     return telemetryInterface->getTelemetry().YawSpeed;
 }
+
+double DataManager::getGndSpeed() const
+{
+    return telemetryInterface->getTelemetry().gndSpeed;
+}

@@ -21,7 +21,6 @@ class DataManager : public QObject
     // currentEndpoint = address; < - address in currently pressed URL value by user
 
     // authorizeStatus - variable used to set authorization icon - (true = > \/ icon), (false = > X icon)
-
     Q_PROPERTY(double lat READ getLat NOTIFY telemetryDataChanged)
     Q_PROPERTY(double lon READ getLon NOTIFY telemetryDataChanged)
     Q_PROPERTY(double latRaw READ getLatRaw NOTIFY telemetryDataChanged)
@@ -41,6 +40,7 @@ class DataManager : public QObject
     Q_PROPERTY(double rollSpeed READ getRollSpeed NOTIFY telemetryDataChanged)
     Q_PROPERTY(double pitchSpeed READ getPitchSpeed NOTIFY telemetryDataChanged)
     Q_PROPERTY(double yawSpeed READ getYawSpeed NOTIFY telemetryDataChanged)
+    Q_PROPERTY(double gndSpeed READ getGndSpeed NOTIFY telemetryDataChanged)
 public:
     explicit DataManager(QObject *parent = nullptr);
 
@@ -71,6 +71,7 @@ public:
     double getRollSpeed() const;
     double getPitchSpeed() const;
     double getYawSpeed() const;
+    double getGndSpeed() const;
 
     bool getCurrentAuthorizationStatus() const;
 signals:
