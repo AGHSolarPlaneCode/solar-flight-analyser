@@ -124,36 +124,42 @@ import "interfaceFunction.js" as Interface
                 height: parent.height*0.5
             }
 
-            height: parent.height*0.22
-            width: parent.width*0.5
+            height: parent.height*0.35
+            width: parent.width*0.85
             opacity: 0.9
             antialiasing: true
-            source: "qrc:/assetsMenu/addressBox.svg"
+            source: "qrc:/assetsMenu/addressBoxMAP.svg"
 
 
 
 
-            TextInput {
+            TextEdit {
                 id: textInputTXT
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
+                anchors.horizontalCenterOffset: -parent.width*0.05
+                anchors.verticalCenterOffset: -parent.height*0.05
                 selectByMouse: true
-                height: parent.height*0.36
+                wrapMode: Text.Wrap
+                height: parent.height*0.8
                 width: parent.width*0.8
-                font.pointSize: parent.height*0.26
+                font.pointSize: parent.height*0.2
                 font.family: standardFont.name
                 color: "#3C4151"
-                maximumLength: 102
-                property string placeholderText: "MAPBOX access token..."
+                horizontalAlignment : TextEdit.AlignLeft
+                verticalAlignment: TextEdit.AlignVCenter
+                property string vplaceholderText: "MAPBOX access token..."
 
                   Text {
-                      text: (textInputTXT.placeholderText).toUpperCase()
+                      text: (textInputTXT.vplaceholderText).toUpperCase()
                       color: "#3C4151"
                       font.family: standardFont.name
-                      font.pixelSize: parent.font.pixelSize* 0.7
+                      font.pixelSize: parent.font.pixelSize*1
+                      horizontalAlignment: Text.AlignLeft
+                      verticalAlignment: Text.verticalCenter
                       anchors.verticalCenter: parent.verticalCenter
-                      anchors.verticalCenterOffset: -parent.height*0.2
-                      anchors.horizontalCenterOffset: -parent.width*0.5
+                      //anchors.verticalCenterOffset: -parent.height*0.2
+                      //anchors.horizontalCenterOffset: -parent.width*0.5
                       visible: !textInputTXT.text && !textInputTXT.activeFocus // <----------- ;-)
                   }
               }
@@ -204,8 +210,7 @@ import "interfaceFunction.js" as Interface
             anchors {
                 bottom: parent.bottom
                 bottomMargin: parent.height*0.05
-                left: parent.left
-                leftMargin: parent.width*0.03
+                horizontalCenter: parent.horizontalCenter
             }
             border{
                 color: "#F2B81E"
@@ -230,7 +235,7 @@ import "interfaceFunction.js" as Interface
                     console.log("ACCES token lenght:")
                     console.log(token.length)
                     if(isKeyLoaded){
-                        errorModel.append({"type": 2, "msg" : "You have one chance to change API token"})
+                        errorModel.insert(0, {"type": 2, "msg" : "You have one chance to change API token"})
                     }
                     else {
 
@@ -249,14 +254,14 @@ import "interfaceFunction.js" as Interface
                                 }
                             }', map)
                         if(map.error !== Map.NoError){
-                        errorModel.append({"type": 2, "msg" : "MapBox access token loaded succesfuly"})
+                        errorModel.insert(0, {"type": 2, "msg" : "MapBox access token loaded succesfuly"})
                     }
                         else {
-                            errorModel.append({"type": 1, "msg" : "Error on access token loading occured"})
+                            errorModel.insert(0, {"type": 1, "msg" : "Error on access token loading occured"})
                         }
                         }
                     else {
-                        errorModel.append({"type": 2, "msg" : "MapBox access token is incorrect"})
+                        errorModel.insert(0, {"type": 2, "msg" : "MapBox access token is incorrect"})
                     }
                     }
                     pluginDialog.visible = false

@@ -12,7 +12,7 @@ Item {
     property int sunLevel: 50 //get from backend -- don't know which class field
     property string icon: "0"//weather.iconID
     property color windOff: "#5E5A5A"
-    property string sunrise: ""
+    property string sunrise: "-"
     property string sunset: "-"
     property color windOn: "#FFFFFF"
     property color rainOff: "#CDE7EF"
@@ -128,13 +128,12 @@ Item {
     Rectangle {
         id: moreBarBottom
         anchors {
-            bottom: root.bottom
-            bottomMargin: height*0.4
+            verticalCenter: parent.verticalCenter
             left: root.left
-//            leftMargin: root.width*0.0
+            leftMargin: root.width*0.025
         }
         width: parent.width*0.38
-        height: parent.height*0.45
+        height: parent.height*0.75
         radius: height*0.1
         color: "#31364A"
         opacity: 0.5
@@ -143,18 +142,17 @@ Item {
     }
     ColumnLayout {
         anchors {
+            bottom: moreBarBottom.bottom
             horizontalCenter: moreBarBottom.horizontalCenter
-            verticalCenter: moreBarBottom.verticalCenter
-            verticalCenterOffset: -moreBarBottom.height*0.01
         }
-        height: moreBarBottom.height*0.95
+        height: moreBarBottom.height*0.6
         width: moreBarBottom.width
-        spacing: moreBarBottom.height*0.05
+        spacing: moreBarBottom.height*0.025
 
         Text{
             id:sunriseTXT
-            Layout.leftMargin: parent.width*0.1
-            //Layout.topMargin: moreBarBottom.height*0.05
+            Layout.leftMargin: parent.width*0.15
+            Layout.topMargin: moreBarBottom.height*0.05
             //Layout.alignment: Qt.AlignHCenter
             text: "SUNRISE:  " + sunrise
             font.family: standardFont.name
@@ -162,11 +160,11 @@ Item {
             color: "#FFFFFF"
             opacity: 1
             Layout.fillHeight: true
-            font.pixelSize: moreBarBottom.height*0.2*0.9
+            font.pixelSize: moreBarBottom.height*0.2*0.9*0.5
         }
         Text{
             id:sunsetTXT
-            Layout.leftMargin: parent.width*0.1
+            Layout.leftMargin: parent.width*0.15
             //Layout.alignment: Qt.AlignHCenter
             text: "SUNSET:  " + sunset
             font.family: standardFont.name
@@ -174,20 +172,20 @@ Item {
             color: "#FFFFFF"
             opacity: 1
             Layout.fillHeight: true
-            font.pixelSize: moreBarBottom.height*0.2*0.9
+            font.pixelSize: moreBarBottom.height*0.2*0.9*0.5
         }
 
 
     Text{
         id:tempMaxTXT
-        Layout.leftMargin: parent.width*0.1
+        Layout.leftMargin: parent.width*0.15
         //Layout.alignment: Qt.AlignHCenter
         text: "MAX TEMP:  " + maxTemp.toString() + "\u00B0" + "C"
         font.family: standardFont.name
         visible: true
         color: "#FFFFFF"
         opacity: 1
-        font.pixelSize: moreBarBottom.height*0.2*0.9
+        font.pixelSize: moreBarBottom.height*0.2*0.9*0.5
         Layout.fillHeight: true
 //        anchors {
 //            left: moreBarBottom.left
@@ -198,7 +196,7 @@ Item {
     }
     Text{
         id:tempMinTXT
-        Layout.leftMargin: parent.width*0.1
+        Layout.leftMargin: parent.width*0.15
         //Layout.alignment: Qt.AlignHCenter
         text: "MIN TEMP:  " + minTemp.toString() + "\u00B0" + "C"
         font.family: standardFont.name
@@ -206,7 +204,7 @@ Item {
         color: "#FFFFFF"
         opacity: 1
         Layout.fillHeight: true
-        font.pixelSize: moreBarBottom.height*0.2*0.9
+        font.pixelSize: moreBarBottom.height*0.2*0.9*0.5
 //        anchors {
 //            top: tempMaxTXT
 //            topMargin: height*0.1
@@ -215,8 +213,8 @@ Item {
     }
     Text{
         id: pressureTXT
-        Layout.leftMargin: parent.width*0.1
-        Layout.bottomMargin: moreBarBottom.height*0.05
+        Layout.leftMargin: parent.width*0.15
+        Layout.bottomMargin: moreBarBottom.height*0.1
         //Layout.alignment: Qt.AlignHCenter
         text: "PRESSURE:  " + pressure.toString() + " hPa"
         font.family: standardFont.name
@@ -224,7 +222,7 @@ Item {
         Layout.fillHeight: true
         color: "#FFFFFF"
         opacity: 1
-        font.pixelSize: moreBarBottom.height*0.2*0.9
+        font.pixelSize: moreBarBottom.height*0.2*0.9*0.5
 //        anchors {
 //            left: moreBarBottom.left
 //            leftMargin: moreBarBottom.width*0.05
@@ -297,7 +295,7 @@ Item {
 
     Image {
         id: weatherMainIcon
-        height: parent.height*0.41
+        height: parent.height*0.38
         width: parent.width*0.32
         smooth: true
         antialiasing: true
@@ -313,19 +311,19 @@ Item {
         }
         anchors {
             top: parent.top
-            topMargin: parent.height*0.05
+            topMargin: parent.height*0.13
             right: parent.right
             rightMargin: parent.width*0.2
         }
        }
     Rectangle {
-        height: parent.height*0.013
+        height: parent.height*0.011
         width: weatherMainIcon.width*0.65
         color: "white"
         anchors {
             top: weatherMainIcon.bottom
             horizontalCenter: weatherMainIcon.horizontalCenter
-            topMargin: parent.height*0.04
+            topMargin: parent.height*0.05
         }
     }
 
@@ -336,9 +334,9 @@ Item {
         color: "white"
         font.family: standardFont.name
         anchors{
-            right: moreBarBottom.right
-            bottom: moreBarBottom.top
-            bottomMargin: moreBarBottom.height*0.05
+            horizontalCenter: moreBarBottom.horizontalCenter
+            top: moreBarBottom.top
+            topMargin: moreBarBottom.height*0.01
         }
         text:
     {
@@ -414,10 +412,10 @@ Item {
             id: windIcon
             smooth: true
             antialiasing: true
-            height: parent.height*0.7
-            width: parent.height*1
+            height: parent.height*0.4
+            width: parent.height*0.8
             anchors.left: parent.left
-            anchors.leftMargin: parent.height*0
+            anchors.leftMargin: parent.height*0.52
             anchors.verticalCenter: parent.verticalCenter
             source: "qrc:/assetsMenu/wind.svg"
 
@@ -504,7 +502,7 @@ Item {
             height: parent.height*0.5
             width: parent.height*0.35
             anchors.left: windTXT.right
-            anchors.leftMargin: parent.height*0.5
+            anchors.leftMargin: parent.height*1.1
             anchors.verticalCenter: parent.verticalCenter
             source: "qrc:/assetsMenu/rainIcon.svg"
         }

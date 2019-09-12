@@ -110,5 +110,6 @@
         <file>assetsMenu/viconP.svg</file>
         <file>PluginParameterDialog.qml</file>
         <file>assetsMenu/mapIcon.svg</file>
+        <file>assetsMenu/addressBoxMAP.svg</file>
     </qresource>
 </RCC>

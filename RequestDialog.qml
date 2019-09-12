@@ -319,6 +319,7 @@ import "interfaceFunction.js" as Interface
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
+                    addressAndPortString = textInputTXT.text
                 adapter.currentEndpoint = textInputTXT.text
                 }
                 onEntered: {

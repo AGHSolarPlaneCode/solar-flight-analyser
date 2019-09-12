@@ -31,6 +31,7 @@ Item {
     property double maxtransmitterDistance: 40
     property double maxaltitude: 250
     property double maxgroundSpeed: 60
+    property string addressAndPortString: ""
 //    property int numberOfInformation: 0
 //    property int numberOfWarning: 0
 //    property int errorIterator: 0
@@ -46,6 +47,23 @@ Item {
     property bool connected: startButtonState
     property double hdg: NaN
     property real batteryPercentage: 99.5456
+
+    onAddressAndPortStringChanged: {
+        var list = addressAndPortString.split(':')
+        if(list.length >2){
+        realPortS = list[list.length-1]
+        }
+        if(list.length > 2){
+            var list2 = list[list.length-2].split('/')
+            serverAdress = list2[list2.length-1]
+        }
+        else if(list.length === 2){
+            serverAdress = list[0]
+            realPortS = list[1]
+        }
+        console.log("onAddressAndPortStringChanged executed")
+        console.log("server address: ", serverAdress, "port: ", realPortS)
+    }
 
     Connections{
         target: adapter
@@ -390,7 +408,7 @@ Item {
                 source: "qrc:/assetsMenu/BatteryStatus.png"
             }
             Text{
-                text: "Battery\nStatus"
+                text: ("Battery\nStatus").toUpperCase()
                 wrapMode: text.WordWrap
                 width: parent.width*0.5
                 font.family: standardFont.name
@@ -428,7 +446,7 @@ Item {
     Connections{
         target: errorManager
         onSendMessageToMainNotification:{
-            errorModel.append({"msg": message, "type" : type})
+            errorModel.insert(0, {"msg": message, "type" : type})
         }
     }
 
@@ -548,7 +566,7 @@ Item {
             ListView{
                  width: alertsBackground.width
                  model: errorModel
-                 //anim
+
                  add: Transition {
                            NumberAnimation { properties: "y"; from: alertsBackground.height; duration: 300 }
                        }
@@ -587,6 +605,7 @@ Item {
         Component{
 
         id: delegate
+
 
         Rectangle {
         color: "#363b4d"
@@ -867,7 +886,7 @@ Item {
                 }
             }
             Text{
-                text: "Request\nAddress"
+                text: ("Request\nAddress").toUpperCase()
                 wrapMode: text.WordWrap
                 width: parent.width*0.5
                 font.family: standardFont.name
