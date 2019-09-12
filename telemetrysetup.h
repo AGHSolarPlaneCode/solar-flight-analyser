@@ -17,6 +17,7 @@ public:
     void setTelemetry(const QVariantMap& data) override;
     void setTelemetry(const TelemetryData& data) override;
     TelemetryData getTelemetry() const override;
+    void resetTelemetry() override;
     bool telemetryDataAuthorization(const QByteArray& frame) override;
     void runTelemetryDownloader(const QUrl& address, bool& runState) override;
     void stopDownloadTelemetry() override;

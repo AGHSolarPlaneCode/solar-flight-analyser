@@ -84,6 +84,8 @@ Item {
             transmitterTXT.text = (batteryPercentage.toFixed(1)).toString() + "%"
               distanceToNextPoint = DistanceCalculator.distanceCalculate()
         }else{
+            groundSpeed = 0.0;
+            adapter.resetTelemetryData();
             transmitterTXT.color = "#DB3D40"
             portTXT.color = "#DB3D40"//red
             portTXT.text = "Not Connected"
@@ -92,12 +94,13 @@ Item {
             realPort.text = "---"
             realPort.color = "#DB3D40"
             transmitterTXT.text = "---"
-            latitude = 0;
-            longitude = NaN;
-            groundSpeed = 0;
+            //latitude = 0;
+            //longitude = 0;
+            //groundSpeed = 0;
             planePosition = QtPositioning.coordinate(NaN, NaN)
-            hdg = NaN;
-            altitude = 0;
+            //hdg = NaN;
+            //altitude = 0;
+
         }
     }
 
@@ -468,8 +471,35 @@ Item {
                         right: alertsPropertiesSquares.left
                         rightMargin: width*0.5
                     }
+
+                    // TOOLS TIP - START
+
+                      ToolTip {
+                          id: binTip
+                          text: "REMOVE ALL MESSAGES"
+                          visible: binMouseArea.containsMouse
+
+                          contentItem: Text {
+                              text: binTip.text
+                              font.bold: true
+                              font.family: standardFont
+                              color: "#F2B81E"
+                          }
+
+                          background: Rectangle {
+                              border.color: "#F2B81E"
+                              color: "#424D5C"
+                              radius: 5
+                          }
+                      }
+
+                    // TOOLS TIP - END
+
+
                     MouseArea {
+                        id: binMouseArea
                         anchors.fill: parent
+                        hoverEnabled: true
                         onClicked: {
                             errorModel.clear()
                         }
@@ -852,7 +882,31 @@ Item {
                 }
             }
 
+            // TOOLS TIP - START
+
+              ToolTip {
+                  id: requestTip
+                  text: "ENTER REQUEST ADDRESS"
+                  visible: requestMouseArea.containsMouse
+
+                  contentItem: Text {
+                      text: requestTip.text
+                      font.bold: true
+                      font.family: standardFont
+                      color: "#F2B81E"
+                  }
+
+                  background: Rectangle {
+                      border.color: "#F2B81E"
+                      color: "#424D5C"
+                      radius: 5
+                  }
+              }
+
+            // TOOLS TIP - END
+
             MouseArea{
+                id: requestMouseArea
                 anchors{
                     top: parent.top
                     topMargin: parent.height*0.1
@@ -866,7 +920,6 @@ Item {
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
                     Interface.showDialog()
-
                 }
 
             }
@@ -963,6 +1016,7 @@ Item {
                               borderColor: "transparent"
                           }
                           PieSlice{
+                              id: groundSpeedValue
                               value: maxgroundSpeed-speedSlice.value
                               color: "#292BAA"
                               borderWidth: 0
@@ -1631,8 +1685,34 @@ Item {
                         rightMargin: parent.height*0.1
                         verticalCenterOffset: 0
                     }
+
+                    // TOOLS TIP - START
+
+                      ToolTip {
+                          id: apiTip
+                          text: "ENTER MAPBOX API KEY"
+                          visible: apiMouseArea.containsMouse
+
+                          contentItem: Text {
+                              text: apiTip.text
+                              font.bold: true
+                              font.family: standardFont
+                              color: "#F2B81E"
+                          }
+
+                          background: Rectangle {
+                              border.color: "#F2B81E"
+                              color: "#424D5C"
+                              radius: 5
+                          }
+                      }
+
+                    // TOOLS TIP - END
+
                     MouseArea {
+                        id: apiMouseArea
                         anchors.fill: parent
+                        hoverEnabled: true
                         onClicked: {
                             pluginDialog.visible = true
                             requestBackground.visible = true

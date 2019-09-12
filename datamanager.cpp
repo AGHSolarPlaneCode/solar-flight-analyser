@@ -69,25 +69,25 @@ void DataManager::setCurrentEndpoint(const QUrl &address)
     }
 
     // authorization
-//    bool authState = (twoWaysAuthorize.address == address &&
-//                      twoWaysAuthorize.connectionState &&
-//                      twoWaysAuthorize.dataValidation);
+    bool authState = (twoWaysAuthorize.address == address &&
+                      twoWaysAuthorize.connectionState &&
+                      twoWaysAuthorize.dataValidation);
 
-    if(twoWaysAuthorize.address == address){
-        if(twoWaysAuthorize.connectionState && twoWaysAuthorize.dataValidation){
-            RegisterError(WindowType::URLDialogWindow, MessageType::Information) << "Address authorization has already done.";
-            return;
-        }
-        else{
-            RegisterError(WindowType::URLDialogWindow, MessageType::Information) << "Address authorization has already denied.";
-            return;
-        }
-    }
-
-//    if(authState){ // the same address (we don't need double authorization)
-//        RegisterError(WindowType::URLDialogWindow, MessageType::Information) << "Address authorization has already done";
-//        return;
+//    if(twoWaysAuthorize.address == address){
+//        if(twoWaysAuthorize.connectionState && twoWaysAuthorize.dataValidation){
+//            RegisterError(WindowType::URLDialogWindow, MessageType::Information) << "Address authorization has already done.";
+//            return;
+//        }
+//        else{
+//            RegisterError(WindowType::URLDialogWindow, MessageType::Information) << "Address authorization has already denied.";
+//            return;
+//        }
 //    }
+
+    if(authState){ // the same address (we don't need double authorization)
+        RegisterError(WindowType::URLDialogWindow, MessageType::Information) << "Address authorization has already done";
+        return;
+    }
 
     const auto& validConnection = connectionStatus->connectionAvailable(address);    // first step
 
@@ -115,6 +115,12 @@ void DataManager::setCurrentEndpoint(const QUrl &address)
     RegisterError(WindowType::URLDialogWindow, MessageType::Success) << "Authorization Success!";
 
     emit connectionDataChanged();
+}
+
+void DataManager::resetTelemetryData(){
+    telemetryInterface->resetTelemetry();
+
+    emit telemetryDataChanged();
 }
 
 void DataManager::telemetryDataState(bool state)

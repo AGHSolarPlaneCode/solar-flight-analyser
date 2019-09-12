@@ -11,10 +11,15 @@ void TelemetrySetup::setTelemetry(const TelemetryData& data){
 
     telemetry = data;
 }
+void TelemetrySetup::resetTelemetry(){
+
+    telemetry = TelemetryData { 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0 };
+
+    qDebug() << telemetry;
+}
 
 void TelemetrySetup::setTelemetry(const QVariantMap &fData)
 {
-
     telemetry.Lat         = fData["lat"].toDouble();
     telemetry.Lon         = fData["lon"].toDouble();
     telemetry.latRaw      = fData["latRaw"].toDouble();

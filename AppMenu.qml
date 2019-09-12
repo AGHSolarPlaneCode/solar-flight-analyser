@@ -107,7 +107,32 @@ Item {
                  rightMargin: clockIMG.width*0.7
                  verticalCenter: parent.verticalCenter
              }
+
+           // TOOLS TIP - START
+
+             ToolTip {
+                 id: startTip
+                 text: "LAUNCH DATA FLOW"
+                 visible: startButtonArea.containsMouse
+
+                 contentItem: Text {
+                     text: startTip.text
+                     font.bold: true
+                     font.family: standardFont
+                     color: "#F2B81E"
+                 }
+
+                 background: Rectangle {
+                     border.color: "#F2B81E"
+                     color: "#424D5C"
+                     radius: 5
+                 }
+             }
+
+           // TOOLS TIP - END
+
              MouseArea {
+                 id: startButtonArea
                  anchors.fill: parent
                  hoverEnabled: true
                  cursorShape: Qt.PointingHandCursor
@@ -135,8 +160,9 @@ Item {
             property bool notify: true
 
             property var menuObj: undefined
+
             onNotifyChanged: {
-                    errorManager.notifyBellState = notify
+                errorManager.notifyBellState = notify
                 NotifyMenu.deleteMenu();
             }
 
@@ -147,8 +173,34 @@ Item {
             }
             height: parent.height*0.3*1.2
             width: parent.width*0.020*1.2
+
+            // TOOLS TIP - START
+
+            ToolTip {
+                id: bellTip
+                text: "TURN ON/OFF NOTIFICATION"
+                visible: bellMouseArea.containsMouse
+
+                contentItem: Text {
+                    text: bellTip.text
+                    font.bold: true
+                    font.family: standardFont
+                    color: "#F2B81E"
+                }
+
+                background: Rectangle {
+                    border.color: "#F2B81E"
+                    color: "#424D5C"
+                    radius: 5
+                }
+            }
+
+            // TOOLS TIP - END
+
             MouseArea {
+                id: bellMouseArea
                 anchors.fill: notifyBell
+                hoverEnabled: true
                 onClicked: {
                     if(parent.menuObj==undefined){
                         parent.menu==true;

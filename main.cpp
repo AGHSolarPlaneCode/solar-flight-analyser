@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);  
     QQmlApplicationEngine engine;
     app.setWindowIcon(QIcon(":/assetsMenu/icon.svg"));
-    QCoreApplication::setAttribute( Qt::AA_UseSoftwareOpenGL );
+    //QCoreApplication::setAttribute( Qt::AA_UseSoftwareOpenGL );
     std::shared_ptr<DataManager> dataWrapper = std::make_shared<DataManager>();
 
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);

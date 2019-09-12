@@ -105,8 +105,14 @@ QByteArray REST::Client::RESTClientManager::getRESTServerRequest(const QUrl &end
 
 void REST::Client::RESTClientManager::_requestFinished(QNetworkReply *reply)
 {
-    if(reply->error() != QNetworkReply::NoError) { // check kind of errors, and stop connection
-         // AppMessage(MESSAGE::INFORMATION) << "" reply->errorString();
+    if(!_requestTimer->isActive()){
+        RegisterError(WindowType::MainAppWindow, MessageType::Information) << "Data flow stopped!";
+        return;
+    }
+
+    if(reply->error() != QNetworkReply::NoError) { // check kind of errors, and stop connection  TODO: Priority of errors < --
+
+        RegisterError(WindowType::MainAppWindow, MessageType::Information) << reply->errorString().toUtf8();
         return;
     }
 
@@ -117,7 +123,6 @@ void REST::Client::RESTClientManager::_requestFinished(QNetworkReply *reply)
     else{
         RegisterError(WindowType::MainAppWindow, MessageType::Information) << "Empty frame received";
     }
-
 
     reply->deleteLater();
 }

@@ -45,6 +45,7 @@ public:
     explicit DataManager(QObject *parent = nullptr);
 
     Q_INVOKABLE void getDataAction();
+    Q_INVOKABLE void resetTelemetryData();
 
     void setCurrentEndpoint(const QUrl& address);
     QUrl getCurrentEndpoint() const;

@@ -1,6 +1,7 @@
 #ifndef FLIGHTDATA_H
 #define FLIGHTDATA_H
 #include <tuple>
+#include <QDebug>
 
 namespace Data{
     struct TelemetryData{
@@ -20,6 +21,7 @@ namespace Data{
         double RollSpeed;
         double PitchSpeed;
         double YawSpeed;
+
         bool operator==(const TelemetryData& compData){
 
             return std::tie(Lat,Lon,latRaw,lonRaw,Alt,
@@ -53,6 +55,27 @@ namespace Data{
 
             return *this;
         }
+
+        friend QDebug operator<<(QDebug debug, const TelemetryData& tData){
+            debug << "Lat: "         << tData.Lat;
+            debug << "Lon: "         << tData.Lon;
+            debug << "rawLat: "      << tData.latRaw;
+            debug << "rawLon: "      << tData.lonRaw;
+            debug << "Alt: "         << tData.Alt;
+            debug << "RelativeAlt: " << tData.RelativeAlt;
+            debug << "Vx: "          << tData.Vx;
+            debug << "Vy: "          << tData.Vy;
+            debug << "Vz: "          << tData.Vz;
+            debug << "Hdg: "         << tData.Hdg;
+            debug << "Row: "         << tData.Row;
+            debug << "Pitch: "       << tData.Pitch;
+            debug << "Yaw: "         << tData.Yaw;
+            debug << "RollSpeed: "   << tData.RollSpeed;
+            debug << "YawSpeed: "    << tData.YawSpeed;
+
+            return debug;
+        }
+
     };
 }
 
