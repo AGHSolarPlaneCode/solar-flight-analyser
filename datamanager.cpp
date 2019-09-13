@@ -222,3 +222,8 @@ double DataManager::getGndSpeed() const
 {
     return telemetryInterface->getTelemetry().gndSpeed;
 }
+
+double DataManager::getBatteryCap() const
+{
+    return telemetryInterface->getTelemetry().batteryCap;
+}

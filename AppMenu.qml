@@ -118,7 +118,7 @@ Item {
                  contentItem: Text {
                      text: startTip.text
                      font.bold: true
-                     font.family: standardFont
+                     font.family: standardFont.name
                      color: "#F2B81E"
                  }
 
@@ -184,7 +184,7 @@ Item {
                 contentItem: Text {
                     text: bellTip.text
                     font.bold: true
-                    font.family: standardFont
+                    font.family: standardFont.name
                     color: "#F2B81E"
                 }
 

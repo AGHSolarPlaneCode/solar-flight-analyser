@@ -21,6 +21,7 @@ Item {
     property double transmitterDistance : 0 //get from backend
     property double groundSpeed : 0 //get from backend
     property double altitude : 0
+    property double batteryCapacity: 0
     property var planePosition: QtPositioning.coordinate(NaN,NaN)
     property bool mapFollow: followSwitch.onOffState
     property double xVelocity: NaN
@@ -75,6 +76,7 @@ Item {
           groundSpeed = (adapter.gndSpeed).toFixed(1).toString()
           xVelocity = adapter.vx
           yVelocity = adapter.vy
+          batteryCapacity = adapter.batteryCap
           planePosition = QtPositioning.coordinate(latitude, longitude)
 
           if(mapFollow == true){
@@ -99,10 +101,9 @@ Item {
             realPort.color = "#38865B"
             realPort.text = "Port: " + realPortS
             port.text = serverAdress.toUpperCase()
-            transmitterTXT.text = (batteryPercentage.toFixed(1)).toString() + "%"
-              distanceToNextPoint = DistanceCalculator.distanceCalculate()
+            transmitterTXT.text = (batteryCapacity.toFixed(1)).toString() + "V"
+            distanceToNextPoint = DistanceCalculator.distanceCalculate()
         }else{
-
             adapter.resetTelemetryData();
 
             transmitterTXT.color = "#DB3D40"
@@ -132,7 +133,7 @@ Item {
 //    }
     onBatteryPercentageChanged: {
         if(connected == true){
-            transmitterTXT.text = transmitterDistance.toFixed(0).toString() + "%"
+            transmitterTXT.text = batteryCapacity.toFixed(0).toString() + "V"
             if(transmitterDistance.toFixed(0)<=20){
                 transmitterTXT.color = "#ff5900"
 
@@ -495,7 +496,7 @@ Item {
                           contentItem: Text {
                               text: binTip.text
                               font.bold: true
-                              font.family: standardFont
+                              font.family: standardFont.name
                               color: "#F2B81E"
                           }
 
@@ -923,7 +924,7 @@ Item {
                       contentItem: Text {
                           text: requestTip.text
                           font.bold: true
-                          font.family: standardFont
+                          font.family: standardFont.name
                           color: "#F2B81E"
                       }
 
@@ -1011,7 +1012,6 @@ Item {
                       anchors.fill: parent
                       antialiasing: true
                       backgroundColor: "transparent"
-                      theme: ChartView.ChartThemeBlueIcy
                       margins {
                           left: 0
                           right: 0
@@ -1068,7 +1068,6 @@ Item {
                       anchors.fill: parent
                       antialiasing: true
                       backgroundColor: "transparent"
-                      theme: ChartView.ChartThemeDark
                       margins {
                           left: 0
                           right: 0
@@ -1123,7 +1122,6 @@ Item {
                       anchors.fill: parent
                       antialiasing: true
                       backgroundColor: "transparent"
-                      theme: ChartView.ChartThemeBlueIcy
                       margins {
                           left: 0
                           right: 0
@@ -1136,13 +1134,13 @@ Item {
                           PieSlice{
                               id: transmitterDistanceSlice
                               value: transmitterDistance
-//                              color: "#292BFF"
+                              color: "#E67F22"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
                           PieSlice{
                               value: maxtransmitterDistance-transmitterDistanceSlice.value
-//                              color: "#292BAA"
+                              color: "#BEC3C7"
                               borderWidth: 0
                               borderColor: "transparent"
                           }
@@ -1174,7 +1172,6 @@ Item {
                       anchors.fill: parent
                       antialiasing: true
                       backgroundColor: "transparent"
-                      theme: ChartView.ChartThemeBlueCerulean
                       margins {
                           left: 0
                           right: 0
@@ -1710,7 +1707,7 @@ Item {
                           contentItem: Text {
                               text: apiTip.text
                               font.bold: true
-                              font.family: standardFont
+                              font.family: standardFont.name
                               color: "#F2B81E"
                           }
 

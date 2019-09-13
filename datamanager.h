@@ -40,7 +40,9 @@ class DataManager : public QObject
     Q_PROPERTY(double rollSpeed READ getRollSpeed NOTIFY telemetryDataChanged)
     Q_PROPERTY(double pitchSpeed READ getPitchSpeed NOTIFY telemetryDataChanged)
     Q_PROPERTY(double yawSpeed READ getYawSpeed NOTIFY telemetryDataChanged)
+
     Q_PROPERTY(double gndSpeed READ getGndSpeed NOTIFY telemetryDataChanged)
+    Q_PROPERTY(double batteryCap READ getBatteryCap NOTIFY telemetryDataChanged)
 public:
     explicit DataManager(QObject *parent = nullptr);
 
@@ -71,7 +73,9 @@ public:
     double getRollSpeed() const;
     double getPitchSpeed() const;
     double getYawSpeed() const;
+
     double getGndSpeed() const;
+    double getBatteryCap() const;
 
     bool getCurrentAuthorizationStatus() const;
 signals:
