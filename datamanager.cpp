@@ -140,12 +140,20 @@ QUrl DataManager::getCurrentEndpoint() const
 
 double DataManager::getLat() const
 {
-    return telemetryInterface->getTelemetry().Lat/10000000;
+    auto tmpLat = telemetryInterface->getTelemetry().Lat;
+
+    if(tmpLat == 0.0) return telemetryInterface->getTelemetry().latRaw/10000000;
+
+    return tmpLat/10000000;
 }
 
 double DataManager::getLon() const
 {
-    return telemetryInterface->getTelemetry().Lon/10000000;
+    auto tmpLon = telemetryInterface->getTelemetry().Lon;
+
+    if(tmpLon == 0.0) return telemetryInterface->getTelemetry().lonRaw/10000000;
+
+    return tmpLon/10000000;
 }
 
 double DataManager::getLatRaw() const
