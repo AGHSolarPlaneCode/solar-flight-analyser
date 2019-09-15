@@ -23,17 +23,18 @@ namespace Data{
         double YawSpeed;
         double gndSpeed;
         double batteryCap;
+        double airSpeed;
 
         bool operator==(const TelemetryData& compData){
 
             return std::tie(Lat,Lon,latRaw,lonRaw,Alt,
                             RelativeAlt,Vx,Vy,Vz,Hdg,Row,
-                            Pitch,Yaw,RollSpeed,PitchSpeed,YawSpeed, gndSpeed, batteryCap) ==
+                            Pitch,Yaw,RollSpeed,PitchSpeed,YawSpeed, gndSpeed, batteryCap, airSpeed) ==
                    std::tie(compData.Lat, compData.Lon, compData.latRaw,
                             compData.lonRaw, compData.Alt, compData.RelativeAlt,
                             compData.Vx,compData.Vy,compData.Vz,compData.Hdg,compData.Row,
                             compData.Pitch, compData.Yaw,compData.RollSpeed,
-                            compData.PitchSpeed,compData.YawSpeed, gndSpeed, batteryCap);
+                            compData.PitchSpeed,compData.YawSpeed, gndSpeed, batteryCap, airSpeed);
         }
 
         TelemetryData& operator=(const TelemetryData& comp){
@@ -56,6 +57,7 @@ namespace Data{
             YawSpeed    = comp.YawSpeed;
             gndSpeed    = comp.gndSpeed;
             batteryCap  = comp.batteryCap;
+            airSpeed    = comp.airSpeed;
 
             return *this;
         }
@@ -78,6 +80,7 @@ namespace Data{
             debug << "YawSpeed: "    << tData.YawSpeed;
             debug << "gndSpeed: "    << tData.gndSpeed;
             debug << "batteryCap: "  << tData.batteryCap;
+            debug << "airSpeed: "    << tData.airSpeed;
 
             return debug;
         }

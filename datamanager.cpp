@@ -227,3 +227,8 @@ double DataManager::getBatteryCap() const
 {
     return telemetryInterface->getTelemetry().batteryCap;
 }
+
+double DataManager::getAirSpeed() const
+{
+    return telemetryInterface->getTelemetry().airSpeed;
+}
