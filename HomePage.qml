@@ -47,7 +47,7 @@ Item {
     property real timeElapsed:0
     property bool connected: startButtonState
     property double hdg: NaN
-    property real batteryPercentage: 99.5456
+    property real batteryPercentage: NaN
 
     onAddressAndPortStringChanged: {
         var list = addressAndPortString.split(':')
@@ -78,7 +78,7 @@ Item {
           yVelocity = adapter.vy
           batteryCapacity = adapter.batteryCap
           planePosition = QtPositioning.coordinate(latitude, longitude)
-
+          batteryPercentage = adapter.batteryCap
           if(mapFollow == true){
               map.center = planePosition
           }
@@ -972,7 +972,7 @@ Item {
                 id: realPort
                 font.family: fontFamily
                 color: "#DB3D40" //red
-                font.pointSize: (parent.height*0.1).toFixed(0)
+                font.pointSize: (parent.height*0.06).toFixed(0)
                 anchors{
                     verticalCenter: port.verticalCenter
                     horizontalCenter: port.horizontalCenter

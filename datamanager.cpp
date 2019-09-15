@@ -140,52 +140,52 @@ QUrl DataManager::getCurrentEndpoint() const
 
 double DataManager::getLat() const
 {
-    return telemetryInterface->getTelemetry().Lat;
+    return telemetryInterface->getTelemetry().Lat/10000000;
 }
 
 double DataManager::getLon() const
 {
-    return telemetryInterface->getTelemetry().Lon;
+    return telemetryInterface->getTelemetry().Lon/10000000;
 }
 
 double DataManager::getLatRaw() const
 {
-    return telemetryInterface->getTelemetry().latRaw;
+    return telemetryInterface->getTelemetry().latRaw/10000000;
 }
 
 double DataManager::getLonRaw() const
 {
-    return telemetryInterface->getTelemetry().lonRaw;
+    return telemetryInterface->getTelemetry().lonRaw/10000000;
 }
 
 double DataManager::getAlt() const
 {
-    return telemetryInterface->getTelemetry().Alt;
+    return telemetryInterface->getTelemetry().Alt/1000;
 }
 
 double DataManager::getRelativeAlt() const
 {
-    return telemetryInterface->getTelemetry().RelativeAlt;
+    return telemetryInterface->getTelemetry().RelativeAlt/1000;
 }
 
 double DataManager::getVx() const
 {
-    return telemetryInterface->getTelemetry().Vx;
+    return telemetryInterface->getTelemetry().Vx/100;
 }
 
 double DataManager::getVy() const
 {
-    return telemetryInterface->getTelemetry().Vy;
+    return telemetryInterface->getTelemetry().Vy/100;
 }
 
 double DataManager::getVz() const
 {
-    return telemetryInterface->getTelemetry().Vz;
+    return telemetryInterface->getTelemetry().Vz/100;
 }
 
 double DataManager::getHdg() const
 {
-    return telemetryInterface->getTelemetry().Hdg;
+    return telemetryInterface->getTelemetry().Hdg/100;
 }
 
 double DataManager::getRow() const
