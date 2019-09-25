@@ -4,7 +4,7 @@ DataManager::DataManager(QObject *parent) : QObject(parent),
     connectionStatus(std::make_unique<ConnectionSetup>()),
     telemetryInterface(std::make_unique<TelemetrySetup>())
 { connect(telemetryInterface.get(), &TelemetrySetup::telemetryDataReceivedState, this, &DataManager::telemetryDataState);
-    QTimer::singleShot(3000, [](){
+    QTimer::singleShot(4000, [](){
 
         RegisterError(WindowType::MainAppWindow, MessageType::Information) << "Enter URL address";
         RegisterError(WindowType::MainAppWindow, MessageType::Information) << "Enjoy this app!";
@@ -140,20 +140,20 @@ QUrl DataManager::getCurrentEndpoint() const
 
 double DataManager::getLat() const
 {
-    auto tmpLat = telemetryInterface->getTelemetry().Lat;
+    auto tmpLat = telemetryInterface->getTelemetry().Lat/10000000;
 
     if(tmpLat == 0.0) return telemetryInterface->getTelemetry().latRaw/10000000;
 
-    return tmpLat/10000000;
+    return tmpLat;
 }
 
 double DataManager::getLon() const
 {
-    auto tmpLon = telemetryInterface->getTelemetry().Lon;
+    auto tmpLon = telemetryInterface->getTelemetry().Lon/10000000;
 
     if(tmpLon == 0.0) return telemetryInterface->getTelemetry().lonRaw/10000000;
 
-    return tmpLon/10000000;
+    return tmpLon;
 }
 
 double DataManager::getLatRaw() const
