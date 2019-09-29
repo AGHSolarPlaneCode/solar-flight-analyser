@@ -30,7 +30,7 @@ The main purpose of the project is to provide original solution for UAV flight d
 * JSON
 * Mavlink
 
-The program uses comProxy server for Mavlink packets transferring. Visit [@comProxy](https://github.com/AGHSolarPlaneCode/comProxy)for more info.
+The program uses comProxy server for Mavlink packets transferring. Visit [@comProxy](https://github.com/AGHSolarPlaneCode/comProxy) for more info.
 
 ## Setup
 You can build it by yourself, using Qmake or using QtCreator.The program uses mapbox API, to use map functionalities add your own mapbox token. For more visit [@Mapbox website](https://www.mapbox.com/).
@@ -47,7 +47,7 @@ To-do list:
 * Settings panel
 
 ## Status
-Project is still _in progress. Currently being tested for all popular platforms.
+Project is still in progress. Currently being tested for all popular platforms.
 
 ## Contact
 Created by [@AGH Solar Plane](http://solarplane.agh.edu.pl/?fbclid=IwAR0UkQjEqguk1YbxctuQL0dXhfLmXreBpVWPGhSip6OmkvUPGNGTzUrqTEI) - feel free to contact us!
