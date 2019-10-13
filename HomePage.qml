@@ -73,7 +73,7 @@ Item {
           longitude = (adapter.lon).toFixed(8).toString()
           latitude = (adapter.lat).toFixed(8).toString()
           altitude = (adapter.alt).toFixed(1).toString()
-          groundSpeed = (adapter.gndSpeed).toFixed(1).toString()
+          groundSpeed = (adapter.airSpeed).toFixed(1).toString()
           xVelocity = adapter.vx
           yVelocity = adapter.vy
           batteryCapacity = adapter.batteryCap

@@ -233,10 +233,10 @@ double DataManager::getGndSpeed() const
 
 double DataManager::getBatteryCap() const
 {
-    return telemetryInterface->getTelemetry().batteryCap;
+    return telemetryInterface->getTelemetry().batteryCap/1000;
 }
 
 double DataManager::getAirSpeed() const
 {
-    return telemetryInterface->getTelemetry().airSpeed;
+    return telemetryInterface->getTelemetry().airSpeed*3.6;
 }

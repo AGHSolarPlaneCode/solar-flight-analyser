@@ -43,7 +43,7 @@ class DataManager : public QObject
 
     Q_PROPERTY(double gndSpeed READ getGndSpeed NOTIFY telemetryDataChanged)
     Q_PROPERTY(double batteryCap READ getBatteryCap NOTIFY telemetryDataChanged)
-    Q_PROPERTY(double getAirSpeed READ getAirSpeed NOTIFY telemetryDataChanged)
+    Q_PROPERTY(double airSpeed READ getAirSpeed NOTIFY telemetryDataChanged)
 public:
     explicit DataManager(QObject *parent = nullptr);
 
