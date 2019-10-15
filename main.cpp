@@ -4,6 +4,7 @@
 #include "weatherapi.h"
 #include "datamanager.h"
 #include "errorsingleton.h"
+#include "waypointservice.h"
 
 int main(int argc, char *argv[])
 {
@@ -16,9 +17,11 @@ int main(int argc, char *argv[])
 
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    WaypointService waypointService;
 
     engine.rootContext()->setContextProperty("errorManager", ErrorSingleton::getInstance());
     engine.rootContext()->setContextProperty("adapter", dataWrapper.get());
+    engine.rootContext()->setContextProperty("waypoint", &waypointService);
 //    engine.rootContext()->setContextProperty("weather", &weather);
 
     if(engine.rootObjects().isEmpty())

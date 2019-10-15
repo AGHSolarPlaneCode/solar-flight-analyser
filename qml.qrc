@@ -111,5 +111,7 @@
         <file>PluginParameterDialog.qml</file>
         <file>assetsMenu/mapIcon.svg</file>
         <file>assetsMenu/addressBoxMAP.svg</file>
+        <file>assetsMenu/Waypoints_Loader.svg</file>
+        <file>assetsMenu/WaypointsLoader.png</file>
     </qresource>
 </RCC>

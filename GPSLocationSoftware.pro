@@ -15,6 +15,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
+    waypointservice.cpp \
     weatherapi.cpp \
     weatherdata.cpp \
     datamanager.cpp \
@@ -38,6 +39,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    waypointservice.h \
     weatherapi.h \
     weatherdata.h \
     datamanager.h \

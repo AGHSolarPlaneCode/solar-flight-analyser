@@ -12,8 +12,8 @@ function createMarkerObjects(coord) {
 
 function finishCreation(pos) {
     if (component.status === Component.Ready) {
-        //marker = component.createObject(map, {"marker.coordinate": map.toCoordinate(Qt.point(posX,posY))});
         marker = component.createObject(map);
+        marker.number = map.mapItems.length;
         marker.coordinate = pos;
         map.addMapItem(marker);
         numberOfPoint = numberOfPoint+1;
@@ -28,7 +28,27 @@ function finishCreation(pos) {
     }
 }
 function removeMarker(marker){
+    var index = marker.number-1
     map.removeMapItem(marker);
     numberOfPoint--;
+    if(map.mapItems.length>1){
+    for(var i = 1; i < map.mapItems.length; i++){
+        map.mapItems[i].number = i;
+    }
+    }
+   }
+function addPoints(){
+    var dbLat = waypoint.DBLat
+    var dbLong = waypoint.DBLong
+    for(var i = 0; i < dbLat.length; i++){
+        createMarkerObjects( QtPositioning.coordinate(dbLat[i],dbLong[i]))
+    }
 }
-
+function clearMap(){
+    while(map.mapItems.length>1){
+        if(map.mapItems[1].isPositionMarker){
+        map.removeMapItem(map.mapItems[1])
+            numberOfPoint--
+        }
+    }
+}

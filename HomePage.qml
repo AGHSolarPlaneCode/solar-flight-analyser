@@ -9,6 +9,7 @@ import QtCharts 2.0
 import "WeatherPageGenerator.js" as WeatherPageGenerator
 import "interfaceFunction.js" as Interface
 import "listViewFun.js" as ListFun
+import QtQuick.Dialogs 1.3
 
 Item {
     id: root
@@ -33,17 +34,6 @@ Item {
     property double maxaltitude: 250
     property double maxgroundSpeed: 60
     property string addressAndPortString: ""
-//    property int numberOfInformation: 0
-//    property int numberOfWarning: 0
-//    property int errorIterator: 0
-//    property var jsonError: 0
-//    property int numberOfError: 0
-//    property int informationIterator: 0
-//    property var requestError: 0
-//    property var informations: []
-//    property var sslerror: []
-
-
     property real timeElapsed:0
     property bool connected: startButtonState
     property double hdg: NaN
@@ -64,6 +54,13 @@ Item {
         }
         console.log("onAddressAndPortStringChanged executed")
         console.log("server address: ", serverAdress, "port: ", realPortS)
+    }
+    Connections{
+        target: waypoint
+        onPointsListChanged:{
+            MarkerGenerator.clearMap()
+            MarkerGenerator.addPoints()
+        }
     }
 
     Connections{
@@ -1323,7 +1320,6 @@ Item {
             Map { //map
                id: map
                anchors.fill: parent
-
                 anchors {
                     bottom: parent.bottom
                     left: parent.left
@@ -1689,6 +1685,7 @@ Item {
                 Image{
                     source: "qrc:/assetsMenu/MapProperty.png"
                     height: parent.height*0.7
+                    id: mapPropertySquare
                     width: height*1.1
                     anchors {
                         verticalCenter: parent.verticalCenter
@@ -1730,6 +1727,43 @@ Item {
                         }
                     }
                 }
+                Image {
+                    source: "qrc:/assetsMenu/Waypoints_Loader.svg"
+                    smooth: true
+                    height: parent.height*0.70
+                    width: height*1.2
+                    anchors{
+                        right: mapPropertySquare.left
+                        rightMargin: height*0.03
+                        verticalCenter: mapPropertySquare.verticalCenter
+                    }
+//                    ToolTip {
+//                        id: toolTip
+//                        text: "Load point from files"
+//                        visible: loadPoint.containsMouse
+
+//                        contentItem: Text {
+//                            text: toolTip.text
+//                            font.bold: true
+//                            font.family: standardFont.name
+//                            color: "#F2B81E"
+//                        }
+
+//                        background: Rectangle {
+//                            border.color: "#F2B81E"
+//                            color: "#424D5C"
+//                            radius: 5
+//                        }
+//                    }
+                    MouseArea {
+                        id: loadPoint
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onClicked: {
+                        fileDialog.visible = true
+                        }
+                    }
+                }
 
     }
     }
@@ -1742,6 +1776,20 @@ Item {
     PluginParameterDialog{
         id: pluginDialog
         visible: false
+    }
+    FileDialog {
+        id: fileDialog
+        visible: false
+        title: "Please choose a waypoint file"
+        folder: shortcuts.home
+        onAccepted: {
+            waypoint.loadFile(fileDialog.fileUrl)
+            fileDialog.visible = false
+        }
+        onRejected: {
+            console.log("Canceled")
+            fileDialog.visible = false;
+        }
     }
 
 }
