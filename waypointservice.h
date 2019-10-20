@@ -8,6 +8,12 @@
 #include <QTextStream>
 #include "errorsingleton.h"
 #include <QList>
+enum class Extension {
+    NO_EXTENSION = 0,
+    CSV,
+    TXT,
+    WAYPOINTS
+};
 
 class WaypointService : public QObject
 {
@@ -26,11 +32,12 @@ signals:
 public slots:
     void loadFile(QString path);
 private:
-    void saveToDB(QString line);
+    void saveToDB(QString line, Extension type);
     void clearDB();
     QList<double> DBLat;
     QList<double> DBLong;
     int numberOfPoint = 0;
 };
+
 
 #endif // WAYPOINTSERVICE_H
