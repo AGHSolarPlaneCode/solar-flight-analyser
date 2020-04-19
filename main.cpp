@@ -4,11 +4,13 @@
 #include "weatherapi.h"
 #include "datamanager.h"
 #include "errorsingleton.h"
+#include "Data/databaseconnection.h"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QApplication app(argc, argv);  
+    QApplication app(argc, argv);
+    Data::DatabaseConnection DBC("Database/ShaderStash.sqlite", "QSQLITE");
     QQmlApplicationEngine engine;
     app.setWindowIcon(QIcon(":/assetsMenu/icon.svg"));
     //QCoreApplication::setAttribute( Qt::AA_UseSoftwareOpenGL );

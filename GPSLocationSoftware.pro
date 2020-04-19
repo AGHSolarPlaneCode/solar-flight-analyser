@@ -1,4 +1,4 @@
-QT += quick network positioning charts widgets
+QT += quick network positioning charts widgets sql
 
 CONFIG += c++17
 
@@ -14,7 +14,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        main.cpp \
+    Data/databaseconnection.cpp \
+    Data/sharedstash.cpp \
+    main.cpp \
     weatherapi.cpp \
     weatherdata.cpp \
     datamanager.cpp \
@@ -38,6 +40,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    Data/databaseconnection.h \
+    Data/sharedstash.h \
     weatherapi.h \
     weatherdata.h \
     datamanager.h \
