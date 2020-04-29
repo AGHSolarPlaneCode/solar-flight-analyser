@@ -44,13 +44,13 @@ namespace Data{
     void DatabaseConnection::QueryCheckAndExec(QSqlQuery &query, QString queryString)
     {
         if(!databaseHandler.isOpen())
-            throw std::ios_base::failure("Database was not open when query was requested: " + queryString.toStdString());
+            throw databaseClosedErrorMessage(queryString);
+
 
         query.exec(queryString);
 
         if(!query.isActive())
-            throw std::ios_base::failure("Could not execute a query: " + queryString.toStdString());
-
+            throw queryFailedErrorMessage(queryString);
     }
 
     unsigned DatabaseConnection::executeCountingQuery(QString queryString)
@@ -74,12 +74,6 @@ namespace Data{
         return query.value(0).toString();
     }
 
-    unsigned DatabaseConnection::recordExists(const QString &tableName, const QString &recordName, const QString & keyCol)
-    {
-        return executeCountingQuery(
-                    QString("SELECT count(%1) FROM %2 WHERE %3='%4'").arg(keyCol).arg(tableName).arg(keyCol).arg(recordName)
-                    );
-    }
 
     unsigned DatabaseConnection::tableExists(const QString &tableName)
     {
@@ -88,9 +82,45 @@ namespace Data{
                     );
     }
 
-    QString getRecord(const QString &tableName, const QString &recordSelector)
-    {
+    std::ios_base::failure DatabaseConnection::databaseClosedErrorMessage(const QString &query){
+        if(query != ""){
+            return std::ios_base::failure("Database was not open when query was requested: " + query.toStdString());
+        }
+        else{
+            return std::ios_base::failure("Database isn't open.");
+        }
+    }
 
+    std::ios_base::failure DatabaseConnection::queryFailedErrorMessage(const QString &query){
+        if(query != ""){
+            return std::ios_base::failure("Could not execute a query: " + query.toStdString());
+        }
+        else{
+            return  std::ios_base::failure("A query has failed");
+        }
+    }
+
+    std::vector<std::tuple<QString, bool>> DatabaseConnection::getTableColumns(const QString & tableName){
+        QSqlQuery q = executeQuery(QString("PRAGMA table_info(%1)").arg(tableName));
+
+        std::vector<std::tuple<QString, bool>> tableInfo;
+
+        while(q.next()){
+            tableInfo.emplace_back(
+                        std::make_tuple<QString, bool>(
+                            q.value(1).toString(),
+                            q.value(5).toBool()
+                            )
+                        );
+        }
+
+        return tableInfo;
+
+    unsigned DatabaseConnection::tableExists(const QString &tableName)
+    {
+        return executeCountingQuery(
+                    QString("SELECT count(name) FROM sqlite_master WHERE type='table' AND name='%1';").arg(tableName)
+                    );
     }
 
     bool DatabaseConnection::isOpen()

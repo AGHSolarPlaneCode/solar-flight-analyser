@@ -10,7 +10,6 @@
 #include <tuple>
 #include <cassert>
 #include <type_traits>
-#include <iostream>
 
 
 namespace Data {
@@ -23,12 +22,17 @@ namespace Data {
      */
     class DatabaseConnection
     {
-        bool startupFailed();
         unsigned executeCountingQuery(QString queryString);
         QString singleRecordStringReturn(QString queryString);
         void QueryCheckAndExec(QSqlQuery & query, QString queryString);
+
         QSqlDatabase databaseHandler;
+
+        std::ios_base::failure databaseClosedErrorMessage(const QString & query = "");
+        std::ios_base::failure queryFailedErrorMessage(const QString & query = "");
+
         static QString DATABASE_CONTAINING_FOLDER;
+
         template<typename T>
         static QString DBTypeName()
         {
@@ -108,6 +112,13 @@ namespace Data {
         }
 
         /*!
+         * \brief executeQuery - execute any SQL query
+         * \param query - QString containing the query
+         * \return returns the QSqlQuery object
+         */
+        QSqlQuery executeQuery(const QString & query);
+
+        std::vector<std::tuple<QString, bool>> getTableColumns(const QString & tableName);
          * \brief Check if a record with string "ID" is used as the key,
          * if otherwise specify the key parameter
          * (if integer-string is passed as a key, it will be checking for integer values)
@@ -117,42 +128,14 @@ namespace Data {
          * \return true - if the record exists, false otherwise
          * \throws std::ios_base::failure
          */
-        unsigned recordExists(const QString & tableName, const QString & recordName, const QString & keyCol);
-        /*!
-         * \brief Returns the string representation of the requested record
-         * \param tableName - name of the table to get from
-         * \param recordSelector - selector of the record in SQL style - i.e. * or name='string'
-         * \throws std::ios_base::failure
-         * \return
-         */
-        QString getRecord(const QString & tableName, const QString & recordSelector);
-        /*!
-         * \brief Set the record to a requested value. The record will be created
-         * if it doesn't exist, or it's value will be changed if it exists
-         * \param tableName - name of the table to set the record in
-         * \param selector of the record in SQL style - i.e. * or name='string'
-         * \param recordData - data to be saved
-         * \throws std::ios_base::failure
-         * \return
-         */
-        bool setRecord(const QString & tableName, const QString & recordSelector, const QString & recordData);
-        /*!
-         * \brief deleteRecord - delete a record with given ID if it exists
-         * \param tableName - name of the table to delete in
-         * \param recordSelector - selector of the record in SQL style - i.e. * or name='string'
-         * \throws std::ios_base::failure
-         * \return
-         */
-        bool deleteRecord(const QString & tableName, const QString & recordSelector);
 
+        bool isOpen();
         /*!
          * \brief Basic constructor of the DatabaseConnection class
          * \param databasePath - path to the database file
          * \param databaseDriver - driver of the database - QSQLITE by default
          * \throws std::ios_base::failure
          */
-
-        bool isOpen();
         DatabaseConnection(const QString & databasePath, const QString & databaseDriver = "QSQLITE");
         ~DatabaseConnection();
         DatabaseConnection(DatabaseConnection & dbCp);
