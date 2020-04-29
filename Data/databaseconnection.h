@@ -31,6 +31,8 @@ namespace Data {
         std::ios_base::failure databaseClosedErrorMessage(const QString & query = "");
         std::ios_base::failure queryFailedErrorMessage(const QString & query = "");
 
+        std::vector<std::tuple<QString, QString>> selectorSeparator(const QString & selector);
+
         static QString DATABASE_CONTAINING_FOLDER;
 
         template<typename T>
@@ -118,16 +120,12 @@ namespace Data {
          */
         QSqlQuery executeQuery(const QString & query);
 
+        bool recordExists(const QString & tableName, const QString & selector);
+
+        bool setRecord(const QString & tableName, const QString & selector, const QString & value);
+
         std::vector<std::tuple<QString, bool>> getTableColumns(const QString & tableName);
-         * \brief Check if a record with string "ID" is used as the key,
-         * if otherwise specify the key parameter
-         * (if integer-string is passed as a key, it will be checking for integer values)
-         * \param tableName - name of the table to check in
-         * \param recordName - Identificator of the record to look for
-         * \param keyCol - column in which to search for the key in
-         * \return true - if the record exists, false otherwise
-         * \throws std::ios_base::failure
-         */
+
 
         bool isOpen();
         /*!

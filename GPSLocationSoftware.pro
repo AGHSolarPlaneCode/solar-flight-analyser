@@ -15,6 +15,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     Data/databaseconnection.cpp \
+    Data/databasetablehandler.cpp \
     Data/sharedstash.cpp \
     main.cpp \
     weatherapi.cpp \
@@ -41,6 +42,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     Data/databaseconnection.h \
+    Data/databasetablehandler.cpp \
     Data/sharedstash.h \
     weatherapi.h \
     weatherdata.h \

@@ -46,11 +46,23 @@ namespace Data{
         if(!databaseHandler.isOpen())
             throw databaseClosedErrorMessage(queryString);
 
-
         query.exec(queryString);
 
         if(!query.isActive())
             throw queryFailedErrorMessage(queryString);
+
+    }
+
+    QSqlQuery DatabaseConnection::executeQuery(const QString & query){
+        if(!databaseHandler.isOpen())
+            throw databaseClosedErrorMessage(query);
+
+        QSqlQuery ret;
+        ret.exec(query);
+
+        if(!ret.isActive())
+            throw queryFailedErrorMessage(query);
+        return ret;
     }
 
     unsigned DatabaseConnection::executeCountingQuery(QString queryString)
@@ -73,7 +85,6 @@ namespace Data{
         query.last();
         return query.value(0).toString();
     }
-
 
     unsigned DatabaseConnection::tableExists(const QString &tableName)
     {
@@ -115,13 +126,44 @@ namespace Data{
         }
 
         return tableInfo;
+    }
 
-    unsigned DatabaseConnection::tableExists(const QString &tableName)
+    bool DatabaseConnection::recordExists(const QString &tableName, const QString &selector)
     {
         return executeCountingQuery(
-                    QString("SELECT count(name) FROM sqlite_master WHERE type='table' AND name='%1';").arg(tableName)
-                    );
+                    QString(
+                        "SELECT COUNT(*) FROM %1 WHERE %2")
+                        .arg(tableName).arg(selector)
+                        );
     }
+
+    std::vector<std::tuple<QString, QString>> selectorSeparator(const QString & selector){
+        QStringList list = selector.split(QRegExp("[\\s|,]+"), QString::SkipEmptyParts);
+        std::vector<std::tuple<QString, QString>> r;
+        for(int i = 0; i < list.size(); i+=2){
+            r.push_back(std::make_tuple(list.at(i), list.at(i+1)));
+        }
+        return r;
+    }
+
+    bool DatabaseConnection::setRecord(const QString &tableName, const QString &selector, const QString &value){
+
+        bool ex = recordExists(tableName, selector);
+
+        if(ex == true){
+            QString query = QString(
+                        "UPDATE %1 SET %2 WHERE %3"
+                        ).arg(tableName).arg(value).arg(selector);
+        }
+        else{
+            QString query = QString(
+                        "INSERT INTO %1 (%2) VALUES (%3)"
+                        ).arg(tableName);
+        }
+
+        return ex;
+    }
+
 
     bool DatabaseConnection::isOpen()
     {
@@ -129,4 +171,3 @@ namespace Data{
     }
 
 }
-
