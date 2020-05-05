@@ -11,7 +11,7 @@ namespace Data {
     {
         DatabaseConnection * database;
         QString tableName;
-        std::vector<std::tuple<QString, bool>> columnNames;
+        QVector<QPair<QString, bool>> columnNames;
         void fetchColumns();
     public:
         QString getNameOfColumn(unsigned columnId);

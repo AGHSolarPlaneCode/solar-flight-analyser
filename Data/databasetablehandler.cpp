@@ -18,22 +18,24 @@ namespace Data{
     }
 
     QString DatabaseTableHandler::getNameOfColumn(unsigned columnId){
-        return std::get<0>(columnNames.at(columnId));
+        return columnNames.at(columnId).first;
     }
 
     void DatabaseTableHandler::setValueByKey(const QString & key, const QString & column, const QString & value, int key_idx){
         QString keyName;
         for(auto it = columnNames.begin(); it != columnNames.end(); it++){
-            if(std::get<1>(*it) != false){
+            if(it->second != false){
                 if(--key_idx < 0){
-                    keyName = std::get<0>(*it);
+                    keyName = it->first;
                     break;
                 }
             }
         }
 
-        QString keySelector = QString("%1=%2").arg(keyName).arg(key);
+        QString keySelector = QString("%1='%2'").arg(keyName).arg(key);
 
+
+        database->updateRecord(tableName, keySelector, QString("%1='%2'").arg(column).arg(value));
     }
 
 }

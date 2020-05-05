@@ -111,14 +111,14 @@ namespace Data{
         }
     }
 
-    std::vector<std::tuple<QString, bool>> DatabaseConnection::getTableColumns(const QString & tableName){
+    QVector<QPair<QString, bool>> DatabaseConnection::getTableColumns(const QString & tableName){
         QSqlQuery q = executeQuery(QString("PRAGMA table_info(%1)").arg(tableName));
 
-        std::vector<std::tuple<QString, bool>> tableInfo;
+        QVector<QPair<QString, bool>> tableInfo;
 
         while(q.next()){
-            tableInfo.emplace_back(
-                        std::make_tuple<QString, bool>(
+            tableInfo.push_back(
+                        qMakePair<QString, bool>(
                             q.value(1).toString(),
                             q.value(5).toBool()
                             )
@@ -137,29 +137,32 @@ namespace Data{
                         );
     }
 
-    std::vector<std::tuple<QString, QString>> selectorSeparator(const QString & selector){
+    QVector<QPair<QString, QString>> selectorSeparator(const QString & selector){
         QStringList list = selector.split(QRegExp("[\\s|,]+"), QString::SkipEmptyParts);
-        std::vector<std::tuple<QString, QString>> r;
+        QVector<QPair<QString, QString>> r;
         for(int i = 0; i < list.size(); i+=2){
-            r.push_back(std::make_tuple(list.at(i), list.at(i+1)));
+            r.push_back(qMakePair(list.at(i), list.at(i+1)));
         }
         return r;
     }
 
-    bool DatabaseConnection::setRecord(const QString &tableName, const QString &selector, const QString &value){
+    void DatabaseConnection::createRecord(const QString &tableName, const QString &columns, const QString &values){
+        QString query = "INSERT INTO %1 (%2) VALUES (%3)";
+        query = query.arg(tableName).arg(columns).arg(values);
+        executeQuery(query);
+    }
+
+    bool DatabaseConnection::updateRecord(const QString &tableName, const QString &selector, const QString &values){
 
         bool ex = recordExists(tableName, selector);
 
         if(ex == true){
             QString query = QString(
                         "UPDATE %1 SET %2 WHERE %3"
-                        ).arg(tableName).arg(value).arg(selector);
+                        ).arg(tableName).arg(values).arg(selector);
+            executeQuery(query);
         }
-        else{
-            QString query = QString(
-                        "INSERT INTO %1 (%2) VALUES (%3)"
-                        ).arg(tableName);
-        }
+
 
         return ex;
     }

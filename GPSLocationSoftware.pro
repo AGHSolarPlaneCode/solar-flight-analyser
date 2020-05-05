@@ -42,7 +42,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     Data/databaseconnection.h \
-    Data/databasetablehandler.cpp \
+    Data/databasetablehandler.h \
     Data/sharedstash.h \
     weatherapi.h \
     weatherdata.h \

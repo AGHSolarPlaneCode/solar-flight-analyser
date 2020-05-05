@@ -6,8 +6,8 @@
 #include <QSqlQuery>
 #include <stdexcept>
 #include <initializer_list>
-#include <vector>
-#include <tuple>
+#include <QVector>
+#include <QPair>
 #include <cassert>
 #include <type_traits>
 
@@ -31,7 +31,7 @@ namespace Data {
         std::ios_base::failure databaseClosedErrorMessage(const QString & query = "");
         std::ios_base::failure queryFailedErrorMessage(const QString & query = "");
 
-        std::vector<std::tuple<QString, QString>> selectorSeparator(const QString & selector);
+        QVector<QPair<QString, QString>> selectorSeparator(const QString & selector);
 
         static QString DATABASE_CONTAINING_FOLDER;
 
@@ -83,7 +83,7 @@ namespace Data {
 
             assert(num_cols == columnNames.size());
 
-            std::vector<std::tuple<QString, QString>> columnNameAndType;
+            QVector<QPair<QString, QString>> columnNameAndType;
 
             auto columnNameIterator = columnNames.begin();
 
@@ -95,7 +95,7 @@ namespace Data {
             unsigned ctr = 0;
 
             for(auto & pair : columnNameAndType){
-                insideQuery += std::get<0>(pair) + " " + std::get<1>(pair);
+                insideQuery += pair.first + " " + pair.second;
                 if(ctr == 0){
                     insideQuery += " PRIMARY KEY";
                 }
@@ -117,15 +117,50 @@ namespace Data {
          * \brief executeQuery - execute any SQL query
          * \param query - QString containing the query
          * \return returns the QSqlQuery object
+         * \throws std::ios_base::failure
          */
         QSqlQuery executeQuery(const QString & query);
 
+        /*!
+         * \brief recordExists - check if a record exists in database
+         * \param tableName - name of the table to check
+         * \param selector - SQL selector of the record, i.e. age='40',sex='M'
+         * \return true if the record exists, false otherwise
+         */
         bool recordExists(const QString & tableName, const QString & selector);
 
-        bool setRecord(const QString & tableName, const QString & selector, const QString & value);
+        /*!
+         * \brief updateRecord - updates the requested record in the table
+         * accordingly to 'selector', and sets the columns specified in 'values'.
+         * for example:
+         *  updateRecord("users", "age=40", "payout='5000',bonus='1000'");
+         * will set payout to 5000 and bonus to 1000 for all users with age 40.
+         *
+         * \param tableName - name of the table to use
+         * \param value is an SQL type selector i. e. name='Ann', surname='Smith'
+         * \param selector is an SQL type selector
+         * \return returns true if an object was updated, and false if it doesn't exist.
+         * \throws std::ios_base::failure
+         */
+        bool updateRecord(const QString & tableName, const QString & selector, const QString & values);
 
-        std::vector<std::tuple<QString, bool>> getTableColumns(const QString & tableName);
+        /*!
+         * \brief createRecord - create a record with requested columns set to values
+         * \param tableName - name of the table
+         * \param columns - comma separated names of columns
+         * \param values - comma separated values to set in the columns
+         */
+        void createRecord(const QString & tableName, const QString & columns, const QString & values);
 
+        /*!
+         * \brief getTableColumns - returns the columns of a table as a Pair
+         * where first is the column name, and second is a boolean value
+         * indicating that this column is a primary key
+         * \param tableName - name of table to check
+         * \return Vector of pairs <QString, bool>
+         * \throws std::ios_base::failure
+         */
+        QVector<QPair<QString, bool>> getTableColumns(const QString & tableName);
 
         bool isOpen();
         /*!
