@@ -2,6 +2,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QVariant>
+#include <QSqlRecord>
 
 namespace Data{
 
@@ -152,6 +153,25 @@ namespace Data{
         executeQuery(query);
     }
 
+    QVector<QVariant> DatabaseConnection::getRecord(const QString &tableName, const QString &selector, const QString & columns)
+    {
+        bool ex= recordExists(tableName, selector);
+
+        if(ex == true){
+            QVector<QVariant> result;
+            QString query = QString("SELECT %1 FROM %2 WHERE %3").arg(columns).arg(tableName).arg(selector);
+            QSqlQuery queryResult = executeQuery(query);
+            queryResult.next();
+            for(int i = 0; i < queryResult.record().count(); i++){
+                result.append(queryResult.value(i));
+            }
+            return result;
+        }
+        else
+            return QVector<QVariant>();
+    }
+
+
     bool DatabaseConnection::updateRecord(const QString &tableName, const QString &selector, const QString &values){
 
         bool ex = recordExists(tableName, selector);
@@ -174,3 +194,4 @@ namespace Data{
     }
 
 }
+

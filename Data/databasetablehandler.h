@@ -51,6 +51,15 @@ namespace Data {
          * \param key_idx - optional - index of primary key in the table (if there is more than one). Defaults to  0
          */
         void setValuesByKey(const QString & key, const std::initializer_list<QString> & columns, const std::initializer_list<QString> & values, int key_idx = 0);
+
+        /*!
+         * \brief createRecord - create a new record in the database. The first column on the list MUST be a primary key
+         * \param columns - list of columns to be set
+         * \param values - list of values to be set in their respective columns
+         * \return true if the record was created,  false if a record with such a key already exists in the database.
+         */
+        bool createRecord(const std::initializer_list<QString> & columns, const std::initializer_list<QString> & values);
+
         DatabaseTableHandler(DatabaseConnection * db, const QString & tableName);
     };
 }

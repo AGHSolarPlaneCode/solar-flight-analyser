@@ -76,4 +76,21 @@ namespace Data{
         database->createRecord(tableName, keyName, keyValue);
     }
 
+    bool DatabaseTableHandler::createRecord(const std::initializer_list<QString> &columns, const std::initializer_list<QString> &values){
+        if(columns.size()) return false;
+        if(keyExists(*columns.begin(), *values.begin()))
+            return false;
+        else{
+            QString colnames;
+            QString vnames;
+            for(auto [itC, itV] = std::tuple{columns.begin(), values.begin()}; itC != columns.end() and itV != values.end(); itC++, itV++){
+                colnames.append(QString("%1,").arg(*itC));
+                vnames.append(QString("%1,").arg(*itV));
+            }
+            colnames.chop(1);
+            vnames.chop(1);
+            database->createRecord(tableName, colnames, vnames);
+            return true;
+        }
+    }
 }

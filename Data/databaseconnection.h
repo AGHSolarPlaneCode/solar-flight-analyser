@@ -35,23 +35,30 @@ namespace Data {
 
         static QString DATABASE_CONTAINING_FOLDER;
 
+        //always-false assert
+        template<typename T>
+        struct falseAssert : std::false_type{};
+
         template<typename T>
         static QString DBTypeName()
         {
             if constexpr(std::is_same<T, int>::value){
                 return "INT";
             }
-            if constexpr(std::is_same<T, bool>::value){
+            else if constexpr(std::is_same<T, bool>::value){
                 return "BIT";
             }
-            if constexpr(std::is_convertible<T, std::string>::value){
+            else if constexpr(std::is_convertible<T, std::string>::value){
                 return "TEXT";
             }
-            if constexpr(std::is_same<T, QString>::value){
+            else if constexpr(std::is_same<T, QString>::value){
                 return "TEXT";
             }
-            if constexpr(std::is_convertible<T, double>::value){
+            else if constexpr(std::is_convertible<T, double>::value){
                 return "REAL";
+            }
+            else{
+                static_assert (falseAssert<T>::value, "This type is not supported. Please add the type to the database, or to the type list.");
             }
 
         }
@@ -144,6 +151,15 @@ namespace Data {
          */
         bool updateRecord(const QString & tableName, const QString & selector, const QString & values);
 
+        /*!
+         * \brief getRecord - get a record from a table
+         * \param tableName - name of the table to access
+         * \param selector - an SQL type selector i.e. name='Ann', surname='Smith'
+         * \param columns - columns that should be returned, comma separated i. e. "name, surname"
+         * \return vector of QVariants containg data from the selected columns
+         * \throws std::ios_base::failure
+         */
+        QVector<QVariant> getRecord(const QString & tableName, const QString & selector, const QString & columns);
         /*!
          * \brief createRecord - create a record with requested columns set to values
          * \param tableName - name of the table
