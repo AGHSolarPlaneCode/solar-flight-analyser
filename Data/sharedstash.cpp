@@ -1,14 +1,45 @@
 #include "sharedstash.h"
+#include <exception>
+#include <iostream>
 
 namespace Data{
 
     void SharedStash::loadTable(const QString & tableName)
     {
-        bool exists = database->tableExists(tableName);
-        if(exists == false){
-            database->createTable<QString, QString>(tableName, {"objectName", "objectData"});
+        try {
+            bool exists = database->tableExists(tableName);
+            if(exists == false){
+                database->createTable<QString, QString>(tableName, {"objectName", "objectData"});
+            }
+            this->tableHandler.reset(new DatabaseTableHandler(this->database.get(), tableName));
+        } catch (std::ios_base::failure e) {
+            handleError(tableError(), e);
         }
-        this->tableHandler.reset(new DatabaseTableHandler(this->database.get(), tableName));
+    }
+
+    QString SharedStash::getObjectName(const QString &packageName, const QString &itemName)
+    {
+        return QString("%1_%2").arg(packageName).arg(itemName);
+    }
+
+    std::string SharedStash::setError()
+    {
+        return "Error while trying to set an element in the database: ";
+    }
+
+    std::string SharedStash::getError()
+    {
+        return "Error while trying to get an element from the database: ";
+    }
+
+    std::string SharedStash::tableError()
+    {
+        return "Error while loading table: ";
+    }
+
+    void SharedStash::handleError(const std::string &errorText, const std::ios_base::failure &e)
+    {
+        std::cerr << errorText << e.what() << std::endl;
     }
 
     SharedStash::SharedStash(std::shared_ptr<DatabaseConnection> databaseConnection, const QString & stashTable)
@@ -22,10 +53,32 @@ namespace Data{
         loadTable(stashTable);
     }
 
-    auto SharedStash::getElement(const QString &packageName, const QString &itemName)
+    QVariant SharedStash::getElement(const QString &packageName, const QString &itemName)
     {
-        QString objectName = QString("%1_%2").arg(packageName).arg(itemName);
-        //TODO
-        //this->tableHandler->
+        QVariant result{};
+        try {
+            QString objectName = getObjectName(packageName, itemName);
+
+            result = tableHandler->getValueFromRow(objectName, "objectData");
+        } catch (std::ios_base::failure e) {
+            handleError(getError(), e);
+        }
+
+        return result;
+    }
+
+    void SharedStash::setElement(const QString &packageName, const QString & itemName, const QVariant &element)
+    {
+        try {
+            QString objectName = getObjectName(packageName, itemName);
+            if(tableHandler->keyExists(objectName)){
+                tableHandler->setValueByKey(objectName, "objectData", element.toString());
+            }
+            else{
+                tableHandler->createRecord({"objectName", "objectData"}, {objectName, element.toString()});
+            }
+        } catch (std::ios_base::failure e) {
+            handleError(setError(), e);
+        }
     }
 }
